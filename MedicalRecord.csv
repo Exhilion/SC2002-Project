@@ -1,0 +1,4 @@
+MedicalRecordId,PatientId,DiagnosisId,TreatmentId,PrescriptionId
+1,H125,2001,3001,4001
+2,H126,2002,3002,4002
+3,H127,2003,3003,4003
