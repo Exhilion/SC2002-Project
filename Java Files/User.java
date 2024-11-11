@@ -1,36 +1,142 @@
 import java.io.*;
 import java.util.*;
-
+import java.io.BufferedReader;
 
 public class User implements UserAuthentication {
     private String hospitalID;
     private String password;
     private Role role;
     private Gender gender;
-    private boolean isLoggedIn;
-
-    private static final String CSV_FILE_PATH = "users.csv";
-
-    public User(String hospitalID, String password, Role role, Gender gender, boolean isLoggedIn) {
-        this.hospitalID = hospitalID;
-        this.password = password;
-        this.role = role;
-        this.gender = gender;
-        this.isLoggedIn = isLoggedIn;
-    }
-
-    public boolean login(String hospitalID, String password) {
-        User user = getUserFromCSV(hospitalID);
-        if (user != null && user.password.equals(password)) {
-            user.isLoggedIn = true;
-            updateUserInCSV(user);
-            System.out.println("Login successful for user: " + hospitalID);
-            return true;
-        } else {
-            System.out.println("Login failed for user: " + hospitalID);
-            return false;
+    
+	public User() {
+		
+	}
+	
+	public User(String hospitalID, String password, Role role, Gender gender) {
+		this.hospitalID = hospitalID; 
+		this.password = password; 
+		this.role = role; 
+		this.gender = gender;
+	}
+	
+	public String login(String Username, String Password) {
+		String role = Username.substring(0,2);
+        if(role.equalsIgnoreCase("DR")) {
+        	//Check against Doc database
+        	String path = "src\\\\OOPProject\\\\doctors.csv";
+        	//System.out.println("Current directory: " + System.getProperty("user.dir"));
+        	
+        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        		String line; 
+        		br.readLine();
+        		
+        		while((line = br.readLine()) != null) {
+        			String[] values = line.split(","); 
+        			if(values.length == 7) {
+        				String fileUsername = values[0].trim();
+        				String filePassword = values[1].trim();
+        				if(fileUsername.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
+        					return "DR"; 
+        				}
+        			}
+        			
+        		}
+        	}catch (IOException e ) {
+        			System.out.println("Error Reading the file: " + e.getMessage());
+        			
+        		
+        	}
+        	return " ";
+        	
+        	
+        }else if(role.equalsIgnoreCase("PH")) {
+        	//Check against Pharma database
+        	String path = "src\\\\OOPProject\\\\Pharmacist.csv";
+        	//System.out.println("Current directory: " + System.getProperty("user.dir"));
+        	
+        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        		String line; 
+        		br.readLine();
+        		
+        		while((line = br.readLine()) != null) {
+        			String[] values = line.split(","); 
+        			if(values.length == 5) {
+        				String fileUsername = values[0].trim();
+        				String filePassword = values[1].trim();
+        				if(fileUsername.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
+        					return "PH"; 
+        				}
+        			}
+        			
+        		}
+        	}catch (IOException e ) {
+        			System.out.println("Error Reading the file: " + e.getMessage());
+        			
+        		
+        	}
+        	return " ";
+        	
+        }else if(role.equalsIgnoreCase("AD")) {
+        	//Check against Admin database
+        	
+        	String path = "src\\\\OOPProject\\\\Admin.csv";
+        	//System.out.println("Current directory: " + System.getProperty("user.dir"));
+        	
+        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        		String line; 
+        		br.readLine();
+        		
+        		while((line = br.readLine()) != null) {
+        			String[] values = line.split(","); 
+        			if(values.length == 5) {
+        				String fileUsername = values[0].trim();
+        				String filePassword = values[1].trim();
+        				if(fileUsername.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
+        					return "AD"; 
+        				}
+        			}
+        			
+        		}
+        	}catch (IOException e ) {
+        			System.out.println("Error Reading the file: " + e.getMessage());
+        			
+        		
+        	}
+        	return " ";
+        	
+        }else if(role.equalsIgnoreCase("PT")) {
+        	//Check against Patient database
+        	String path = "src\\\\OOPProject\\\\Patient.csv";
+        	//System.out.println("Current directory: " + System.getProperty("user.dir"));
+        	
+        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        		String line; 
+        		br.readLine();
+        		
+        		while((line = br.readLine()) != null) {
+        			String[] values = line.split(","); 
+        			if(values.length == 10) {
+        				String filePatientID = values[0].trim();
+        				String filePassword = values[1].trim();
+        				if(filePatientID.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
+        					return "PT"; 
+        				}
+        			}
+        			
+        		}
+        	}catch (IOException e ) {
+        			System.out.println("Error Reading the file: " + e.getMessage());
+        			
+        		
+        	}
+        	return " ";
         }
-    }
+        else {
+        	System.out.println("Username does not exist");
+        	return " "; 
+        }
+		
+	}
 
     public void changePassword(String hospitalID, String oldPassword, String newPassword) {
         User user = getUserFromCSV(hospitalID);
