@@ -1,11 +1,11 @@
-package secondpart;
+package OOPProject;
 
-//Doctor diagnosis for patient
 public class Diagnosis {
+	private String diagnosis; 
+	private String description; 
+	private Doctor Doctor; 
 	private String diagnosisId;
-	private String diagnosis;
-	private String description;
-
+	
 	public Diagnosis(String diagnosisID, String diagnosis, String description) {
 		this.diagnosisId = diagnosisID;
 		this.diagnosis = diagnosis;

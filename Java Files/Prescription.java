@@ -1,11 +1,9 @@
-package secondpart;
-
+package OOPProject;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 //Pharmacist prescription management
 //Pharmacist can view Appointment outcome record to fufill prescription orders ( Appointment outcome class)
 //Status can be updated from pending to dispensed
@@ -67,17 +65,12 @@ public class Prescription {
 	}
 
 	  // toString() method to display the prescription
-    @Override
-    public String toString() {
-        return "Prescription ID: " + prescriptionID + "\n" +
-               "Medication: " + medication.getmedicineName() + "\n" +
-               "Dosage: " + dosage + " mg\n" +
-               "Frequency: " + frequency + " times per day\n" +
-               "Duration: " + duration + "\n";
-    }
-
-
-
-
-
+  @Override
+  public String toString() {
+      return "Prescription ID: " + prescriptionID + "\n" +
+             "Medication: " + medication.getMedicineName() + "\n" +
+             "Dosage: " + dosage + " mg\n" +
+             "Frequency: " + frequency + " times per day\n" +
+             "Duration: " + duration + "\n";
+  }
 }

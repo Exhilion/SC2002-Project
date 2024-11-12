@@ -1,51 +1,29 @@
 package OOPProject;
+
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader; 
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-public class User{
-	private String hospitalID;
-    private String password;
-    private Role role;
-    private Gender gender;
-    
-    
-
-	public User() {
-		
-	}
+public class UserCSV {
 	
-	public User(String username, String pasword) {
-		this.hospitalID = username;
-		this.password = password;
-	}
-	
-	public User(String hospitalID, String password, Role role, Gender gender) {
-		this.hospitalID = hospitalID; 
-		this.password = password; 
-		this.role = role; 
-		this.gender = gender;
-	}
-	
-	/*public String login(String Username, String Password) {
+	public String login(String Username, String Password) {
 		String role = Username.substring(0,2);
         if(role.equalsIgnoreCase("DR")) {
         	//Check against Doc database
-        	String path = "src\\\\OOPProject\\\\doctors.csv";
-        	//System.out.println("Current directory: " + System.getProperty("user.dir"));
+        	//String path = "src\\\\OOPProject\\\\doctors.csv";
+        	System.out.println("Current directory: " + System.getProperty("user.dir"));
         	
-        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        	try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.DOCTOR_FILE_PATH))){
         		String line; 
         		br.readLine();
-        		
         		while((line = br.readLine()) != null) {
         			String[] values = line.split(","); 
         			if(values.length == 7) {
         				String fileUsername = values[0].trim();
         				String filePassword = values[1].trim();
+        				System.out.println(fileUsername + filePassword);
         				if(fileUsername.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
         					return "DR"; 
         				}
@@ -62,10 +40,10 @@ public class User{
         	
         }else if(role.equalsIgnoreCase("PH")) {
         	//Check against Pharma database
-        	String path = "src\\\\OOPProject\\\\Pharmacist.csv";
+        	//String path = "src\\\\OOPProject\\\\Pharmacist.csv";
         	//System.out.println("Current directory: " + System.getProperty("user.dir"));
         	
-        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        	try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.PHARMACIST_FILE_PATH))){
         		String line; 
         		br.readLine();
         		
@@ -90,10 +68,10 @@ public class User{
         }else if(role.equalsIgnoreCase("AD")) {
         	//Check against Admin database
         	
-        	String path = "src\\\\OOPProject\\\\Admin.csv";
+        	//String path = "src\\\\OOPProject\\\\Admin.csv";
         	//System.out.println("Current directory: " + System.getProperty("user.dir"));
         	
-        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        	try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.ADMIN_FILE_PATH))){
         		String line; 
         		br.readLine();
         		
@@ -117,18 +95,19 @@ public class User{
         	
         }else if(role.equalsIgnoreCase("PT")) {
         	//Check against Patient database
-        	String path = "src\\\\OOPProject\\\\Patient.csv";
+        	//String path = "src\\\\OOPProject\\\\Patient.csv";
         	//System.out.println("Current directory: " + System.getProperty("user.dir"));
         	
-        	try(BufferedReader br  = new BufferedReader(new FileReader(path))){
+        	try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))){
         		String line; 
         		br.readLine();
-        		
+        		System.out.println("Reached1");
         		while((line = br.readLine()) != null) {
         			String[] values = line.split(","); 
-        			if(values.length == 10) {
+        			if(values.length == 9) {
         				String filePatientID = values[0].trim();
         				String filePassword = values[1].trim();
+        				System.out.println(filePatientID + filePassword);
         				if(filePatientID.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
         					return "PT"; 
         				}
@@ -147,44 +126,5 @@ public class User{
         	return " "; 
         }
 		
-	}*/
-	
-	public String getHospitalId() {
-        return hospitalID;
-    }
-
-    public void setHospitalId(String hospitalID) {
-        this.hospitalID = hospitalID;
-    }
-
-    // Getter and Setter for password
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    // Getter and Setter for role
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    // Getter and Setter for gender
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-	
-	
-	
+	}
 }

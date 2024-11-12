@@ -1,5 +1,4 @@
 package OOPProject;
-//Change the package name
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -32,16 +31,21 @@ public class main {
         	switch(choice) {
         	case 1:
                 // View Medical Record Record
-        		patient = patient.viewPatientRecords(username);
-        		System.out.println(username);
-                System.out.println("Patient ID: " + patient.getUsername());
-                System.out.println("Name: " + patient.getName());
-                System.out.println("Date of Birth: " + patient.getDateOfBirth());
-                System.out.println("Gender: " + patient.getGender());
-                System.out.println("Blood Type: " + patient.getBloodType());
-                System.out.println("Contact Info: " + patient.getContactInfo());
-                System.out.println("Role: " + patient.getRole());
-                System.out.println("Email: " + patient.getEmail());
+        		loadCSVClass load = new loadCSVClass();
+        		List<MedicalRecord> filteredRecords = MedicalRecord.filterByHospitalId(load.getMedicalRecords(), username);
+
+        		System.out.println("\nAvailable Medical Records:");
+        		for (MedicalRecord record : filteredRecords) {
+        			System.out.println("Medical Record ID: " + record.getRecordID());
+        			System.out.println("Patient Name: " + record.getPatient().getName());
+        			System.out.println("Diagnosis: " + record.getDiagnosis().getdiagnosis());
+        			System.out.println("Treatment: " + record.getTreatment().gettreatment());
+        			System.out.println("Prescriptions: ");
+        			record.getPrescriptions().forEach(
+        					prescription -> System.out.println("  - " + prescription.getMedication().getMedicineName()));
+        			System.out.println("----------------------------------------------------");
+        		}
+
                 break;
 
             case 2:
@@ -105,7 +109,7 @@ public class main {
 		System.out.println("(7) Record Appointment Outcome");
 		System.out.println("(8) Logout");
 		
-		Doctor doctor = new Doctor();
+		//Doctor doctor = new Doctor();
 		Scanner scanner = new Scanner(System.in);
         int choice;
         Patient patient = null; 
@@ -117,25 +121,27 @@ public class main {
             switch (choice) {
                 case 1:
                     // View Medical Record
-                	System.out.println("Enter Patient ID");
-                	patientID = scanner.nextLine();
-                    patient = doctor.viewPatientRecords(patientID);
-                    System.out.println("Patient ID: " + patient.getUsername());
-                    System.out.println("Name: " + patient.getName());
-                    System.out.println("Date of Birth: " + patient.getDateOfBirth());
-                    System.out.println("Gender: " + patient.getGender());
-                    System.out.println("Blood Type: " + patient.getBloodType());
-                    System.out.println("Contact Info: " + patient.getContactInfo());
-                    System.out.println("Role: " + patient.getRole());
+                	loadCSVClass load = new loadCSVClass();
+                	List<MedicalRecord> filteredRecords = MedicalRecord.filterByHospitalId(load.getMedicalRecords(), doctorID);
+
+            		System.out.println("\nAvailable Medical Records:");
+            	     
+                	for (MedicalRecord record : filteredRecords) {
+            			System.out.println("Medical Record ID: " + record.getRecordID());
+            			System.out.println("Patient Name: " + record.getPatient().getName());
+            			System.out.println("Diagnosis: " + record.getDiagnosis().getdiagnosis());
+            			System.out.println("Treatment: " + record.getTreatment().gettreatment());
+            			System.out.println("Prescriptions: ");
+            			record.getPrescriptions().forEach(
+            					prescription -> System.out.println("  - " + prescription.getMedication().getMedicineName()));
+            			System.out.println("----------------------------------------------------");
+            		}
+
                     break;
 
                 case 2:
                     // Update Patient Personal Info
                 	// Retrieve the details 
-                	System.out.println("Enter Patient ID to update"); 
-                	patientID = scanner.nextLine();
-                	doctor.updatePatientInfo(patientID);
-                    
                     break;
 
                 case 3:
@@ -284,7 +290,8 @@ public class main {
         String username = scanner.nextLine(); 
         System.out.println("Enter your password");
         String password = scanner.nextLine();
-        User tempuser = new User();
+        UserCSV tempuser = new UserCSV();
+        
         //Verify username and password 
         String result = tempuser.login(username, password); 
         if(result == "DR") {

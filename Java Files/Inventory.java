@@ -1,9 +1,8 @@
-package HospitalProject;
-
+package OOPProject;
 import java.util.ArrayList;
 
 public class Inventory {
-    private ArrayList<Medication> medications;
+	private ArrayList<Medication> medications;
     public Inventory() {
         this.medications = new ArrayList<>();
     }

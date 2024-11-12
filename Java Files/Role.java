@@ -1,6 +1,5 @@
+package OOPProject;
+
 public enum Role {
-    PATIENT,
-    DOCTOR,
-    PHARMACIST,
-    ADMINISTRATOR
+	PATIENT, DOCTOR, PHARMACIST, ADMINISTRATOR
 }

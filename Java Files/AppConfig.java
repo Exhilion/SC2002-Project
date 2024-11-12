@@ -1,13 +1,13 @@
-package secondpart;
-
-//add file path in ""
-//e.g. C:\\Users\\OneDrive\\Desktop\\Diagnosis.csv
+package OOPProject;
 
 public class AppConfig {
-    public static final String DIAGNOSIS_FILE_PATH = "";
-    public static final String PRESCRIPTION_FILE_PATH = "";
-    public static final String TREATMENT_FILE_PATH = "";
-    public static final String MEDICALRECORD_FILE_PATH = "";
-    public static final String MEDICATION_FILE_PATH = "";
-    public static final String PATIENT_FILE_PATH = "";
+    public static final String DIAGNOSIS_FILE_PATH = "src\\\\OOPProject\\\\Diagnosis.csv";
+    public static final String PRESCRIPTION_FILE_PATH = "src\\\\OOPProject\\\\Prescription.csv";
+    public static final String TREATMENT_FILE_PATH = "src\\\\OOPProject\\\\Treatment.csv";
+    public static final String MEDICALRECORD_FILE_PATH = "src\\\\OOPProject\\\\MedicalRecord.csv";
+    public static final String MEDICATION_FILE_PATH = "src\\\\OOPProject\\\\Medication.csv";
+    public static final String PATIENT_FILE_PATH = "src\\\\OOPProject\\\\Patient.csv";
+    public static final String DOCTOR_FILE_PATH = "src\\\\OOPProject\\\\doctors.csv";
+    public static final String PHARMACIST_FILE_PATH = "src\\\\OOPProject\\\\Pharmacist.csv";
+    public static final String ADMIN_FILE_PATH = "src\\\\OOPProject\\\\Admin.csv";
 }

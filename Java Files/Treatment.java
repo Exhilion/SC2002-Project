@@ -1,4 +1,4 @@
-package secondpart;
+package OOPProject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

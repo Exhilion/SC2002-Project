@@ -19,28 +19,38 @@ public class Patient extends User{
 	private BloodType bloodType; 
 	private String hospitalID; 
 	private String password; 
-	private String role;
-	private ContactInfo contactInfo; 
+	private Role role;
+	private String phoneNumber; 
 	private String email; 
 	
-	public Patient (String HospitalID, String Password, String role,  String name, Date dateOfBirth, Gender gender, BloodType bloodType, ContactInfo contactInfo, String email) {
-		this.hospitalID = HospitalID; 
-		this.password = Password; 
-		this.role = role; 
-		this.name = name; 
-		this.dateOfBirth = dateOfBirth; 
-		this.gender = gender; 
-		this.contactInfo = contactInfo; 
-		this.bloodType = bloodType; 
-		this.email = email;
+	
+	private static PatientCSV patientCSV  = new PatientCSV();
+	
+	public static void updatePatientRecords(String username) {
+		patientCSV.updatePatientRecords(username);
 	}
+	
+	public Patient(String hospitalID, String password, Role role, Gender gender, 
+            String name, Date dateOfBirth, BloodType bloodType, 
+            String phoneNumber, String email) {
+			 super(hospitalID, password, role, gender);
+			 this.name = name;
+			 this.dateOfBirth = dateOfBirth;
+			 this.bloodType = bloodType;
+			 this.phoneNumber = phoneNumber;
+			 this.email = email;
+			 this.gender = gender; 
+			 this.hospitalID = hospitalID; 
+			 this.role = role; 
+	}
+
 	public String getUsername() {
 		return hospitalID; 
 	}
 	public String getEmail() {
 		return email; 
 	}
-	public String getRole() {
+	public Role getRole() {
 		return role;
 	}
 	
@@ -68,12 +78,10 @@ public class Patient extends User{
 	public void setBloodType(BloodType bloodType) {
 		this.bloodType = bloodType; 
 	}
-	public ContactInfo getContactInfo() {
-		return contactInfo;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
-	public void setContactInfo(ContactInfo contactInfo) {
-		this.contactInfo = contactInfo; 
-	}
+	
 	
 	
 	//public MedicalRecord viewMedicalRecord(Patient patient) {
@@ -81,7 +89,7 @@ public class Patient extends User{
 		//return patient.medicalRecord; 
 	//}
 	
-	public static Patient viewPatientRecords(String patientID) {
+	/*public static Patient viewPatientRecords(String patientID) {
 		String path = "src\\\\OOPProject\\\\Patient.csv";
     	//System.out.println("Current directory: " + System.getProperty("user.dir"));
 		
@@ -96,12 +104,12 @@ public class Patient extends User{
     			if(values.length >= 7) {
     				String fileUsername = values[0].trim();
     				String filePassword = values[1].trim();
-    				String fileRole = values[2].trim();
+    				Role fileRole = Role.valueOf(values[2].trim().toUpperCase());
     				Gender fileGender = Gender.valueOf(values[3].trim().toUpperCase());
     				String fileName = values[4].trim(); 
     				String fileDateOfBirth = values[5].trim(); 
     				BloodType fileBloodType = BloodType.valueOf(values[6].trim());
-    				ContactInfo fileContactInfo = new ContactInfo(values[7].trim());
+    				String fileContactInfo = values[7].trim();
     				String fileEmail = values[8].trim();
     				Date date = null;
     				try {
@@ -113,7 +121,7 @@ public class Patient extends User{
     				
     				if(fileUsername.trim().equalsIgnoreCase(patientID.trim())) {
     					
-    					return new Patient(fileUsername, filePassword, fileRole, fileName, date, fileGender , fileBloodType, fileContactInfo, fileEmail); 
+    					return new Patient(fileUsername, filePassword, fileRole, fileGender, fileName, date, fileBloodType, fileContactInfo, fileEmail); 
     				}
     			}
     			System.out.println("Reached");
@@ -124,9 +132,9 @@ public class Patient extends User{
     		
     	} 
     	return null; 
-	}
+	}*/
 	
-	public static void updatePatientRecords(String patientID) {
+	/*public static void updatePatientRecords(String patientID) {
 		System.out.println("Would you like to update (1)Email or (2)Contact Number?");
 		Scanner scanner = new Scanner(System.in);
 		int choice;
@@ -193,5 +201,5 @@ public class Patient extends User{
 
         
         
-	}
+	}*/
 }

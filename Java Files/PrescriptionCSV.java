@@ -1,4 +1,4 @@
-package secondpart;
+package OOPProject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrescriptionCSV {
-	
-    private Medication findMedicationByName(String medicationName, List<Medication> medications) {
+	private Medication findMedicationByName(String medicationName, List<Medication> medications) {
         for (Medication med : medications) {
-            if (med.getmedicineName().equals(medicationName)) {
+            if (med.getMedicineName().equals(medicationName)) {
                 return med;
             }
         }
@@ -49,6 +48,4 @@ public class PrescriptionCSV {
         }
         return prescriptions;
     }
-
-
 }
