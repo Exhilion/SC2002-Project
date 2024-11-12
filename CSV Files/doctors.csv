@@ -1,1 +1,2 @@
-doctor_id,doctor_name,department,specialization
+HospitalID,Password,Role,Gender,DoctorName,Department,Specialization
+DR1234,1234,DR,Male,Jake,Cardio,Heart
