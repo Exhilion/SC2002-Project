@@ -101,10 +101,9 @@ public class UserCSV {
         	try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))){
         		String line; 
         		br.readLine();
-        		System.out.println("Reached1");
         		while((line = br.readLine()) != null) {
         			String[] values = line.split(","); 
-        			if(values.length == 9) {
+        			if(values.length == 10) {
         				String filePatientID = values[0].trim();
         				String filePassword = values[1].trim();
         				System.out.println(filePatientID + filePassword);

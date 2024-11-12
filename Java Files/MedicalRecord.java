@@ -7,49 +7,48 @@ import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 public class MedicalRecord {
-	private String MedicalRecordID;
-	private Patient Patient;
-	private Diagnosis Diagnosis;
-	private Treatment Treatment;
+	
+	private String medicalRecordID;
+	private Patient patient;
+	private Diagnosis diagnosis;
+	private Treatment treatment;
 	private List<Prescription> prescriptions; // Changed from single Prescription to List
 
 	public MedicalRecord(String MedicalRecordID, Patient Patient, Diagnosis Diagnosis, Treatment Treatment,
 			List<Prescription> prescriptions) {
-		this.MedicalRecordID = MedicalRecordID;
-		this.Patient = Patient;
-		this.Diagnosis = Diagnosis;
-		this.Treatment = Treatment;
+		this.medicalRecordID = MedicalRecordID;
+		this.patient = Patient;
+		this.diagnosis = Diagnosis;
+		this.treatment = Treatment;
 		this.prescriptions = prescriptions; // Updated constructor to accept a list of prescriptions
 	}
 
 	// Getter and Setter methods
 
 	public String getRecordID() {
-		return MedicalRecordID;
+	    return medicalRecordID;
 	}
-
 	public Patient getPatient() {
-		return Patient;
+	    return patient;
+	}
+	public Diagnosis getDiagnosis() {
+	    return diagnosis;
+	}
+	public Treatment getTreatment() {
+	    return treatment;
 	}
 
 	public void setPatient(Patient patient) {
-		this.Patient = patient;
-	}
-
-	public Diagnosis getDiagnosis() {
-		return Diagnosis;
+		this.patient = patient;
 	}
 
 	public void setDiagnosis(Diagnosis diagnosis) {
-		this.Diagnosis = diagnosis;
+		this.diagnosis = diagnosis;
 	}
 
-	public Treatment getTreatment() {
-		return Treatment;
-	}
 
 	public void setTreatment(Treatment treatment) {
-		this.Treatment = treatment;
+		this.treatment = treatment;
 	}
 
 	public List<Prescription> getPrescriptions() {
@@ -62,9 +61,12 @@ public class MedicalRecord {
 
 	// Filter medical records by hospital ID
 	public static List<MedicalRecord> filterByHospitalId(List<MedicalRecord> records, String hospitalId) {
-		return records.stream().filter(record -> record.getPatient().getHospitalId() != null
-				&& record.getPatient().getHospitalId().equals(hospitalId)).collect(Collectors.toList());
+	    return records.stream()
+	                  .filter(record -> record.getPatient().getHospitalId() != null
+	                          && record.getPatient().getHospitalId().equalsIgnoreCase(hospitalId))
+	                  .collect(Collectors.toList());
 	}
+
 
 
 }

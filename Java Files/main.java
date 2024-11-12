@@ -35,16 +35,21 @@ public class main {
         		List<MedicalRecord> filteredRecords = MedicalRecord.filterByHospitalId(load.getMedicalRecords(), username);
 
         		System.out.println("\nAvailable Medical Records:");
-        		for (MedicalRecord record : filteredRecords) {
-        			System.out.println("Medical Record ID: " + record.getRecordID());
-        			System.out.println("Patient Name: " + record.getPatient().getName());
-        			System.out.println("Diagnosis: " + record.getDiagnosis().getdiagnosis());
-        			System.out.println("Treatment: " + record.getTreatment().gettreatment());
-        			System.out.println("Prescriptions: ");
-        			record.getPrescriptions().forEach(
-        					prescription -> System.out.println("  - " + prescription.getMedication().getMedicineName()));
-        			System.out.println("----------------------------------------------------");
-        		}
+                if (filteredRecords.isEmpty()) {
+                    System.out.println("No medical records found for the given hospital ID.");
+                } else {
+                    for (MedicalRecord record : filteredRecords) {
+                        System.out.println("Medical Record ID: " + record.getRecordID());
+                        System.out.println("Patient Name: " + record.getPatient().getName());
+                        System.out.println("Diagnosis: " + record.getDiagnosis().getdiagnosis());
+                        System.out.println("Treatment: " + record.getTreatment().gettreatment());
+                        System.out.println("Prescriptions: ");
+                        record.getPrescriptions().forEach(
+                            prescription -> System.out.println("  - " + prescription.getMedication().getMedicineName())
+                        );
+                        System.out.println("----------------------------------------------------");
+                    }
+                }
 
                 break;
 

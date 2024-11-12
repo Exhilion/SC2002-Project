@@ -4,7 +4,10 @@ import java.util.UUID;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.io.FileReader;
@@ -26,7 +29,7 @@ public class MedicalRecordCSV {
 
 	private Diagnosis findDiagnosisByID(String diagnosisID, List<Diagnosis> diagnoses) {
 		for (Diagnosis diagnosis : diagnoses) {
-			if (diagnosis.getdisgnosisID().equals(diagnosisID)) {
+			if (diagnosis.getDiagnosisID().equals(diagnosisID)) {
 				return diagnosis;
 			}
 		}
@@ -35,7 +38,7 @@ public class MedicalRecordCSV {
 
 	private Treatment findTreatmentByID(String treatmentID, List<Treatment> treatments) {
 		for (Treatment treatment : treatments) {
-			if (treatment.gettreatmentID().equals(treatmentID)) {
+			if (treatment.getTreatmentID().equals(treatmentID)) {
 				return treatment;
 			}
 		}
@@ -44,12 +47,14 @@ public class MedicalRecordCSV {
 
 	private Prescription findPrescriptionByID(String prescriptionID, List<Prescription> prescriptions) {
 		for (Prescription prescription : prescriptions) {
-			if (prescription.getprescriptionID().equals(prescriptionID)) {
+			if (prescription.getPrescriptionID().equals(prescriptionID)) {
 				return prescription;
 			}
 		}
 		return null;
 	}
+	
+
 
 	// Read Medical Record
 	public List<MedicalRecord> loadMedicalRecordsFromCSV(List<Patient> patients, List<Diagnosis> diagnoses,
@@ -131,9 +136,9 @@ public class MedicalRecordCSV {
 		try (FileWriter writer = new FileWriter(AppConfig.MEDICALRECORD_FILE_PATH, true)) {
 
 			String csvLine = record.getRecordID()
-					+ "," + record.getPatient().getHospitalId() + "," + record.getDiagnosis().getdisgnosisID() + ","
-					+ record.getTreatment().gettreatmentID() + "," + record.getPrescriptions().stream()
-							.map(prescription -> prescription.getprescriptionID()).collect(Collectors.joining(";"))
+					+ "," + record.getPatient().getHospitalId() + "," + record.getDiagnosis().getDiagnosisID() + ","
+					+ record.getTreatment().getTreatmentID() + "," + record.getPrescriptions().stream()
+							.map(prescription -> prescription.getPrescriptionID()).collect(Collectors.joining(";"))
 					+ "\n";
 
 			writer.write(csvLine);

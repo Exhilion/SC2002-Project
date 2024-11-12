@@ -18,10 +18,9 @@ public class Treatment {
 		this.description = description;
 	}
 
-	public String gettreatmentID() {
-		return treatmentID;
+	public String getTreatmentID() {
+	    return treatmentID;
 	}
-
 	public String gettreatment() {
 		return treatment;
 	}

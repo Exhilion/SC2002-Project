@@ -1,3 +1,5 @@
+package OOPProject;
+
 public class TimeSlot {
     private String id;
     private String date;

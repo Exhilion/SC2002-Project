@@ -24,8 +24,8 @@ public class Prescription {
 		this.duration = duration;
 	}
 
-	public String getprescriptionID() {
-		return prescriptionID;
+	public String getPrescriptionID() {
+	    return prescriptionID;
 	}
 
 	// Getter and Setter for medication

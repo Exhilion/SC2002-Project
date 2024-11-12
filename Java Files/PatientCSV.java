@@ -17,14 +17,14 @@ public class PatientCSV {
 	// Method to load patients from CSV
 	public List<Patient> viewPatientRecords() {
 	    List<Patient> patients = new ArrayList<>();
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/DD/yyyy");
 
 	    try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))) {
 	        String line;
 	        br.readLine(); // Skip the header line
 	        while ((line = br.readLine()) != null) {
 	            String[] values = line.split(",");
-	            if (values.length == 9) { // Adjusted to 9 instead of 8
+	            if (values.length == 10) { // Adjusted to 9 instead of 8
 	                try {
 	                    // Parse the values and convert to appropriate types
 	                    String hospitalID = values[0];
@@ -36,11 +36,13 @@ public class PatientCSV {
 	                    BloodType bloodType = BloodType.valueOf(values[6].toUpperCase()); // Enum conversion
 	                    String phoneNumber = values[7];
 	                    String email = values[8];
+	                    Boolean firstTimeLogin = Boolean.parseBoolean(values[9].trim());
+
 
 	                    // Create Patient object and add to list
 	                    Patient patient = new Patient(hospitalID, password, role, gender,
 	                                                  name, dateOfBirth, bloodType,
-	                                                  phoneNumber, email);
+	                                                  phoneNumber, email,firstTimeLogin);
 	                    patients.add(patient);
 	                } catch (Exception e) {
 	                    System.out.println("Error processing record: " + line + " | " + e.getMessage());
