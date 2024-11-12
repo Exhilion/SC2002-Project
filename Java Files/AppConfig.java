@@ -10,4 +10,6 @@ public class AppConfig {
     public static final String DOCTOR_FILE_PATH = "src\\\\OOPProject\\\\Doctor.csv";
     public static final String PHARMACIST_FILE_PATH = "src\\\\OOPProject\\\\Pharmacist.csv";
     public static final String ADMIN_FILE_PATH = "src\\\\OOPProject\\\\Admin.csv";
+    public static final String APPOINTMENT_SLOT_FILE_PATH = "src\\\\OOPProject\\\\AppointmentSlot.csv";
+  
 }

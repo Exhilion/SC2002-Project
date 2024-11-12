@@ -1,34 +1,93 @@
 package OOPProject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AppointmentSlot {
-	private int appointmentID;
-    private Doctor doctor;
-    private long time;
-    private Date date;
+	private String appointmentSlotID;
+	private Doctor doctor;
+	private String startTime;
+	private String endTime;
+	private Date date;
+	private boolean isBooked;
 
-    public AppointmentSlot(int appointmentID, Doctor doctor, long time, Date date) {
-        this.appointmentID = appointmentID;
-        this.doctor = doctor;
-        this.time = time;
-        this.date = date;
-    }
+	// Constructor
+	public AppointmentSlot(String appointmentSlotID, Doctor doctor, String startTime, String endTime, Date date,
+			boolean isBooked) {
+		this.appointmentSlotID = appointmentSlotID;
+		this.doctor = doctor;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.date = date;
+		this.isBooked = isBooked;
+	}
 
-    public int getAppointmentID() {
-        return appointmentID;
-    }
+	// Getters
+	public String getAppointmentSlotID() {
+		return appointmentSlotID;
+	}
 
-    public Doctor getDoctor() {
-        return doctor;
-    }
+	public Doctor getDoctor() {
+		return doctor;
+	}
 
-    public long getTime() {
-        return time;
-    }
+	public String getStartTime() {
+		return startTime;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public boolean isBooked() {
+		return isBooked;
+	}
+
+	// Setters
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setBooked(boolean isBooked) {
+		this.isBooked = isBooked;
+	}
+
+	public static List<AppointmentSlot> filterByDoctorID(List<AppointmentSlot> slots, String doctorID) {
+		List<AppointmentSlot> filteredSlots = new ArrayList<>();
+		for (AppointmentSlot slot : slots) {
+			if (slot.getDoctor() != null && slot.getDoctor().getHospitalId().equals(doctorID)) {
+				filteredSlots.add(slot);
+			}
+		}
+		return filteredSlots;
+	}
+
+	// Utility method to display appointment details
+	@Override
+	public String toString() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		String formattedDate = dateFormat.format(date);
+
+		return "StartTime: " + startTime + ", EndTime: " + endTime + ", Date: " + formattedDate + ", Is Booked: "
+				+ isBooked;
+	}
 
 }

@@ -9,6 +9,9 @@ public class loadCSVClass {
     private List<Diagnosis> diagnoses;
     private List<Prescription> prescriptions;
     private List<MedicalRecord> medicalRecords;
+    private List<AppointmentSlot> appointmentSlots;
+    private List<Doctor> doctors;
+
 
     // Constructor to load all CSV data
     public loadCSVClass() {
@@ -36,6 +39,12 @@ public class loadCSVClass {
         MedicalRecordCSV medicalRecordCSV = new MedicalRecordCSV();
         this.medicalRecords = medicalRecordCSV.loadMedicalRecordsFromCSV(
                 this.patients, this.diagnoses, this.treatments, this.prescriptions);
+        
+        DoctorCSV doctorCSV = new DoctorCSV();
+        this.doctors = doctorCSV.loadDoctorsFromCSV();
+        
+        AppointmentSlotCSV appointmentSlotCSV = new AppointmentSlotCSV();
+        this.appointmentSlots = appointmentSlotCSV.loadAppointmentSlotsFromCSV(doctors);
     }
 
     // Getter methods to access the loaded data
@@ -61,5 +70,13 @@ public class loadCSVClass {
 
     public List<MedicalRecord> getMedicalRecords() {
         return medicalRecords;
+    }
+    
+    public List<Doctor> getDoctors() {
+        return doctors;
+    }
+    
+    public List<AppointmentSlot> getAppointmentSlots() {
+        return appointmentSlots;
     }
 }

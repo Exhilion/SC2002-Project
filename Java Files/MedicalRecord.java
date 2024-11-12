@@ -66,6 +66,9 @@ public class MedicalRecord {
 	                          && record.getPatient().getHospitalId().equalsIgnoreCase(hospitalId))
 	                  .collect(Collectors.toList());
 	}
+	
+
+
 
 
 
