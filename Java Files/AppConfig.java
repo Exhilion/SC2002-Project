@@ -7,7 +7,7 @@ public class AppConfig {
     public static final String MEDICALRECORD_FILE_PATH = "src\\\\OOPProject\\\\MedicalRecord.csv";
     public static final String MEDICATION_FILE_PATH = "src\\\\OOPProject\\\\Medication.csv";
     public static final String PATIENT_FILE_PATH = "src\\\\OOPProject\\\\Patient.csv";
-    public static final String DOCTOR_FILE_PATH = "src\\\\OOPProject\\\\doctors.csv";
+    public static final String DOCTOR_FILE_PATH = "src\\\\OOPProject\\\\Doctor.csv";
     public static final String PHARMACIST_FILE_PATH = "src\\\\OOPProject\\\\Pharmacist.csv";
     public static final String ADMIN_FILE_PATH = "src\\\\OOPProject\\\\Admin.csv";
 }

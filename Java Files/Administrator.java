@@ -16,8 +16,8 @@ public class Administrator extends User{
     	
     }
     
-    public Administrator(String hospitalID, String password, Role role, Gender gender, String administratorName) {
-		super(hospitalID, password, role, gender);
+    public Administrator(String hospitalID, String password, Role role, Gender gender, String administratorName,Boolean firstTimeLogin) {
+        super(hospitalID, password, role, gender, firstTimeLogin);
 		this.adminName = administratorName;
 
 	}

@@ -1,2 +1,1 @@
-HospitalID,Password,Role,Gender,DoctorName,Department,Specialization
-DR1234,1234,DR,Male,Jake,Cardio,Heart
+DR6da83172,password,DOCTOR,MALE,Jason,Neurology,Brain Surgery,true

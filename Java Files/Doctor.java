@@ -15,8 +15,8 @@ public class Doctor extends User{
     private String specialisation;
 
     public Doctor(String hospitalId, String password, Role role, Gender gender, 
-                  String doctorName, String department, String specialisation) {
-        super(hospitalId, password, role, gender);
+                  String doctorName, String department, String specialisation, Boolean firstTimeLogin) {
+        super(hospitalId, password, role, gender, firstTimeLogin);
         this.doctorName = doctorName;
         this.department = department;
         this.specialisation = specialisation;

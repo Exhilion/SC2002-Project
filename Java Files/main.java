@@ -30,7 +30,7 @@ public class main {
         	
         	switch(choice) {
         	case 1:
-                // View Medical Record Record
+                // View Medical Record
         		loadCSVClass load = new loadCSVClass();
         		List<MedicalRecord> filteredRecords = MedicalRecord.filterByHospitalId(load.getMedicalRecords(), username);
 
@@ -190,11 +190,14 @@ public class main {
 	
 	private static void displayAdminMenu(String adminID) {
 		System.out.println("\nAdmin Menu:");
-		System.out.println("(1) View and Manage Hospital Staff");
-		System.out.println("(2) View Appointments details");
-		System.out.println("(3) View and Manage Medication Inventory");
-		System.out.println("(4) Approve Replenishment Requests");
-		System.out.println("(5) Logout");
+		System.out.println("(1) View Hospital Staff");
+		System.out.println("(2) Add Hospital Staff");
+		System.out.println("(3) Update Hospital Staff");
+		System.out.println("(4) Remove Hospital Staff");
+		System.out.println("(5) View Appointments details");
+		System.out.println("(6) View and Manage Medication Inventory");
+		System.out.println("(7) Approve Replenishment Requests");
+		System.out.println("(8) Logout");
 		
 		Administrator admin = new Administrator();
 		Scanner scanner = new Scanner(System.in);
@@ -205,23 +208,88 @@ public class main {
 
             switch (choice) {
                 case 1:
-                    // View and Manage Hospital Staff
+                    // View Hospital Staff
+                	
+                    break;
+                case 2:
+                    // Add Hospital Staff
+                	StaffCSV newstaff = new StaffCSV();
+                	System.out.println("Select Role (1-DOCTOR, 2-PHARMACIST, 3-ADMINISTRATOR):");
+            		int roleChoice = scanner.nextInt();
+            		scanner.nextLine(); 
+            		Role role = null;
+            		switch (roleChoice) {
+            		case 1 -> role = Role.DOCTOR;
+            		case 2 -> role = Role.PHARMACIST;
+            		case 3 -> role = Role.ADMINISTRATOR;
+            		default -> {
+            			System.out.println("Invalid role selected. Exiting...");
+            			scanner.close();
+            			return;
+            		}
+            		}
+
+            		// Gender selection
+            		System.out.println("Select Gender (1-MALE, 2-FEMALE, 3-OTHER): ");
+            		int genderChoice = scanner.nextInt();
+            		scanner.nextLine(); 
+            		Gender gender = null;
+            		switch (genderChoice) {
+            		case 1 -> gender = Gender.MALE;
+            		case 2 -> gender = Gender.FEMALE;
+            		default -> {
+            			System.out.println("Invalid gender selected. Exiting...");
+            			scanner.close();
+            			return;
+            		}
+            		}
+
+            		// Common details for all roles
+            		System.out.print("Enter Name: ");
+            		String name = scanner.nextLine();
+
+            		// Generate hospital ID and password
+            		String hospitalID = newstaff.generateStaffId(role);
+            		String password = "password";
+            		Boolean firstTimeLogin = true;
+
+            		// Additional details based on role
+            		switch (role) {
+            		case DOCTOR -> {
+            			System.out.print("Enter Department: ");
+            			String department = scanner.nextLine();
+            			System.out.print("Enter Specialisation: ");
+            			String specialisation = scanner.nextLine();
+            			newstaff.addDoctor(hospitalID, password, role, gender, name, department, specialisation, firstTimeLogin);
+            		}
+            		case PHARMACIST -> newstaff.addPharmacist(hospitalID, password, role, gender, name, firstTimeLogin);
+            		case ADMINISTRATOR -> newstaff.addAdmin(hospitalID, password, role, gender, name, firstTimeLogin);
+            		}
+
+                	
+                    break;
+                case 3:
+                    // Update Hospital Staff
+                	
+                    break;
+                case 4:
+                    // Remove Hospital Staff
                 	
                     break;
 
-                case 2:
+                case 5:
                     // View Appointments details
                     break;
 
-                case 3:
+                case 6:
                     // View and Manage Medication Inventory
                     break;
 
-                case 4:
+                case 7:
                     // Approve Replenishment Requests
                     
                     break;
-                case 5:
+                case 8:
                     // Quit the program
                     System.out.println("Logout");
                 	displayLoginMenu();

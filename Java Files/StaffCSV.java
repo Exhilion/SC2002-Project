@@ -29,21 +29,21 @@ public class StaffCSV implements AdminStaffManagement{
 
 
 	@Override
-	public void addAdmin(String hospitalId, String password, Role role, Gender gender, String administratorName) {
-		Administrator newAdmin = new Administrator(hospitalId, password, role, gender, administratorName);
+	public void addAdmin(String hospitalId, String password, Role role, Gender gender, String administratorName, Boolean firstTimeLogin ) {
+		Administrator newAdmin = new Administrator(hospitalId, password, role, gender, administratorName , firstTimeLogin);
 		writeToCSV(newAdmin);
 	}
 
 	@Override
 	public void addDoctor(String hospitalId, String password, Role role, Gender gender, String doctorName,
-			String department, String specialisation) {
-		Doctor newDoctor = new Doctor(hospitalId, password, role, gender, doctorName, department, specialisation);
+			String department, String specialisation, Boolean firstTimeLogin) {
+		Doctor newDoctor = new Doctor(hospitalId, password, role, gender, doctorName, department, specialisation, firstTimeLogin);
 		writeToCSV(newDoctor);
 	}
 
 	@Override
-	public void addPharmacist(String hospitalId, String password, Role role, Gender gender, String pharmacistName) {
-		Pharmacist newPharmacist = new Pharmacist(hospitalId, password, role, gender, pharmacistName);
+	public void addPharmacist(String hospitalId, String password, Role role, Gender gender, String pharmacistName, Boolean firstTimeLogin) {
+		Pharmacist newPharmacist = new Pharmacist(hospitalId, password, role, gender, pharmacistName, firstTimeLogin);
 		writeToCSV(newPharmacist);
 	}
 
@@ -55,16 +55,16 @@ public class StaffCSV implements AdminStaffManagement{
 
 		if (staffMember instanceof Administrator admin) {
 			csvLine = admin.getHospitalId() + "," + admin.getPassword() + "," + admin.getRole() + ","
-					+ admin.getGender() + "," + admin.getAdminName() + "\n";
+					+ admin.getGender() + "," + admin.getAdminName() + "," + admin.getFirstTimeLogin() +"\n";
 			filePath = roleFilePathMap.get(admin.getRole());
 		} else if (staffMember instanceof Doctor doctor) {
 			csvLine = doctor.getHospitalId() + "," + doctor.getPassword() + "," + doctor.getRole() + ","
 					+ doctor.getGender() + "," + doctor.getDoctorName() + "," + doctor.getDepartment() + ","
-					+ doctor.getSpecialisation() + "\n";
+					+ doctor.getSpecialisation() + "," + doctor.getFirstTimeLogin() +"\n";
 			filePath = roleFilePathMap.get(doctor.getRole());
 		} else if (staffMember instanceof Pharmacist pharmacist) {
 			csvLine = pharmacist.getHospitalId() + "," + pharmacist.getPassword() + "," + pharmacist.getRole() + ","
-					+ pharmacist.getGender() + "," + pharmacist.getPharmacistName() + "\n";
+					+ pharmacist.getGender() + "," + pharmacist.getPharmacistName() + "," + pharmacist.getFirstTimeLogin() +"\n";
 			filePath = roleFilePathMap.get(pharmacist.getRole());
 		} else {
 			throw new IllegalArgumentException("Unsupported staff member type");

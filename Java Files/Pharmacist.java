@@ -4,8 +4,8 @@ public class Pharmacist extends User {
 	private String pharmacistName;
 
     public Pharmacist(String hospitalId, String password, Role role, Gender gender, 
-                      String pharmacistName) {
-        super(hospitalId, password, role, gender);
+                      String pharmacistName, Boolean firstTimeLogin) {
+        super(hospitalId, password, role, gender, firstTimeLogin);
         this.pharmacistName = pharmacistName;
     }
 

@@ -20,7 +20,7 @@ public class UserCSV {
         		br.readLine();
         		while((line = br.readLine()) != null) {
         			String[] values = line.split(","); 
-        			if(values.length == 7) {
+        			if(values.length == 8) {
         				String fileUsername = values[0].trim();
         				String filePassword = values[1].trim();
         				System.out.println(fileUsername + filePassword);
@@ -49,7 +49,7 @@ public class UserCSV {
         		
         		while((line = br.readLine()) != null) {
         			String[] values = line.split(","); 
-        			if(values.length == 5) {
+        			if(values.length == 6) {
         				String fileUsername = values[0].trim();
         				String filePassword = values[1].trim();
         				if(fileUsername.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {
@@ -77,7 +77,7 @@ public class UserCSV {
         		
         		while((line = br.readLine()) != null) {
         			String[] values = line.split(","); 
-        			if(values.length == 5) {
+        			if(values.length == 6) {
         				String fileUsername = values[0].trim();
         				String filePassword = values[1].trim();
         				if(fileUsername.equalsIgnoreCase(Username) && filePassword.equalsIgnoreCase(Password)) {

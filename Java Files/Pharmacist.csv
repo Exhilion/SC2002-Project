@@ -1,3 +1,2 @@
-HospitalID,Password,Role,Gender,Name
-PHf64a8ecd,3yuL!Fek,PHARMACIST,FEMALE,Jane
-PHdd43c5f8,4dO4hLa#pi,PHARMACIST,FEMALE,Astray
+HospitalID,Password,Role,Gender,Name,firstTimeLogin
+PHfaca411e,password,PHARMACIST,FEMALE,Jessi,true

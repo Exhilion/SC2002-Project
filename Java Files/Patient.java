@@ -22,7 +22,7 @@ public class Patient extends User{
 	private Role role;
 	private String phoneNumber; 
 	private String email; 
-	private Boolean firstTimeLogin;
+
 
 	
 	
@@ -35,7 +35,7 @@ public class Patient extends User{
 	public Patient(String hospitalID, String password, Role role, Gender gender, 
             String name, Date dateOfBirth, BloodType bloodType, 
             String phoneNumber, String email, Boolean firstTimeLogin) {
-			 super(hospitalID, password, role, gender);
+			 super(hospitalID, password, role, gender, firstTimeLogin);
 			 this.name = name;
 			 this.dateOfBirth = dateOfBirth;
 			 this.bloodType = bloodType;
@@ -44,7 +44,6 @@ public class Patient extends User{
 			 this.gender = gender; 
 			 this.hospitalID = hospitalID; 
 			 this.role = role; 
-			 this.firstTimeLogin = firstTimeLogin;
 	}
 
 	public String getUsername() {
