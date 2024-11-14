@@ -60,4 +60,16 @@ public class AppointmentOutcome {
     public void setStatus(PrescriptionStatus status) {
         this.status = status;
     }
+    
+
+    public void printDetails() {
+        System.out.println("Appointment Outcome Details:");
+        System.out.println("Patient Name: " + (appointment != null && appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
+        medicalRecord.printPrescriptionDetails();
+        System.out.println("Consultation Notes: " + consultationNotes);
+        System.out.println("Prescription Status: " + (status != null ? status : "N/A"));
+        System.out.println("--------------------------------");
+    }
+    
+  
 }

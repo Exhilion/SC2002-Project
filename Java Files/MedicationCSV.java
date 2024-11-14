@@ -1,6 +1,8 @@
 package OOPProject;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,38 @@ public class MedicationCSV {
 	        return medications;
 	    }
 		
+		  // Update medication quantity by medicineID
+	    public void updateMedicationQuantity(int medicineID, int newQuantity) {
+	        List<Medication> medications = loadMedicationsFromCSV(); // Load medications from CSV
+
+	        // Find the medication by its ID and update the quantity
+	        for (Medication med : medications) {
+	            if (med.getMedicineID() == medicineID) {
+	                med.setQuantity(newQuantity);
+	                System.out.println("Quantity updated for " + med.getMedicineName() + " to " + newQuantity);
+	                break;
+	            }
+	        }
+
+	        saveMedicationsToCSV(medications);
+	    }
+
+
+	    private void saveMedicationsToCSV(List<Medication> medications) {
+	        try (BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.MEDICATION_FILE_PATH))) {
+	            bw.write("medicineID,medicineName,quantity,lowQuantity,lowStockAlert\n"); // Write header
+	            for (Medication med : medications) {
+	                bw.write(med.getMedicineID() + "," +
+	                        med.getMedicineName() + "," +
+	                        med.getQuantity() + "," +
+	                        med.getLowQuantity() + "," +
+	                        med.getLowStockAlert() + "\n");
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
 		public void updateLowStockAlert(Medication med)
 		{
 			if(med.getLowQuantity() >= med.getQuantity())	
@@ -41,4 +75,6 @@ public class MedicationCSV {
 			else 
 			med.setlowstockAlert(false);
 		}
+		
+		
 }

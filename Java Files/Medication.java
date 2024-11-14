@@ -63,6 +63,22 @@ public class Medication {
 		this.lowStockAlert = lowStockAlert;
 	}
 	
+	public void reduceQuantity(int amount) {
+	    if (this.quantity >= amount) {
+	        this.quantity -= amount;
+	    } else {
+	        System.out.println("Insufficient stock available.");
+	    }
+	}
+	
+    public void printDetails() {
+        System.out.println("Medication Details:");
+        System.out.println("Medicine Name: " + medicineName);
+        System.out.println("Quantity: " + quantity);
+        System.out.println("Low Quantity Threshold: " + lowQuantity);
+        System.out.println("Low Stock Alert: " + lowStockAlert);
+    }
+	
 	
 
 }

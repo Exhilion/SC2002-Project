@@ -68,7 +68,23 @@ public class MedicalRecord {
 	}
 	
 
-
+    // Method to print prescription details
+    public void printPrescriptionDetails() {
+        System.out.println("Prescription Details:");
+        
+        if (prescriptions != null && !prescriptions.isEmpty()) {
+            for (Prescription prescription : prescriptions) {
+                System.out.println("--------------------------------");
+                System.out.println("Medication Name: " + prescription.getMedication().getMedicineName());
+                System.out.println("Dosage: " + prescription.getDosage());
+                System.out.println("Frequency: " + prescription.getFrequency());
+                System.out.println("Duration: " + prescription.getDuration());
+            }
+        } else {
+            System.out.println("No prescriptions available.");
+        }
+        System.out.println("--------------------------------");
+    }
 
 
 

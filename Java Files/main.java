@@ -173,16 +173,15 @@ public class main {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 				Date date;
 				try {
-					date = dateFormat.parse(dateStr); // Parse the input date string into a Date object
+					date = dateFormat.parse(dateStr);
 				} catch (ParseException e) {
 					System.out.println("Invalid date format. Please use 'dd/MM/yyyy'.");
-					break; // Exit the case if date is invalid
+					break;
 				}
 
 				String AppointmentSlotID = "AS" + UUID.randomUUID().toString();
 				AppointmentSlot newSlot = new AppointmentSlot(AppointmentSlotID, startTime, endTime, date, false);
 
-				// Save the new slot to CSV
 				if (newslot.addAppointmentSlotToCSV(newSlot, doctorID)) {
 					System.out.println("Appointment slot added successfully!");
 				} else {
@@ -201,43 +200,28 @@ public class main {
 						pendingAppointments.add(appointment);
 					}
 				}
-
 				if (pendingAppointments.isEmpty()) {
 					System.out.println("No pending appointments found.");
 				} else {
 					for (Appointment appointment : pendingAppointments) {
-						System.out.println("Patient: " + appointment.getPatient().getName());
-						System.out.println("Appointment Slot:");
-						System.out
-								.println("   Doctor: " + appointment.getAppointmentSlot().getDoctor().getDoctorName());
-						System.out.println("   Start Time: " + appointment.getAppointmentSlot().getStartTime());
-						System.out.println("   End Time: " + appointment.getAppointmentSlot().getEndTime());
-						SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
-						String formattedDate = dateFormat1.format(appointment.getAppointmentSlot().getDate());
-						System.out.println("   Date: " + formattedDate);
-						System.out.println("   Is Booked: " + appointment.getAppointmentSlot().isBooked());
-
-						// Ask user if they want to accept or decline the appointment
+						appointment.printAppointmentDetails();
 						System.out
 								.println("Do you want to accept or decline this appointment? (1: Accept, 2: Decline)");
 						int response = scanner.nextInt();
 						scanner.nextLine();
-
 						String newStatus = (response == 1) ? "Confirmed" : "Cancelled";
+						// Update appointment and slot status
+						new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 						if (response == 1) {
-
-							new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 							new AppointmentSlotCSV().updateAppointmentSlotBookingStatus(
 									appointment.getAppointmentSlot().getAppointmentSlotID(), true);
-							System.out.println("Appointment " + newStatus + " successfully!");
-						}
-
-						else {
-							new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
+							System.out.println("Appointment Confirmed successfully!");
+						} else {
 							System.out.println("Appointment Cancelled");
 						}
 					}
 				}
+
 				break;
 
 			case 6:
@@ -247,23 +231,8 @@ public class main {
 						.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID, status);
 				// Output the filtered appointments
 				for (Appointment appointment : confirmedAppointments) {
-					AppointmentSlot slot = appointment.getAppointmentSlot();
-					Doctor doctor = slot.getDoctor();
-					Date dates = slot.getDate();
-
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					String formattedDate = sdf.format(dates);
-
-					System.out.println("Doctor: " + (doctor != null ? doctor.getDoctorName() : "N/A"));
-					System.out.println("Start Time: " + slot.getStartTime());
-					System.out.println("End Time: " + slot.getEndTime());
-					System.out.println("Date: " + formattedDate);
-					System.out.println("Status: " + appointment.getStatus());
-					System.out.println("Patient: "
-							+ (appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
-					System.out.println("-------------------------------");
+					appointment.printAppointmentDetails();
 				}
-
 				break;
 			case 7:
 				// Record Appointment Outcome
@@ -275,19 +244,9 @@ public class main {
 				if (filteredAppointments.isEmpty()) {
 					System.out.println("No confirmed appointments found.");
 				} else {
-					System.out.println("Upcoming confirmed appointments:");
+					System.out.println("Patients appointments:");
 					for (int i = 0; i < filteredAppointments.size(); i++) {
-						Appointment appointment = filteredAppointments.get(i);
-						AppointmentSlot slot = appointment.getAppointmentSlot();
-						String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(slot.getDate());
-						System.out.println((i + 1) + ". Doctor: "
-								+ (slot.getDoctor() != null ? slot.getDoctor().getDoctorName() : "N/A"));
-						System.out
-								.println("   Start Time: " + slot.getStartTime() + ", End Time: " + slot.getEndTime());
-						System.out.println("   Date: " + formattedDate + ", Status: " + appointment.getStatus());
-						System.out.println("   Patient: "
-								+ (appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
-						System.out.println("-------------------------------");
+						filteredAppointments.get(i).printAppointmentDetails();
 					}
 
 					// Select appointment
@@ -308,48 +267,47 @@ public class main {
 							// Select diagnosis
 							System.out.println("Available Diagnoses:");
 							for (int i = 0; i < diagnoses.size(); i++)
-							    System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
+								System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
 							int diagnosisChoice = scanner.nextInt() - 1;
-							scanner.nextLine();  
+							scanner.nextLine();
 
 							// Select treatment
 							System.out.println("Available Treatments:");
 							for (int i = 0; i < treatments.size(); i++)
-							    System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
+								System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
 							int treatmentChoice = scanner.nextInt() - 1;
-							scanner.nextLine(); 
+							scanner.nextLine();
 
 							// Select prescriptions
 							System.out.println("Available Prescriptions:");
 							for (int i = 0; i < prescriptions.size(); i++) {
-							    Prescription p = prescriptions.get(i);
-							    System.out.println((i + 1) + ". " + p.getMedication().getMedicineName() + " - "
-							            + p.getDosage() + " mg");
+								Prescription p = prescriptions.get(i);
+								System.out.println((i + 1) + ". " + p.getMedication().getMedicineName() + " - "
+										+ p.getDosage() + " mg");
 							}
 
 							// Collect multiple prescriptions
 							List<Prescription> selectedPrescriptions = new ArrayList<>();
 							String addMore = "y";
 							while ("y".equalsIgnoreCase(addMore)) {
-							    System.out.print("Select a prescription by number: ");
-							    int prescriptionChoice = scanner.nextInt() - 1;
-							    scanner.nextLine();  // Consume the newline character
-							    if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
-							        selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
-							        System.out.println("Prescription added: "
-							                + prescriptions.get(prescriptionChoice).getMedication().getMedicineName());
-							    } else {
-							        System.out.println("Invalid choice.");
-							    }
-							    System.out.print("Add another prescription? (y/n): ");
-							    addMore = scanner.next();
-							    scanner.nextLine(); 
+								System.out.print("Select a prescription by number: ");
+								int prescriptionChoice = scanner.nextInt() - 1;
+								scanner.nextLine(); // Consume the newline character
+								if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
+									selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
+									System.out.println("Prescription added: "
+											+ prescriptions.get(prescriptionChoice).getMedication().getMedicineName());
+								} else {
+									System.out.println("Invalid choice.");
+								}
+								System.out.print("Add another prescription? (y/n): ");
+								addMore = scanner.next();
+								scanner.nextLine();
 							}
 
 							// Enter consultation notes
 							System.out.print("Enter consultation notes: \n");
-							String consultationNotes = scanner.nextLine();  
-
+							String consultationNotes = scanner.nextLine();
 
 							MedicalRecordCSV medicalRecordCSV = new MedicalRecordCSV();
 							String recordID = medicalRecordCSV.generateMedicalRecordID();
@@ -529,15 +487,129 @@ public class main {
 			switch (choice) {
 			case 1:
 				// View appointment Outcome Record
+				List<AppointmentOutcome> PendingOutcomes = AppointmentOutcomeFilter
+						.filterByPendingStatus(load.getAppointmentOutcomes());
+				for (int i = 0; i < PendingOutcomes.size(); i++) {
+					PendingOutcomes.get(i).printDetails();
+				}
 
 				break;
 
 			case 2:
 				// Update Prescription Status
+
+				List<AppointmentOutcome> pendingOutcomes = AppointmentOutcomeFilter
+				        .filterByPendingStatus(load.getAppointmentOutcomes());
+
+				if (pendingOutcomes.isEmpty()) {
+				    System.out.println("No pending appointment outcomes available for prescription.");
+				} else {
+				    System.out.println("Select an AppointmentOutcome to prescribe:");
+				    for (int i = 0; i < pendingOutcomes.size(); i++) {
+				        System.out.println("(" + (i + 1) + ")");
+				        pendingOutcomes.get(i).printDetails();
+				    }
+
+				    System.out.print("Enter the AppointmentOutcome to prescribe: ");
+				    int outcomeChoice = scanner.nextInt();
+				    scanner.nextLine();
+
+				    if (outcomeChoice > 0 && outcomeChoice <= pendingOutcomes.size()) {
+				        AppointmentOutcome selectedOutcome = pendingOutcomes.get(outcomeChoice - 1);
+				        System.out.println("Prescribing medication for AppointmentOutcome ID: "
+				                + selectedOutcome.getAppointmentOutcomeID());
+
+				        // Display available medications
+				        List<Medication> medications = load.getMedications();
+				        if (medications.isEmpty()) {
+				            System.out.println("No medications available.");
+				            return;
+				        }
+
+				        List<Medication> prescribedMedications = new ArrayList<>();
+				        List<Integer> prescribedQuantities = new ArrayList<>();
+
+				        boolean prescribing = true;
+				        while (prescribing) {
+				            System.out.println("Select a medication to prescribe:");
+				            for (int i = 0; i < medications.size(); i++) {
+				                System.out.println("(" + (i + 1) + ") " + medications.get(i).getMedicineName()
+				                        + " - Available: " + medications.get(i).getQuantity());
+				            }
+
+				            System.out.print("Enter the number of the medication (or 0 to finish): ");
+				            int medicationChoice = scanner.nextInt();
+				            scanner.nextLine();
+
+				            if (medicationChoice == 0) {
+				                break;
+				            }
+
+				            if (medicationChoice > 0 && medicationChoice <= medications.size()) {
+				                Medication selectedMedication = medications.get(medicationChoice - 1);
+
+				                // Check if the medication has already been prescribed
+				                if (prescribedMedications.contains(selectedMedication)) {
+				                    System.out.println("This medication has already been prescribed. Choose another.");
+				                    continue;
+				                }
+
+				                System.out.print("Enter the quantity to prescribe: ");
+				                int quantity = scanner.nextInt();
+				                scanner.nextLine();
+
+				                if (quantity > 0 && quantity <= selectedMedication.getQuantity()) {
+				                    selectedMedication.reduceQuantity(quantity);
+				                    prescribedMedications.add(selectedMedication);
+				                    prescribedQuantities.add(quantity);
+				                    MedicationCSV medicationCSV = new MedicationCSV();
+				                    medicationCSV.updateMedicationQuantity(selectedMedication.getMedicineID(), selectedMedication.getQuantity());
+
+				                    System.out.println("Added " + quantity + " units of "
+				                            + selectedMedication.getMedicineName() + " to the prescription.");
+				                } else {
+				                    System.out.println("Invalid quantity.");
+				                }
+				            } else {
+				                System.out.println("Invalid medication selection.");
+				            }
+
+				            System.out.print("Do you want to prescribe another medication? (y/n): ");
+				            String response = scanner.nextLine();
+				            prescribing = response.equalsIgnoreCase("y");
+				        }
+
+				        // Check if any medications were prescribed
+				        if (!prescribedMedications.isEmpty()) {
+				            // Update the status of the AppointmentOutcome
+				            AppointmentOutcomeCSV outcome = new AppointmentOutcomeCSV();
+				            outcome.updateAppointmentOutcomeStatus(load.getAppointmentOutcomes(),
+				                    selectedOutcome.getAppointmentOutcomeID(), PrescriptionStatus.Dispensed);
+				            System.out.println("Prescription successful. Medications prescribed:");
+
+				            // Display all prescribed medications
+				            for (int i = 0; i < prescribedMedications.size(); i++) {
+				                System.out.println("- " + prescribedQuantities.get(i) + " units of "
+				                        + prescribedMedications.get(i).getMedicineName());
+				            }
+				        } else {
+				            System.out.println("No medications were prescribed.");
+				        }
+				    } else {
+				        System.out.println("Invalid AppointmentOutcome selection.");
+				    }
+				}
+
+
 				break;
 
 			case 3:
 				// View Medication Inventory
+				List<Medication> medications = load.getMedications();
+				for(Medication medication : medications)
+				{
+					medication.printDetails();
+				}
 				break;
 
 			case 4:

@@ -1,5 +1,6 @@
 package OOPProject;
 
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 public class Appointment {
@@ -48,6 +49,20 @@ public class Appointment {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+    
+    public void printAppointmentDetails() {
+        System.out.println("Patient: " + patient.getName());
+        System.out.println("Appointment Slot:");
+        System.out.println("   Doctor: " + appointmentSlot.getDoctor().getDoctorName());
+        System.out.println("   Start Time: " + appointmentSlot.getStartTime());
+        System.out.println("   End Time: " + appointmentSlot.getEndTime());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = dateFormat.format(appointmentSlot.getDate());
+        System.out.println("   Date: " + formattedDate);
+        System.out.println("   Is Booked: " + appointmentSlot.isBooked());
+
     }
 
 
