@@ -242,34 +242,141 @@ public class main {
 
 			case 6:
 				// View Upcoming Appointment
-
 				String status = "confirmed";
-				
-
-				List<Appointment> confirmedAppointments = AppointmentFilter.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID,
-						status);
-
+				List<Appointment> confirmedAppointments = AppointmentFilter
+						.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID, status);
 				// Output the filtered appointments
 				for (Appointment appointment : confirmedAppointments) {
-				    AppointmentSlot slot = appointment.getAppointmentSlot();
-				    Doctor doctor = slot.getDoctor();
-				    Date dates = slot.getDate();
-				    
-				    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				    String formattedDate = sdf.format(dates);
-				    
-				    System.out.println("Doctor: " + (doctor != null ? doctor.getDoctorName() : "N/A"));
-				    System.out.println("Start Time: " + slot.getStartTime());
-				    System.out.println("End Time: " + slot.getEndTime());
-				    System.out.println("Date: " + formattedDate);
-				    System.out.println("Status: " + appointment.getStatus());
-				    System.out.println("Patient: " + (appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
-				    System.out.println("-------------------------------");
+					AppointmentSlot slot = appointment.getAppointmentSlot();
+					Doctor doctor = slot.getDoctor();
+					Date dates = slot.getDate();
+
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String formattedDate = sdf.format(dates);
+
+					System.out.println("Doctor: " + (doctor != null ? doctor.getDoctorName() : "N/A"));
+					System.out.println("Start Time: " + slot.getStartTime());
+					System.out.println("End Time: " + slot.getEndTime());
+					System.out.println("Date: " + formattedDate);
+					System.out.println("Status: " + appointment.getStatus());
+					System.out.println("Patient: "
+							+ (appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
+					System.out.println("-------------------------------");
 				}
 
 				break;
 			case 7:
 				// Record Appointment Outcome
+				String appointmentStatus = "confirmed";
+				List<Appointment> filteredAppointments = AppointmentFilter
+						.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID, appointmentStatus);
+
+				// Output the filtered appointments and allow the doctor to select one
+				if (filteredAppointments.isEmpty()) {
+					System.out.println("No confirmed appointments found.");
+				} else {
+					System.out.println("Upcoming confirmed appointments:");
+					for (int i = 0; i < filteredAppointments.size(); i++) {
+						Appointment appointment = filteredAppointments.get(i);
+						AppointmentSlot slot = appointment.getAppointmentSlot();
+						String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(slot.getDate());
+						System.out.println((i + 1) + ". Doctor: "
+								+ (slot.getDoctor() != null ? slot.getDoctor().getDoctorName() : "N/A"));
+						System.out
+								.println("   Start Time: " + slot.getStartTime() + ", End Time: " + slot.getEndTime());
+						System.out.println("   Date: " + formattedDate + ", Status: " + appointment.getStatus());
+						System.out.println("   Patient: "
+								+ (appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
+						System.out.println("-------------------------------");
+					}
+
+					// Select appointment
+					System.out.print("Select the patient to update their medical record: ");
+					int selectedAppointmentIndex = scanner.nextInt() - 1;
+					scanner.nextLine(); // Consume newline
+
+					if (selectedAppointmentIndex >= 0 && selectedAppointmentIndex < filteredAppointments.size()) {
+						Appointment selectedAppointment = filteredAppointments.get(selectedAppointmentIndex);
+						Patient selectedPatient = selectedAppointment.getPatient();
+
+						if (selectedPatient != null) {
+							System.out.println("Patient ID: " + selectedPatient.getHospitalId());
+							List<Diagnosis> diagnoses = load.getDiagnoses();
+							List<Treatment> treatments = load.getTreatments();
+							List<Prescription> prescriptions = load.getPrescriptions();
+
+							// Select diagnosis
+							System.out.println("Available Diagnoses:");
+							for (int i = 0; i < diagnoses.size(); i++)
+							    System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
+							int diagnosisChoice = scanner.nextInt() - 1;
+							scanner.nextLine();  
+
+							// Select treatment
+							System.out.println("Available Treatments:");
+							for (int i = 0; i < treatments.size(); i++)
+							    System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
+							int treatmentChoice = scanner.nextInt() - 1;
+							scanner.nextLine(); 
+
+							// Select prescriptions
+							System.out.println("Available Prescriptions:");
+							for (int i = 0; i < prescriptions.size(); i++) {
+							    Prescription p = prescriptions.get(i);
+							    System.out.println((i + 1) + ". " + p.getMedication().getMedicineName() + " - "
+							            + p.getDosage() + " mg");
+							}
+
+							// Collect multiple prescriptions
+							List<Prescription> selectedPrescriptions = new ArrayList<>();
+							String addMore = "y";
+							while ("y".equalsIgnoreCase(addMore)) {
+							    System.out.print("Select a prescription by number: ");
+							    int prescriptionChoice = scanner.nextInt() - 1;
+							    scanner.nextLine();  // Consume the newline character
+							    if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
+							        selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
+							        System.out.println("Prescription added: "
+							                + prescriptions.get(prescriptionChoice).getMedication().getMedicineName());
+							    } else {
+							        System.out.println("Invalid choice.");
+							    }
+							    System.out.print("Add another prescription? (y/n): ");
+							    addMore = scanner.next();
+							    scanner.nextLine(); 
+							}
+
+							// Enter consultation notes
+							System.out.print("Enter consultation notes: \n");
+							String consultationNotes = scanner.nextLine();  
+
+
+							MedicalRecordCSV medicalRecordCSV = new MedicalRecordCSV();
+							String recordID = medicalRecordCSV.generateMedicalRecordID();
+							MedicalRecord newMedicalRecord = new MedicalRecord(recordID, selectedPatient,
+									diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice),
+									selectedPrescriptions);
+
+							// Add the medical record to CSV
+							medicalRecordCSV.addMedicalRecord(recordID, selectedPatient, diagnoses.get(diagnosisChoice),
+									treatments.get(treatmentChoice), selectedPrescriptions);
+							System.out.println(
+									"Medical record updated for Patient ID \n" + selectedPatient.getHospitalId());
+
+							String appointmentID = selectedAppointment.getAppointmentID();
+							String appointmentOutcomeID = "A" + UUID.randomUUID().toString();
+							AppointmentOutcomeCSV appointmentOutcomeCSV = new AppointmentOutcomeCSV();
+							appointmentOutcomeCSV.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment,
+									newMedicalRecord, consultationNotes, PrescriptionStatus.Pending);
+
+						} else {
+							System.out.println("Invalid selection.");
+						}
+					} else {
+						System.out.println("Invalid selection.");
+					}
+				}
+
 				break;
 			case 8:
 				// Quit the program

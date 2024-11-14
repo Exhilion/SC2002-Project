@@ -3,15 +3,13 @@ package OOPProject;
 public class AppointmentOutcome {
     private String appointmentOutcomeID;
     private Appointment appointment;
-    private String typeOfService;
     private MedicalRecord medicalRecord;
     private String consultationNotes;
     private PrescriptionStatus status;
 
-    public AppointmentOutcome(String appointmentOutcomeID, Appointment appointment, String typeOfService, MedicalRecord medicalRecord, String consultationNotes, PrescriptionStatus status) {
+    public AppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord, String consultationNotes, PrescriptionStatus status) {
         this.appointmentOutcomeID = appointmentOutcomeID;
     	this.appointment = appointment;
-        this.typeOfService = typeOfService;
         this.medicalRecord = medicalRecord;
         this.consultationNotes = consultationNotes;
         this.status = status;
@@ -35,14 +33,6 @@ public class AppointmentOutcome {
         this.appointment = appointment;
     }
 
-    // Getter and Setter for typeOfService
-    public String getTypeOfService() {
-        return typeOfService;
-    }
-
-    public void setTypeOfService(String typeOfService) {
-        this.typeOfService = typeOfService;
-    }
 
     // Getter and Setter for medicalRecord
     public MedicalRecord getMedicalRecord() {
