@@ -47,7 +47,7 @@ public class AppointmentSlotCSV {
                     boolean isBooked = Boolean.parseBoolean(values[5]);
 
                     // Convert date string to Date object
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Date date = null;
                     try {
                         date = dateFormat.parse(dateStr);

@@ -9,8 +9,8 @@ public class Appointment {
     private Patient patient;
 
     // Constructor
-    public Appointment(AppointmentSlot appointmentSlot, String status, Patient patient) {
-        this.appointmentID = generateUniqueID();
+    public Appointment(String appointmentID, AppointmentSlot appointmentSlot, String status, Patient patient) {
+        this.appointmentID = this.appointmentID;
         this.appointmentSlot = appointmentSlot;
         this.status = status;
         this.patient = patient;
