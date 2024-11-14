@@ -1,20 +1,32 @@
 package OOPProject;
 
 public class AppointmentOutcome {
+    private String appointmentOutcomeID;
     private Appointment appointment;
     private String typeOfService;
     private MedicalRecord medicalRecord;
     private String consultationNotes;
     private PrescriptionStatus status;
 
-    public AppointmentOutcome(Appointment appointment, String typeOfService, MedicalRecord medicalRecord, String consultationNotes, PrescriptionStatus status) {
-        this.appointment = appointment;
+    public AppointmentOutcome(String appointmentOutcomeID, Appointment appointment, String typeOfService, MedicalRecord medicalRecord, String consultationNotes, PrescriptionStatus status) {
+        this.appointmentOutcomeID = appointmentOutcomeID;
+    	this.appointment = appointment;
         this.typeOfService = typeOfService;
         this.medicalRecord = medicalRecord;
         this.consultationNotes = consultationNotes;
         this.status = status;
     }
 
+    // Getter and Setter for appointmentOutcomeID
+    public String getAppointmentOutcomeID() {
+        return appointmentOutcomeID;
+    }
+
+    public void setAppointmentOutcomeID(String appointmentOutcomeID) {
+        this.appointmentOutcomeID = appointmentOutcomeID;
+    }
+
+    // Getter and Setter for appointment
     public Appointment getAppointment() {
         return appointment;
     }
@@ -23,6 +35,7 @@ public class AppointmentOutcome {
         this.appointment = appointment;
     }
 
+    // Getter and Setter for typeOfService
     public String getTypeOfService() {
         return typeOfService;
     }
@@ -31,6 +44,7 @@ public class AppointmentOutcome {
         this.typeOfService = typeOfService;
     }
 
+    // Getter and Setter for medicalRecord
     public MedicalRecord getMedicalRecord() {
         return medicalRecord;
     }
@@ -39,6 +53,7 @@ public class AppointmentOutcome {
         this.medicalRecord = medicalRecord;
     }
 
+    // Getter and Setter for consultationNotes
     public String getConsultationNotes() {
         return consultationNotes;
     }
@@ -47,6 +62,7 @@ public class AppointmentOutcome {
         this.consultationNotes = consultationNotes;
     }
 
+    // Getter and Setter for status
     public PrescriptionStatus getStatus() {
         return status;
     }
@@ -54,5 +70,4 @@ public class AppointmentOutcome {
     public void setStatus(PrescriptionStatus status) {
         this.status = status;
     }
-
 }
