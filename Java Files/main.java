@@ -326,6 +326,8 @@ public class main {
 							AppointmentOutcomeCSV appointmentOutcomeCSV = new AppointmentOutcomeCSV();
 							appointmentOutcomeCSV.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment,
 									newMedicalRecord, consultationNotes, PrescriptionStatus.Pending);
+							AppointmentCSV appointmentCSV = new AppointmentCSV();
+							appointmentCSV.updateAppointmentStatus(appointmentID, "Completed");
 
 						} else {
 							System.out.println("Invalid selection.");
@@ -443,6 +445,11 @@ public class main {
 
 			case 5:
 				// View Appointments details
+				List<AppointmentOutcome> appointmentOutcomes = load.getAppointmentOutcomes();
+				for(AppointmentOutcome appointmentOutcome: appointmentOutcomes)
+				{
+					appointmentOutcome.printAppointmentDetails();
+				}
 				break;
 
 			case 6:

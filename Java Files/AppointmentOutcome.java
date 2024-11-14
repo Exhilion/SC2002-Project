@@ -1,5 +1,7 @@
 package OOPProject;
 
+import java.text.SimpleDateFormat;
+
 public class AppointmentOutcome {
     private String appointmentOutcomeID;
     private Appointment appointment;
@@ -69,6 +71,36 @@ public class AppointmentOutcome {
         System.out.println("Consultation Notes: " + consultationNotes);
         System.out.println("Prescription Status: " + (status != null ? status : "N/A"));
         System.out.println("--------------------------------");
+    }
+   
+
+    // Method to print appointment details, with status check for "completed"
+    public void printAppointmentDetails() {
+        if (appointment != null && appointment.getStatus().equalsIgnoreCase("completed")) {
+            System.out.println("Appointment Outcome Details:");
+            System.out.println("Appointment ID: " + appointment.getAppointmentID());
+            System.out.println("Patient ID: " + appointment.getPatient().getHospitalId()); // Assuming Patient class has getHospitalId()
+            System.out.println("Patient Name: " + appointment.getPatient().getName());
+            System.out.println("Appointment Status: " + appointment.getStatus());
+            System.out.println("Appointment Slot:");
+            System.out.println("   Doctor ID: " + appointment.getAppointmentSlot().getDoctor().getHospitalId());
+            System.out.println("   Doctor Name: " + appointment.getAppointmentSlot().getDoctor().getDoctorName());
+            System.out.println("   Start Time: " + appointment.getAppointmentSlot().getStartTime());
+            System.out.println("   End Time: " + appointment.getAppointmentSlot().getEndTime());
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String formattedDate = dateFormat.format(appointment.getAppointmentSlot().getDate());
+            System.out.println("   Date: " + formattedDate);
+            System.out.println("   Is Booked: " + appointment.getAppointmentSlot().isBooked());
+
+            // Printing outcome details
+            medicalRecord.printPrescriptionDetails();
+            System.out.println("Consultation Notes: " + consultationNotes);
+            System.out.println("Prescription Status: " + (status != null ? status : "N/A"));
+            System.out.println("--------------------------------");
+        } else {
+            System.out.println("Appointment is not completed, no details to display.");
+        }
     }
     
   

@@ -1,2 +1,2 @@
 ﻿AppointmentID,AppointmentSlotID,Status,PatientID
-A001,AS001,Confirmed,PT125
+A001,AS001,Completed,PT125
