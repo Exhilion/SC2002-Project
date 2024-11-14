@@ -2,6 +2,7 @@ package OOPProject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -96,6 +97,50 @@ public class AppointmentSlotCSV {
             return false; // Failed to add
         }
     }
+    
+    //Update Booking Status
+    public boolean updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean newStatus) {
+        File inputFile = new File(AppConfig.APPOINTMENT_SLOT_FILE_PATH);
+        List<String> lines = new ArrayList<>();
+        boolean isUpdated = false;  // Flag to track if an update happened
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values[0].equals(appointmentSlotID)) {
+                    // Update booking status
+                    System.out.println("Updating appointment slot with ID: " + appointmentSlotID);  // Debugging line
+                    values[5] = String.valueOf(newStatus);  // Assuming isBooked is at index 4 in the CSV
+                    isUpdated = true;  // Mark that we updated a line
+                }
+                lines.add(String.join(",", values));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // If no update was performed, return false
+        if (!isUpdated) {
+            System.out.println("Appointment Slot " + appointmentSlotID + " not found or no change in booking status.");
+            return false;
+        }
+
+        // Write all lines back to the original file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+            for (String updatedLine : lines) {
+                writer.write(updatedLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
 
     // Validate the format of the time string
     public boolean isValidTimeFormat(String time) {

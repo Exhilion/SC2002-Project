@@ -95,14 +95,6 @@ public class AppointmentSlot {
 		return filteredSlots;
 	}
 
-	// Utility method to display appointment details
-	@Override
-	public String toString() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String formattedDate = dateFormat.format(date);
 
-		return "StartTime: " + startTime + ", EndTime: " + endTime + ", Date: " + formattedDate + ", Is Booked: "
-				+ isBooked;
-	}
 
 }

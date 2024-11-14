@@ -10,7 +10,7 @@ public class Appointment {
 
     // Constructor
     public Appointment(String appointmentID, AppointmentSlot appointmentSlot, String status, Patient patient) {
-        this.appointmentID = this.appointmentID;
+        this.appointmentID = appointmentID;
         this.appointmentSlot = appointmentSlot;
         this.status = status;
         this.patient = patient;
@@ -50,14 +50,5 @@ public class Appointment {
         this.patient = patient;
     }
 
-    // Override toString for better readability
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "appointmentID='" + appointmentID + '\'' +
-                ", appointmentSlot=" + appointmentSlot +
-                ", status='" + status + '\'' +
-                ", patient=" + patient +
-                '}';
-    }
+
 }

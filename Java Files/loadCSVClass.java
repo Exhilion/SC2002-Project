@@ -84,7 +84,7 @@ public class loadCSVClass {
         return appointmentSlots;
     }
     
-    public List<Appointment> getAppointment() {
+    public List<Appointment> getAppointments() {
         return appointments;
     }
 }

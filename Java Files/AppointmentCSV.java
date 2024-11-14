@@ -61,19 +61,36 @@ public class AppointmentCSV {
     // Update appointment status in the CSV
     public boolean updateAppointmentStatus(String appointmentID, String newStatus) {
         File inputFile = new File(AppConfig.APPOINTMENT_FILE_PATH);
-        File tempFile = new File("temp.csv");
+        List<String> lines = new ArrayList<>();
+        boolean isUpdated = false;  // Flag to track if an update happened
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
-
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
-                if (values.length == 8 && values[0].equals(appointmentID)) {
+                if (values[0].equals(appointmentID)) {
                     // Update status
+                    System.out.println("Updating appointment with ID: " + appointmentID);  // Debugging line
                     values[2] = newStatus;
+                    isUpdated = true;  // Mark that we updated a line
                 }
-                writer.write(String.join(",", values));
+                lines.add(String.join(",", values));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // If no update was performed, return false
+        if (!isUpdated) {
+            System.out.println("Appointment" +appointmentID+ "ID not found or no change in status.");
+            return false;
+        }
+
+        // Write all lines back to the original file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile))) {
+            for (String updatedLine : lines) {
+                writer.write(updatedLine);
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -81,14 +98,10 @@ public class AppointmentCSV {
             return false;
         }
 
-        // Replace old file with updated content
-        if (!inputFile.delete() || !tempFile.renameTo(inputFile)) {
-            System.out.println("Error updating appointment status.");
-            return false;
-        }
-
         return true;
     }
+
+
 
     // Helper method to find an AppointmentSlot by slotID
     private AppointmentSlot findSlotByID(String slotID, List<AppointmentSlot> slots) {

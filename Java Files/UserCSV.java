@@ -13,7 +13,6 @@ public class UserCSV {
         if(role.equalsIgnoreCase("DR")) {
         	//Check against Doc database
         	//String path = "src\\\\OOPProject\\\\doctors.csv";
-        	System.out.println("Current directory: " + System.getProperty("user.dir"));
         	
         	try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.DOCTOR_FILE_PATH))){
         		String line; 

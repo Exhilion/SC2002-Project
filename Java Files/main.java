@@ -2,6 +2,7 @@ package OOPProject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -191,10 +192,81 @@ public class main {
 
 			case 5:
 				// Accept/Decline Appointment Request
+				System.out.println("\nAccept/Decline Appointment Requests:");
+
+				List<Appointment> pendingAppointments = new ArrayList<>();
+				for (Appointment appointment : load.getAppointments()) {
+					if (appointment.getAppointmentSlot().getDoctor().getHospitalId().equals(doctorID)
+							&& "pending".equalsIgnoreCase(appointment.getStatus())) {
+						pendingAppointments.add(appointment);
+					}
+				}
+
+				if (pendingAppointments.isEmpty()) {
+					System.out.println("No pending appointments found.");
+				} else {
+					for (Appointment appointment : pendingAppointments) {
+						System.out.println("Patient: " + appointment.getPatient().getName());
+						System.out.println("Appointment Slot:");
+						System.out
+								.println("   Doctor: " + appointment.getAppointmentSlot().getDoctor().getDoctorName());
+						System.out.println("   Start Time: " + appointment.getAppointmentSlot().getStartTime());
+						System.out.println("   End Time: " + appointment.getAppointmentSlot().getEndTime());
+						SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+						String formattedDate = dateFormat1.format(appointment.getAppointmentSlot().getDate());
+						System.out.println("   Date: " + formattedDate);
+						System.out.println("   Is Booked: " + appointment.getAppointmentSlot().isBooked());
+
+						// Ask user if they want to accept or decline the appointment
+						System.out
+								.println("Do you want to accept or decline this appointment? (1: Accept, 2: Decline)");
+						int response = scanner.nextInt();
+						scanner.nextLine();
+
+						String newStatus = (response == 1) ? "Confirmed" : "Cancelled";
+						if (response == 1) {
+
+							new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
+							new AppointmentSlotCSV().updateAppointmentSlotBookingStatus(
+									appointment.getAppointmentSlot().getAppointmentSlotID(), true);
+							System.out.println("Appointment " + newStatus + " successfully!");
+						}
+
+						else {
+							new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
+							System.out.println("Appointment Cancelled");
+						}
+					}
+				}
 				break;
 
 			case 6:
 				// View Upcoming Appointment
+
+				String status = "confirmed";
+				
+
+				List<Appointment> confirmedAppointments = AppointmentFilter.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID,
+						status);
+
+				// Output the filtered appointments
+				for (Appointment appointment : confirmedAppointments) {
+				    AppointmentSlot slot = appointment.getAppointmentSlot();
+				    Doctor doctor = slot.getDoctor();
+				    Date dates = slot.getDate();
+				    
+				    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				    String formattedDate = sdf.format(dates);
+				    
+				    System.out.println("Doctor: " + (doctor != null ? doctor.getDoctorName() : "N/A"));
+				    System.out.println("Start Time: " + slot.getStartTime());
+				    System.out.println("End Time: " + slot.getEndTime());
+				    System.out.println("Date: " + formattedDate);
+				    System.out.println("Status: " + appointment.getStatus());
+				    System.out.println("Patient: " + (appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
+				    System.out.println("-------------------------------");
+				}
+
 				break;
 			case 7:
 				// Record Appointment Outcome
