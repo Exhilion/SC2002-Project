@@ -1,14 +1,27 @@
 package OOPProject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class AppointmentSlotCSV {
+	
+    // Define the allowed time format
+    private static final String TIME_FORMAT = "H:mm"; // Format for 9:00, 10:00, etc.
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+    
+    // Ensures that invalid times are rejected
+    static {
+        timeFormat.setLenient(false); 
+    }
+
 
     // Read file and load appointment slots
     public List<AppointmentSlot> loadAppointmentSlotsFromCSV(List<Doctor> doctors) {
@@ -55,6 +68,46 @@ public class AppointmentSlotCSV {
         }
         return appointmentSlots;
     }
+    
+    // Allow doctor to add a new appointment slot with time format validation
+    public boolean addAppointmentSlotToCSV(AppointmentSlot slot, String doctorID) {
+        if (!isValidTimeFormat(slot.getStartTime()) || !isValidTimeFormat(slot.getEndTime())) {
+            System.out.println("Invalid time format. Please use 'H:mm' format (e.g., 9:00, 13:30).");
+            return false;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.APPOINTMENT_SLOT_FILE_PATH, true))) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dateStr = dateFormat.format(slot.getDate());
+
+            String newLine = String.format("%s,%s,%s,%s,%s,%s",
+                slot.getAppointmentSlotID(),
+                doctorID,
+                slot.getStartTime(),
+                slot.getEndTime(),
+                dateStr,
+                slot.isBooked());
+
+            bw.write(newLine);
+            bw.newLine();
+            return true; // Successfully added
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false; // Failed to add
+        }
+    }
+
+    // Validate the format of the time string
+    public boolean isValidTimeFormat(String time) {
+        try {
+            timeFormat.parse(time);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+    
+ 
 
     // Helper method to find a Doctor by name
     private Doctor findDoctorByID(String doctorID, List<Doctor> doctors) {

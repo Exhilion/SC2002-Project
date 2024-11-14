@@ -1,8 +1,11 @@
 package OOPProject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class main {
 	private static loadCSVClass load = new loadCSVClass();
@@ -109,10 +112,11 @@ public class main {
 		System.out.println("(2) Update Patient Medical Records");
 		System.out.println("(3) View Personal Schedule");
 		System.out.println("(4) Set Availability for appointments");
-		System.out.println("(5) Accept or Decline Appointment Requests");
-		System.out.println("(6) View Upcoming Appointments");
-		System.out.println("(7) Record Appointment Outcome");
-		System.out.println("(8) Logout");
+		System.out.println("(5) Accept Appointment Requests");
+		System.out.println("(6) Decline Appointment Requests");
+		System.out.println("(7) View Upcoming Appointments");
+		System.out.println("(8) Record Appointment Outcome");
+		System.out.println("(9) Logout");
 
 		// Doctor doctor = new Doctor();
 		Scanner scanner = new Scanner(System.in);
@@ -154,25 +158,54 @@ public class main {
 				break;
 
 			case 4:
-				// Schedule Appointment
-				// patient.scheduleAppointment(patient, null);
+				// Set Availability for Appointments
+				AppointmentSlotCSV newslot = new AppointmentSlotCSV();
+                System.out.println("\nSet Availability for Appointments:");
+
+                System.out.print("Enter Start Time (HH:mm): ");
+                String startTime = scanner.nextLine();
+                
+                System.out.print("Enter End Time (HH:mm): ");
+                String endTime = scanner.nextLine();
+                
+                System.out.print("Enter Date (dd/MM/yyyy): ");
+                String dateStr = scanner.nextLine();
+                
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date;
+                try {
+                    date = dateFormat.parse(dateStr); // Parse the input date string into a Date object
+                } catch (ParseException e) {
+                    System.out.println("Invalid date format. Please use 'dd/MM/yyyy'.");
+                    break; // Exit the case if date is invalid
+                }
+                
+                String AppointmentSlotID = "AS" + UUID.randomUUID().toString();
+                AppointmentSlot newSlot = new AppointmentSlot(AppointmentSlotID, startTime, endTime, date, false);
+                
+                // Save the new slot to CSV
+                if (newslot.addAppointmentSlotToCSV(newSlot, doctorID)) {
+                    System.out.println("Appointment slot added successfully!");
+                } else {
+                    System.out.println("Failed to add appointment slot.");
+                }
 				break;
 
 			case 5:
-				// Reschedule Appointment
-				// patient.rescheduleAppointment(patient, null, null);
+				// Accept Appointment Request
 				break;
 
 			case 6:
-				// Cancel Appointment
-				// patient.cancelAppointment(patient, null);
+				// Decline Appointment Request
 				break;
 
 			case 7:
-				// View Appointment Outcome
-				// patient.viewAppointmentOutcomes(patient);
+				// View Upcoming Appointment
 				break;
 			case 8:
+				// Record Appointment Outcome
+				break;
+			case 9:
 				// Quit the program
 				System.out.println("Logout");
 				displayLoginMenu();

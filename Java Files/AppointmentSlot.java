@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class AppointmentSlot {
 	private String appointmentSlotID;
@@ -23,8 +24,22 @@ public class AppointmentSlot {
 		this.date = date;
 		this.isBooked = isBooked;
 	}
+	
+	public AppointmentSlot(String appointmentSlotID, String startTime, String endTime, Date date,
+			boolean isBooked) {
+		this.appointmentSlotID = appointmentSlotID;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.date = date;
+		this.isBooked = isBooked;
+	}
 
 	// Getters
+	
+	 // Generate a unique AppointmentID using UUID
+    public String generateUniqueID() {
+        return "AS" + UUID.randomUUID().toString();
+    }
 	public String getAppointmentSlotID() {
 		return appointmentSlotID;
 	}
