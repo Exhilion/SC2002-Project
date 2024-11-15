@@ -1,2 +1,0 @@
-HospitalID,Password,Role,Gender,DoctorName,Department,Specialization,firstTimeLogin,
-DR71febb42,testing123,DOCTOR,MALE,Jason,Neurology,Brain Surgery,false
