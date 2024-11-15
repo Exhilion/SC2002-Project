@@ -1,6 +1,0 @@
-﻿AppointmentID,AppointmentSlotID,Status,PatientID
-A001,AS001,Confirmed,PT125
-A1f2f1c7f-16d4-419c-a0f5-3fe3a1d5453e,AS004,Cancelled,pt125
-A7e9bde6c-5437-46cf-ae43-8af96ad6e5cb,AS002,Pending,pt125
-A764d19c1-0a9a-4982-b669-e52e37f49141,AS004,Cancelled,pt125
-A7661d426-5a2f-4d59-aa99-d923136e69fb,ASe468ad13-624a-4dcc-ae44-6d63c4d2c2e9,Pending,pt125
