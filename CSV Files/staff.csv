@@ -1,0 +1,4 @@
+HospitalID,Password,Role,Gender,Name,FirstTimeLogin
+S001,password,DOCTOR,MALE,Dr. John,True
+S002,password,PHARMACIST,FEMALE,Alice,True
+S003,password,ADMINISTRATOR,OTHER,Charlie,True
