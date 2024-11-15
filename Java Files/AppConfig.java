@@ -1,7 +1,7 @@
 package OOPProject;
 
 public class AppConfig {
-    public static final String DIAGNOSIS_FILE_PATH = "src\\\\OOPProject\\\\Diagnosis.csv";
+	public static final String DIAGNOSIS_FILE_PATH = "src\\\\OOPProject\\\\Diagnosis.csv";
     public static final String PRESCRIPTION_FILE_PATH = "src\\\\OOPProject\\\\Prescription.csv";
     public static final String TREATMENT_FILE_PATH = "src\\\\OOPProject\\\\Treatment.csv";
     public static final String MEDICALRECORD_FILE_PATH = "src\\\\OOPProject\\\\MedicalRecord.csv";
@@ -13,5 +13,5 @@ public class AppConfig {
     public static final String APPOINTMENT_SLOT_FILE_PATH = "src\\\\OOPProject\\\\AppointmentSlot.csv";
     public static final String APPOINTMENT_FILE_PATH = "src\\\\OOPProject\\\\Appointment.csv";
     public static final String APPOINTMENT_OUTCOME_FILE_PATH = "src\\\\OOPProject\\\\AppointmentOutcome.csv";
-  
+
 }

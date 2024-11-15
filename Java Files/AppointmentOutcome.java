@@ -1,9 +1,13 @@
 package OOPProject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class AppointmentOutcome {
-    private String appointmentOutcomeID;
+	private String appointmentOutcomeID;
     private Appointment appointment;
     private MedicalRecord medicalRecord;
     private String consultationNotes;
@@ -103,5 +107,50 @@ public class AppointmentOutcome {
         }
     }
     
-  
+    public static void viewAppointmentOutcomeRecords(List<AppointmentOutcome> slots, String patientID) {
+    	String normalizedPatientID = patientID.trim().toLowerCase();
+        Map<PrescriptionStatus, List<AppointmentOutcome>> groupedOutcomes = new HashMap<>();
+
+        // Filter and group AppointmentOutcome records by status
+        for (AppointmentOutcome slot : slots) {
+            if (slot.getAppointment().getPatient() != null) {
+                String slotPatientID = slot.getAppointment().getPatient().getHospitalId().trim().toLowerCase();
+                if (slotPatientID.equals(normalizedPatientID)) {
+                    // Group by PrescriptionStatus
+                    groupedOutcomes
+                        .computeIfAbsent(slot.getStatus(), k -> new ArrayList<>())
+                        .add(slot);
+                }
+            } else {
+                System.out.println("Appointment with ID: " + slot.getAppointment().getAppointmentID() + " has no linked Patient.");
+            }
+        }
+
+        // Print grouped AppointmentOutcomes by PrescriptionStatus
+        for (Map.Entry<PrescriptionStatus, List<AppointmentOutcome>> entry : groupedOutcomes.entrySet()) {
+            System.out.println("\nStatus: " + entry.getKey());
+            for (AppointmentOutcome outcome : entry.getValue()) {
+                System.out.println(outcome);
+            }
+        }
+    }
+    
+    @Override
+    public String toString() {
+        // Retrieve the AppointmentID and PatientID if they exist
+        String appointmentID = (appointment != null) ? appointment.getAppointmentID() : "N/A";
+        String patientID = (appointment != null && appointment.getPatient() != null) ? 
+                            appointment.getPatient().getHospitalId() : "N/A";
+
+        // Retrieve the MedicalRecordID if it exists
+        String medicalRecordID = (medicalRecord != null) ? medicalRecord.getRecordID() : "N/A";
+
+        return "AppointmentOutcomeID: " + appointmentOutcomeID +
+               "\nAppointmentID: " + appointmentID +
+               "\nMedicalRecordID: " + medicalRecordID +
+               "\nConsultationNotes: " + consultationNotes +
+               "\nPrescriptionStatus: " + status;
+    }
+    
+
 }

@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class AppointmentSlotCSV {
-	
-    // Define the allowed time format
+	// Define the allowed time format
     private static final String TIME_FORMAT = "H:mm"; // Format for 9:00, 10:00, etc.
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
     

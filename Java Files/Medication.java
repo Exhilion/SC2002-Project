@@ -62,7 +62,6 @@ public class Medication {
 	public void setlowstockAlert(boolean lowStockAlert) {
 		this.lowStockAlert = lowStockAlert;
 	}
-	
 	public void reduceQuantity(int amount) {
 	    if (this.quantity >= amount) {
 	        this.quantity -= amount;
@@ -78,7 +77,6 @@ public class Medication {
         System.out.println("Low Quantity Threshold: " + lowQuantity);
         System.out.println("Low Stock Alert: " + lowStockAlert);
     }
-	
 	
 
 }

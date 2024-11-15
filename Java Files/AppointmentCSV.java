@@ -19,42 +19,47 @@ public class AppointmentCSV {
     // Read appointments from CSV file
     public List<Appointment> loadAppointmentsFromCSV(List<AppointmentSlot> slots, List<Patient> patients) {
         List<Appointment> appointments = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.APPOINTMENT_FILE_PATH))) {
-            String line;
-            br.readLine(); // Skip the header line
+        //System.out.println("Attempting to read lines from Appointment.csv...");
 
+        try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.APPOINTMENT_FILE_PATH))) {
+            String line = br.readLine(); // Skip the header line
             while ((line = br.readLine()) != null) {
+                //System.out.println("Read line: " + line);  // Debug line
+
                 String[] values = line.split(",");
-                if (values.length == 4) { // Assuming 4 columns in the CSV
+                if (values.length == 4) {
                     String appointmentID = values[0];
                     String slotID = values[1];
                     String status = values[2];
                     String patientID = values[3];
 
-                    // Find the matching AppointmentSlot object
+                    // Find matching AppointmentSlot and Patient
                     AppointmentSlot slot = findSlotByID(slotID, slots);
                     if (slot == null) {
                         System.out.println("Appointment Slot ID " + slotID + " not found.");
                         continue;
                     }
 
-                    // Find matching patient
                     Patient patient = findPatientByID(patientID, patients);
                     if (patient == null) {
                         System.out.println("Patient with ID " + patientID + " not found.");
                         continue;
                     }
 
-                    // Create Appointment object and add to the list
+                    // Create and add the appointment
                     Appointment appointment = new Appointment(appointmentID, slot, status, patient);
                     appointments.add(appointment);
+                    System.out.println("Loaded Appointment: " + appointment);
                 } else {
                     System.out.println("Invalid record format: " + line);
                 }
             }
         } catch (IOException e) {
+            System.out.println("Error reading Appointment.csv: " + e.getMessage());
             e.printStackTrace();
         }
+
+        //System.out.println("Total appointments loaded: " + appointments.size());
         return appointments;
     }
     

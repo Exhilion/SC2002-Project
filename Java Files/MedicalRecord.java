@@ -68,8 +68,7 @@ public class MedicalRecord {
 	}
 	
 
-    // Method to print prescription details
-    public void printPrescriptionDetails() {
+	public void printPrescriptionDetails() {
         System.out.println("Prescription Details:");
         
         if (prescriptions != null && !prescriptions.isEmpty()) {
