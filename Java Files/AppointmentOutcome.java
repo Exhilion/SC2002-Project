@@ -79,7 +79,7 @@ public class AppointmentOutcome {
         if (appointment != null && appointment.getStatus().equalsIgnoreCase("completed")) {
             System.out.println("Appointment Outcome Details:");
             System.out.println("Appointment ID: " + appointment.getAppointmentID());
-            System.out.println("Patient ID: " + appointment.getPatient().getHospitalId()); // Assuming Patient class has getHospitalId()
+            System.out.println("Patient ID: " + appointment.getPatient().getHospitalId());
             System.out.println("Patient Name: " + appointment.getPatient().getName());
             System.out.println("Appointment Status: " + appointment.getStatus());
             System.out.println("Appointment Slot:");
