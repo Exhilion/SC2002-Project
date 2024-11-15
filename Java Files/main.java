@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import javax.management.relation.Role;
+
 public class main {
 	private static loadCSVClass load = new loadCSVClass();
 
@@ -29,7 +31,6 @@ public class main {
 			System.out.print("Enter your choice: ");
 
 			Patient patient = null;
-			PatientCSV patientCSV = null;
 			choice = scanner.nextInt();
 			scanner.nextLine();
 
@@ -65,54 +66,30 @@ public class main {
 
 			case 3:
 				// View Available Appointment
-				List<AppointmentSlot> availableSlots = AppointmentSlot.filterAvailableSlots(load.getAppointmentSlots());
-
-				System.out.println("\nAvailable Slots:");
-				if (availableSlots.isEmpty()) {
-				    System.out.println("No schedule found");
-				} else {
-				    for (AppointmentSlot schedule : availableSlots) {
-				        System.out.println(schedule.toString());
-				    }
-				}
 				break;
 
 			case 4:
 				// Schedule Appointment
-				patientCSV.scheduleAppointment(username);
-				
+				// patient.scheduleAppointment(patient, null);
 				break;
 
 			case 5:
 				// Reschedule Appointment
-				patientCSV.cancelAppointment(username);
-				System.out.println("Please enter new appointment information: ");
-				patientCSV.scheduleAppointment(username);
+				// patient.rescheduleAppointment(patient, null, null);
 				break;
 
 			case 6:
 				// Cancel Appointment
-				patientCSV.cancelAppointment(username); 
+				// patient.cancelAppointment(patient, null);
 				break;
 
 			case 7:
 				// View Scheduled appointments
-				//System.out.println("Loading appointments from: " + AppConfig.APPOINTMENT_FILE_PATH);
-				List<Appointment> scheduledAppointments = Appointment.filterScheduledAppointment(load.getAppointments(), username);
-
-				System.out.println("\nAvailable Slots:");
-				if (scheduledAppointments.isEmpty()) {
-				    System.out.println("No schedule found");
-				} else {
-				    for (Appointment schedule : scheduledAppointments) {
-				        System.out.println(schedule.toString());
-				    }
-				}
+				// patient.viewAppointmentOutcomes(patient);
 				break;
 			case 8:
 				// View Appointment outcome records
-				AppointmentOutcome.viewAppointmentOutcomeRecords(load.getAppointmentOutcomes(), username);
-				
+
 				break;
 
 			case 9:
@@ -161,7 +138,7 @@ public class main {
 				break;
 
 			case 2:
-				// Update Patient Medical Records
+				// Update Patient Personal Info
 				// Retrieve the details
 				break;
 
@@ -198,16 +175,15 @@ public class main {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 				Date date;
 				try {
-					date = dateFormat.parse(dateStr); // Parse the input date string into a Date object
+					date = dateFormat.parse(dateStr);
 				} catch (ParseException e) {
 					System.out.println("Invalid date format. Please use 'dd/MM/yyyy'.");
-					break; // Exit the case if date is invalid
+					break;
 				}
 
 				String AppointmentSlotID = "AS" + UUID.randomUUID().toString();
 				AppointmentSlot newSlot = new AppointmentSlot(AppointmentSlotID, startTime, endTime, date, false);
 
-				// Save the new slot to CSV
 				if (newslot.addAppointmentSlotToCSV(newSlot, doctorID)) {
 					System.out.println("Appointment slot added successfully!");
 				} else {
@@ -226,43 +202,28 @@ public class main {
 						pendingAppointments.add(appointment);
 					}
 				}
-
 				if (pendingAppointments.isEmpty()) {
 					System.out.println("No pending appointments found.");
 				} else {
 					for (Appointment appointment : pendingAppointments) {
-						System.out.println("Patient: " + appointment.getPatient().getName());
-						System.out.println("Appointment Slot:");
-						System.out
-								.println("   Doctor: " + appointment.getAppointmentSlot().getDoctor().getDoctorName());
-						System.out.println("   Start Time: " + appointment.getAppointmentSlot().getStartTime());
-						System.out.println("   End Time: " + appointment.getAppointmentSlot().getEndTime());
-						SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
-						String formattedDate = dateFormat1.format(appointment.getAppointmentSlot().getDate());
-						System.out.println("   Date: " + formattedDate);
-						System.out.println("   Is Booked: " + appointment.getAppointmentSlot().isBooked());
-
-						// Ask user if they want to accept or decline the appointment
+						appointment.printAppointmentDetails();
 						System.out
 								.println("Do you want to accept or decline this appointment? (1: Accept, 2: Decline)");
 						int response = scanner.nextInt();
 						scanner.nextLine();
-
 						String newStatus = (response == 1) ? "Confirmed" : "Cancelled";
+						// Update appointment and slot status
+						new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 						if (response == 1) {
-
-							new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 							new AppointmentSlotCSV().updateAppointmentSlotBookingStatus(
 									appointment.getAppointmentSlot().getAppointmentSlotID(), true);
-							System.out.println("Appointment " + newStatus + " successfully!");
-						}
-
-						else {
-							new AppointmentCSV().updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
+							System.out.println("Appointment Confirmed successfully!");
+						} else {
 							System.out.println("Appointment Cancelled");
 						}
 					}
 				}
+
 				break;
 
 			case 6:
@@ -274,7 +235,6 @@ public class main {
 				for (Appointment appointment : confirmedAppointments) {
 					appointment.printAppointmentDetails();
 				}
-
 				break;
 			case 7:
 				// Record Appointment Outcome
@@ -402,121 +362,132 @@ public class main {
 		System.out.println("(2) Add Hospital Staff");
 		System.out.println("(3) Update Hospital Staff");
 		System.out.println("(4) Remove Hospital Staff");
-		System.out.println("(5) View Appointments details");
+		System.out.println("(5) View Appointments Details");
 		System.out.println("(6) View and Manage Medication Inventory");
 		System.out.println("(7) Approve Replenishment Requests");
 		System.out.println("(8) Logout");
-
+	
+		// Create an Administrator instance
 		Administrator admin = new Administrator();
 		Scanner scanner = new Scanner(System.in);
 		int choice;
 		do {
+			System.out.print("\nEnter your choice: ");
 			choice = scanner.nextInt();
-			scanner.nextLine();
-
+			scanner.nextLine(); // Consume the newline character
+	
 			switch (choice) {
-			case 1:
-				// View Hospital Staff
-
-				break;
-			case 2:
-				// Add Hospital Staff
-				StaffCSV newstaff = new StaffCSV();
-				System.out.println("Select Role (1-DOCTOR, 2-PHARMACIST, 3-ADMINISTRATOR):");
-				int roleChoice = scanner.nextInt();
-				scanner.nextLine();
-				Role role = null;
-				switch (roleChoice) {
-				case 1 -> role = Role.DOCTOR;
-				case 2 -> role = Role.PHARMACIST;
-				case 3 -> role = Role.ADMINISTRATOR;
-				default -> {
-					System.out.println("Invalid role selected. Exiting...");
-					scanner.close();
-					return;
-				}
-				}
-
-				// Gender selection
-				System.out.println("Select Gender (1-MALE, 2-FEMALE, 3-OTHER): ");
-				int genderChoice = scanner.nextInt();
-				scanner.nextLine();
-				Gender gender = null;
-				switch (genderChoice) {
-				case 1 -> gender = Gender.MALE;
-				case 2 -> gender = Gender.FEMALE;
-				default -> {
-					System.out.println("Invalid gender selected. Exiting...");
-					scanner.close();
-					return;
-				}
-				}
-
-				// Common details for all roles
-				System.out.print("Enter Name: ");
-				String name = scanner.nextLine();
-
-				// Generate hospital ID and password
-				String hospitalID = newstaff.generateStaffId(role);
-				String password = "password";
-				Boolean firstTimeLogin = true;
-
-				// Additional details based on role
-				switch (role) {
-				case DOCTOR -> {
-					System.out.print("Enter Department: ");
-					String department = scanner.nextLine();
-					System.out.print("Enter Specialisation: ");
-					String specialisation = scanner.nextLine();
-					newstaff.addDoctor(hospitalID, password, role, gender, name, department, specialisation,
-							firstTimeLogin);
-				}
-				case PHARMACIST -> newstaff.addPharmacist(hospitalID, password, role, gender, name, firstTimeLogin);
-				case ADMINISTRATOR -> newstaff.addAdmin(hospitalID, password, role, gender, name, firstTimeLogin);
-				}
-
-				break;
-			case 3:
-				// Update Hospital Staff
-
-				break;
-			case 4:
-				// Remove Hospital Staff
-
-				break;
-
-			case 5:
-				// View Appointments details
-				List<AppointmentOutcome> appointmentOutcomes = load.getAppointmentOutcomes();
-				for(AppointmentOutcome appointmentOutcome: appointmentOutcomes)
-				{
-					appointmentOutcome.printAppointmentDetails();
-				}
-				break;
-
-			case 6:
-				// View and Manage Medication Inventory
-				break;
-
-			case 7:
-				// Approve Replenishment Requests
-
-				break;
-			case 8:
-				// Quit the program
-				System.out.println("Logout");
-				displayLoginMenu();
-				break;
-
-			default:
-				System.out.println("Invalid choice, please try again.");
-				break;
+				case 1: // View Hospital Staff
+					List<Staff> staffList = load.getStaff();
+					if (staffList.isEmpty()) {
+						System.out.println("No staff members found.");
+					} else {
+						System.out.println("Hospital Staff List:");
+						for (Staff staff : staffList) {
+							staff.printDetails();
+						}
+					}
+					break;
+	
+				case 2: // Add Hospital Staff
+					StaffCSV newStaff = new StaffCSV();
+					System.out.println("Select Role (1-DOCTOR, 2-PHARMACIST, 3-ADMINISTRATOR):");
+					int roleChoice = scanner.nextInt();
+					scanner.nextLine();
+					Role role = switch (roleChoice) {
+						case 1 -> Role.DOCTOR;
+						case 2 -> Role.PHARMACIST;
+						case 3 -> Role.ADMINISTRATOR;
+						default -> null;
+					};
+					if (role == null) {
+						System.out.println("Invalid role selected.");
+						break;
+					}
+	
+					// Gender selection
+					System.out.println("Select Gender (1-MALE, 2-FEMALE, 3-OTHER): ");
+					int genderChoice = scanner.nextInt();
+					scanner.nextLine();
+					Gender gender = switch (genderChoice) {
+						case 1 -> Gender.MALE;
+						case 2 -> Gender.FEMALE;
+						case 3 -> Gender.OTHER;
+						default -> null;
+					};
+					if (gender == null) {
+						System.out.println("Invalid gender selected.");
+						break;
+					}
+	
+					// Common details for all roles
+					System.out.print("Enter Name: ");
+					String name = scanner.nextLine();
+					String hospitalID = newStaff.generateStaffId(role);
+					String password = "password";
+					Boolean firstTimeLogin = true;
+	
+					// Add specific roles
+					switch (role) {
+						case DOCTOR -> {
+							System.out.print("Enter Department: ");
+							String department = scanner.nextLine();
+							System.out.print("Enter Specialisation: ");
+							String specialisation = scanner.nextLine();
+							newStaff.addDoctor(hospitalID, password, role, gender, name, department, specialisation, firstTimeLogin);
+						}
+						case PHARMACIST -> newStaff.addPharmacist(hospitalID, password, role, gender, name, firstTimeLogin);
+						case ADMINISTRATOR -> newStaff.addAdmin(hospitalID, password, role, gender, name, firstTimeLogin);
+					}
+					System.out.println("Staff added successfully.");
+					break;
+	
+				case 3: // Update Hospital Staff
+					System.out.println("Feature to update hospital staff is not implemented yet.");
+					break;
+	
+				case 4: // Remove Hospital Staff
+					System.out.println("Feature to remove hospital staff is not implemented yet.");
+					break;
+	
+				case 5: // View Appointments Details
+					List<AppointmentOutcome> appointmentOutcomes = load.getAppointmentOutcomes();
+					if (appointmentOutcomes.isEmpty()) {
+						System.out.println("No appointment outcomes available.");
+					} else {
+						for (AppointmentOutcome appointmentOutcome : appointmentOutcomes) {
+							appointmentOutcome.printAppointmentDetails();
+						}
+					}
+					break;
+	
+				case 6: // View and Manage Medication Inventory
+					Inventory inventory = new Inventory(load.getMedications());
+					inventory.displayInventory();
+					break;
+	
+				case 7: // Approve Replenishment Requests
+					System.out.println("Processing replenishment requests...");
+					Inventory inv = new Inventory(load.getMedications());
+					admin.approveReplenishmentRequests(inv);
+					System.out.println("Replenishment requests processed.");
+					break;
+	
+				case 8: // Logout
+					System.out.println("Logout successful.");
+					displayLoginMenu();
+					break;
+	
+				default:
+					System.out.println("Invalid choice, please try again.");
+					break;
 			}
-
-		} while (choice != 5);
-
+	
+		} while (choice != 8);
+	
 		scanner.close();
 	}
+	
 
 	private static void displayPharmacistMenu(String adminID) {
 		System.out.println("\nPharmacist Menu:");
@@ -546,9 +517,10 @@ public class main {
 
 			case 2:
 				// Update Prescription Status
+
 				List<AppointmentOutcome> pendingOutcomes = AppointmentOutcomeFilter
 				        .filterByPendingStatus(load.getAppointmentOutcomes());
-		
+
 				if (pendingOutcomes.isEmpty()) {
 				    System.out.println("No pending appointment outcomes available for prescription.");
 				} else {
@@ -557,26 +529,26 @@ public class main {
 				        System.out.println("(" + (i + 1) + ")");
 				        pendingOutcomes.get(i).printDetails();
 				    }
-		
+
 				    System.out.print("Enter the AppointmentOutcome to prescribe: ");
 				    int outcomeChoice = scanner.nextInt();
 				    scanner.nextLine();
-		
+
 				    if (outcomeChoice > 0 && outcomeChoice <= pendingOutcomes.size()) {
 				        AppointmentOutcome selectedOutcome = pendingOutcomes.get(outcomeChoice - 1);
 				        System.out.println("Prescribing medication for AppointmentOutcome ID: "
 				                + selectedOutcome.getAppointmentOutcomeID());
-		
+
 				        // Display available medications
 				        List<Medication> medications = load.getMedications();
 				        if (medications.isEmpty()) {
 				            System.out.println("No medications available.");
 				            return;
 				        }
-		
+
 				        List<Medication> prescribedMedications = new ArrayList<>();
 				        List<Integer> prescribedQuantities = new ArrayList<>();
-		
+
 				        boolean prescribing = true;
 				        while (prescribing) {
 				            System.out.println("Select a medication to prescribe:");
@@ -584,35 +556,35 @@ public class main {
 				                System.out.println("(" + (i + 1) + ") " + medications.get(i).getMedicineName()
 				                        + " - Available: " + medications.get(i).getQuantity());
 				            }
-		
+
 				            System.out.print("Enter the number of the medication (or 0 to finish): ");
 				            int medicationChoice = scanner.nextInt();
 				            scanner.nextLine();
-		
+
 				            if (medicationChoice == 0) {
 				                break;
 				            }
-		
+
 				            if (medicationChoice > 0 && medicationChoice <= medications.size()) {
 				                Medication selectedMedication = medications.get(medicationChoice - 1);
-		
+
 				                // Check if the medication has already been prescribed
 				                if (prescribedMedications.contains(selectedMedication)) {
 				                    System.out.println("This medication has already been prescribed. Choose another.");
 				                    continue;
 				                }
-		
+
 				                System.out.print("Enter the quantity to prescribe: ");
 				                int quantity = scanner.nextInt();
 				                scanner.nextLine();
-		
+
 				                if (quantity > 0 && quantity <= selectedMedication.getQuantity()) {
 				                    selectedMedication.reduceQuantity(quantity);
 				                    prescribedMedications.add(selectedMedication);
 				                    prescribedQuantities.add(quantity);
 				                    MedicationCSV medicationCSV = new MedicationCSV();
 				                    medicationCSV.updateMedicationQuantity(selectedMedication.getMedicineID(), selectedMedication.getQuantity());
-		
+
 				                    System.out.println("Added " + quantity + " units of "
 				                            + selectedMedication.getMedicineName() + " to the prescription.");
 				                } else {
@@ -621,12 +593,12 @@ public class main {
 				            } else {
 				                System.out.println("Invalid medication selection.");
 				            }
-		
+
 				            System.out.print("Do you want to prescribe another medication? (y/n): ");
 				            String response = scanner.nextLine();
 				            prescribing = response.equalsIgnoreCase("y");
 				        }
-		
+
 				        // Check if any medications were prescribed
 				        if (!prescribedMedications.isEmpty()) {
 				            // Update the status of the AppointmentOutcome
@@ -634,7 +606,7 @@ public class main {
 				            outcome.updateAppointmentOutcomeStatus(load.getAppointmentOutcomes(),
 				                    selectedOutcome.getAppointmentOutcomeID(), PrescriptionStatus.Dispensed);
 				            System.out.println("Prescription successful. Medications prescribed:");
-		
+
 				            // Display all prescribed medications
 				            for (int i = 0; i < prescribedMedications.size(); i++) {
 				                System.out.println("- " + prescribedQuantities.get(i) + " units of "
@@ -647,7 +619,8 @@ public class main {
 				        System.out.println("Invalid AppointmentOutcome selection.");
 				    }
 				}
-				
+
+
 				break;
 
 			case 3:
@@ -660,8 +633,7 @@ public class main {
 				break;
 
 			case 4:
-				// Submit Replenishment Request
-				// Submit Replenishment Request for Low-Stock Medications
+				   // Submit Replenishment Request for Low-Stock Medications
                 // Identify low-stock medications and allow the pharmacist to submit replenishment requests
                 List<Medication> allMedications = load.getMedications();
                 List<Medication> lowStockMedications = new ArrayList<>();
@@ -730,8 +702,8 @@ public class main {
                 if (lowStockMedications.isEmpty()) {
                     System.out.println("\nAll low-stock medications have already been requested for replenishment.");
                 }
+                break;
 
-				break;
 			case 5:
 				// Quit the program
 				System.out.println("Logout");
