@@ -6,9 +6,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for loading doctor data from a CSV file.
+ * The class reads and parses the CSV file to create a list of {@link Doctor} objects.
+ */
 public class DoctorCSV {
 
     // Read file and load doctors
+	/**
+     * Reads a CSV file containing doctor information and loads it into a list of {@link Doctor} objects.
+     *
+     * @return A list of {@link Doctor} objects populated with data from the CSV file.
+     *         Returns an empty list if the file cannot be read or contains invalid data.
+     */
     public List<Doctor> loadDoctorsFromCSV() {
         List<Doctor> doctors = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.DOCTOR_FILE_PATH))) {
