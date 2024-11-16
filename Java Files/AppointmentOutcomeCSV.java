@@ -7,9 +7,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class provides functionality to manage {@link AppointmentOutcome} objects by reading from and writing to a CSV file.
+ * It supports operations like adding, updating, and loading appointment outcomes.
+ */
 public class AppointmentOutcomeCSV {
 
 	// Add AppointmentOutcome
+	/**
+     * Adds a new {@link AppointmentOutcome} and writes it to the CSV file.
+     *
+     * @param appointmentOutcomeID the unique ID for the appointment outcome
+     * @param appointment the associated {@link Appointment} object
+     * @param medicalRecord the associated {@link MedicalRecord} object
+     * @param consultationNotes the notes recorded during the consultation
+     * @param status the {@link PrescriptionStatus} of the appointment outcome
+     */
 	public void addAppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord,
 			String consultationNotes, PrescriptionStatus status) {
 		// Create a new AppointmentOutcome object
@@ -21,6 +34,11 @@ public class AppointmentOutcomeCSV {
 	}
 
 	// Write AppointmentOutcome to CSV
+	/**
+     * Writes a given {@link AppointmentOutcome} to the CSV file.
+     *
+     * @param appointmentOutcome the {@link AppointmentOutcome} object to write
+     */
 	private void writeAppointmentOutcomeToCSV(AppointmentOutcome appointmentOutcome) {
 		try (FileWriter writer = new FileWriter(AppConfig.APPOINTMENT_OUTCOME_FILE_PATH, true)) {
 
@@ -40,6 +58,13 @@ public class AppointmentOutcomeCSV {
 	}
 
 	// Load AppointmentOutcomes from CSV
+	/**
+     * Loads {@link AppointmentOutcome} objects from the CSV file.
+     *
+     * @param appointments a list of {@link Appointment} objects for lookup
+     * @param medicalRecords a list of {@link MedicalRecord} objects for lookup
+     * @return a list of loaded {@link AppointmentOutcome} objects
+     */
 	public List<AppointmentOutcome> loadAppointmentOutcomesFromCSV(List<Appointment> appointments,
 			List<MedicalRecord> medicalRecords) {
 		List<AppointmentOutcome> appointmentOutcomes = new ArrayList<>();
@@ -96,6 +121,13 @@ public class AppointmentOutcomeCSV {
 
 	// Update the status of a specific AppointmentOutcome by its
 	// appointmentOutcomeID
+	/**
+     * Updates the status of an {@link AppointmentOutcome} and saves the changes to the CSV file.
+     *
+     * @param appointmentOutcomes the list of all {@link AppointmentOutcome} objects
+     * @param appointmentOutcomeID the ID of the {@link AppointmentOutcome} to update
+     * @param newStatus the new {@link PrescriptionStatus} to set
+     */
 	public void updateAppointmentOutcomeStatus(List<AppointmentOutcome> appointmentOutcomes,
 			String appointmentOutcomeID, PrescriptionStatus newStatus) {
 		// Find the AppointmentOutcome to update
@@ -115,6 +147,11 @@ public class AppointmentOutcomeCSV {
 	}
 
 	// save the updated AppointmentOutcome back to the CSV
+	/**
+     * Saves the updated {@link AppointmentOutcome} back to the CSV file.
+     *
+     * @param updatedOutcome the updated {@link AppointmentOutcome} object
+     */
 	private void saveAppointmentOutcomeToCSV(AppointmentOutcome updatedOutcome) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.APPOINTMENT_OUTCOME_FILE_PATH))) {
 
@@ -147,6 +184,13 @@ public class AppointmentOutcomeCSV {
 		}
 	}
 
+	/**
+     * Finds an {@link Appointment} by its ID from a list of appointments.
+     *
+     * @param appointmentID the ID of the {@link Appointment} to find
+     * @param appointments the list of {@link Appointment} objects to search
+     * @return the found {@link Appointment} object, or {@code null} if not found
+     */
 	private Appointment findAppointmentByID(String appointmentID, List<Appointment> appointments) {
 		for (Appointment appointment : appointments) {
 			if (appointment.getAppointmentID().equalsIgnoreCase(appointmentID)) {
@@ -156,6 +200,13 @@ public class AppointmentOutcomeCSV {
 		return null;
 	}
 
+	/**
+     * Finds a {@link MedicalRecord} by its ID from a list of medical records.
+     *
+     * @param recordID the ID of the {@link MedicalRecord} to find
+     * @param medicalRecords the list of {@link MedicalRecord} objects to search
+     * @return the found {@link MedicalRecord} object, or {@code null} if not found
+     */
 	private MedicalRecord findMedicalRecordByID(String recordID, List<MedicalRecord> medicalRecords) {
 		for (MedicalRecord medicalRecord : medicalRecords) {
 			if (medicalRecord.getRecordID().equalsIgnoreCase(recordID)) {
