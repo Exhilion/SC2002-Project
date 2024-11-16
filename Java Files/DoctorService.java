@@ -8,14 +8,38 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * This class represents the service layer that provides business logic for doctor-related operations.
+ * It includes functionalities such as viewing and updating patient medical records, managing personal schedules,
+ * handling appointment requests, and recording the outcomes of appointments.
+ */
 public class DoctorService {
 
 	Scanner scanner = new Scanner(System.in);
+	
+	/**
+	 * Service for managing appointments
+	 */
 	private AppointmentService appointmentService;
+	
+	/**
+	 * Service for manaing medical records
+	 */
 	private MedicalRecordService medicalRecordService;
+	
+	/**
+	 * Service for loading data from CSV files
+	 */
 	private loadCSVClass load;
 
 	// Constructor to inject the services
+	/**
+     * Constructor to initialize the {@link DoctorService} with necessary services.
+     *
+     * @param medicalRecordService The {@link MedicalRecordService} used for managing medical records.
+     * @param appointmentService The {@link AppointmentService} used for managing appointments.
+     * @param load The {@link loadCSVClass} used to load CSV data.
+     */
 	public DoctorService(MedicalRecordService medicalRecordService, AppointmentService appointmentService,
 			loadCSVClass load) {
 		this.appointmentService = appointmentService;
@@ -23,15 +47,33 @@ public class DoctorService {
 		this.load = load;
 	}
 
+	/**
+     * View the medical records of a patient. 
+     * This method is to be implemented for viewing the patient's medical history.
+     * 
+     * @param doctorID The ID of the doctor accessing the medical records.
+     */
 	public static void viewPatientMedicalRecords(String doctorID) {
 		// Implement the logic for viewing patient medical records here
 	}
 
+	/**
+     * Update the medical records of a patient. 
+     * This method is to be implemented for updating patient information after consultations.
+     * 
+     * @param doctorID The ID of the doctor making the updates to the medical records.
+     */
 	public static void updatePatientMedicalRecords(String doctorID) {
 		// Implement the logic for updating patient medical records here
 	}
 
 	// View personal schedule for the doctor
+	/**
+     * View the personal schedule of the doctor.
+     * Displays the doctor's available time slots for appointments.
+     * 
+     * @param doctorID The ID of the doctor whose schedule is being viewed.
+     */
 	public void viewPersonalSchedule(String doctorID) {
 		List<AppointmentSlot> doctorSchedule = AppointmentSlot.filterByDoctorID(load.getAppointmentSlots(), doctorID);
 		System.out.println("\nSchedule:");
@@ -44,6 +86,12 @@ public class DoctorService {
 		}
 	}
 
+	/**
+     * Set the doctor's availability for appointments.
+     * Allows the doctor to specify available time slots for appointments.
+     * 
+     * @param doctorID The ID of the doctor setting availability.
+     */
 	public void setAvailabilityForAppointments(String doctorID) {
 		System.out.println("\nSet Availability for Appointments:");
 
@@ -102,6 +150,12 @@ public class DoctorService {
 	}
 
 	// Accept or decline appointments
+	/**
+     * Accept or decline appointment requests.
+     * Allows the doctor to review pending appointment requests and accept or decline them.
+     * 
+     * @param doctorID The ID of the doctor reviewing the appointment requests.
+     */
 	public void acceptDeclineAppointments(String doctorID) {
 		System.out.println("\nAccept/Decline Appointment Requests:");
 		List<Appointment> pendingAppointments = appointmentService.getPendingAppointments(doctorID);
@@ -145,6 +199,12 @@ public class DoctorService {
 	}
 
 	// View upcoming appointments
+	/**
+     * View all upcoming confirmed appointments for the doctor.
+     * Displays a list of confirmed appointments.
+     * 
+     * @param doctorID The ID of the doctor whose upcoming appointments are being viewed.
+     */
 	public void viewUpcomingAppointments(String doctorID) {
 		List<Appointment> confirmedAppointments = appointmentService.getConfirmedAppointments(doctorID);
 		for (Appointment appointment : confirmedAppointments) {
@@ -153,6 +213,13 @@ public class DoctorService {
 	}
 
 	// Record the outcome of an appointment
+	/**
+     * Record the outcome of an appointment after it is completed.
+     * This includes updating the patient's medical record, selecting diagnosis, treatment, and prescriptions,
+     * and adding the appointment outcome.
+     * 
+     * @param doctorID The ID of the doctor recording the appointment outcome.
+     */
 	public void recordAppointmentOutcome(String doctorID) {
 		// Filter confirmed appointments for the given doctor
 		List<Appointment> filteredAppointments = appointmentService.getConfirmedAppointments(doctorID);
