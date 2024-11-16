@@ -1,7 +1,0 @@
-hospitalID,password,role,gender,name,dateOfBirth,bloodType,phoneNumber,email
-PT125,password3,PATIENT,FEMALE,Emily Johnson,Fri Nov 08 00:00:00 GMT 2024,BPOS,12340987,testing098@123.com
-PT126,password4,PATIENT,MALE,Michael Brown,Fri Nov 08 00:00:00 GMT 2024,ONEG,6677889900,michael.brown@email.com
-PT127,password5,PATIENT,FEMALE,Olivia Davis,Sat Nov 09 00:00:00 GMT 2024,APOS,5566778899,olivia.davis@email.com
-PT128,password6,PATIENT,MALE,Liam Miller,Sat Nov 09 00:00:00 GMT 2024,ONEG,4433221100,liam.miller@email.com
-PT129,password7,PATIENT,FEMALE,Sophia Wilson,Sun Nov 10 00:00:00 GMT 2024,BNEG,2233445566,sophia.wilson@email.com
-PT130,password8,PATIENT,MALE,James Moore,Sun Nov 10 00:00:00 GMT 2024,ABPOS,3344556677,james.moore@email.com
