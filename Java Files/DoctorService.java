@@ -11,16 +11,13 @@ import java.util.UUID;
 public class DoctorService {
 
 	private AppointmentService appointmentService;
-	private AppointmentOutcomeService appointmentOutcomeService;
 	private MedicalRecordService medicalRecordService;
-	private AppointmentSlotService appointmentSlotService;
 	private loadCSVClass load;
 
 	// Constructor to inject the services
 	public DoctorService(MedicalRecordService medicalRecordService, AppointmentService appointmentService,
-			AppointmentOutcomeService appointmentOutcomeService, AppointmentSlotService appointmentSlotService, loadCSVClass load) {
+			loadCSVClass load) {
 		this.appointmentService = appointmentService;
-		this.appointmentOutcomeService = appointmentOutcomeService;
 		this.medicalRecordService = medicalRecordService;
 		this.load = load;
 	}
@@ -91,7 +88,7 @@ public class DoctorService {
 				String newStatus = (response == 1) ? "Confirmed" : "Cancelled";
 				appointmentService.updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 				if (response == 1) {
-					appointmentSlotService.updateAppointmentSlotBookingStatus(
+					appointmentService.updateAppointmentSlotBookingStatus(
 							appointment.getAppointmentSlot().getAppointmentSlotID(), true);
 					System.out.println("Appointment Confirmed successfully!");
 				} else {
@@ -199,7 +196,7 @@ public class DoctorService {
 					// Create the appointment outcome
 					String appointmentID = selectedAppointment.getAppointmentID();
 					String appointmentOutcomeID = "A" + UUID.randomUUID().toString();
-					appointmentOutcomeService.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment,
+					appointmentService.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment,
 							newMedicalRecord, consultationNotes, PrescriptionStatus.Pending);
 
 					// Update the appointment status
@@ -214,7 +211,4 @@ public class DoctorService {
 		}
 	}
 
-	public void logout() {
-		// Implementation here for logging out if needed
-	}
 }

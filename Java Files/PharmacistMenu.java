@@ -41,7 +41,7 @@ public class PharmacistMenu {
                     break;
                 case 5:
                     System.out.println("Logout");
-                    displayLoginMenu();
+                    main.displayLoginMenu();
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -52,7 +52,5 @@ public class PharmacistMenu {
         scanner.close();
     }
 
-    private void displayLoginMenu() {
-        // Logic for displaying the login menu
-    }
+   
 }

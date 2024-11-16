@@ -55,7 +55,8 @@ public class PatientMenu {
 				PatientService.viewAppointmentOutcomeRecords(username);
 				break;
 			case 9:
-				System.out.println("Logging out...");
+				 System.out.println("Logout");
+                 main.displayLoginMenu();
 
 				break;
 			default:

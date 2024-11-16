@@ -51,7 +51,8 @@ public class DoctorMenu {
                     doctorService.recordAppointmentOutcome(doctorID);
                     break;
                 case 8:
-                    doctorService.logout();
+                	 System.out.println("Logout");
+                     main.displayLoginMenu();
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");

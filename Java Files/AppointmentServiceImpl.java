@@ -38,4 +38,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         String status = "confirmed";
         return Appointment.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID, status);
     }
+    
+    @Override
+    public void updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean isBooked) {
+        AppointmentSlotCSV.updateAppointmentSlotBookingStatus(appointmentSlotID, isBooked);
+        System.out.println("Appointment Slot " + (isBooked ? "Booked" : "Cancelled") + " Successfully!");
+    }
+    
+	@Override
+	public void addAppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord,
+			String consultationNotes, PrescriptionStatus status) {
+		String appointmentOutcome = "AC" + UUID.randomUUID().toString();
+		AppointmentOutcome newOutcome = new AppointmentOutcome(appointmentOutcome, appointment, medicalRecord,
+				consultationNotes, status);
+		AppointmentOutcomeCSV newOutcomeCSV = new AppointmentOutcomeCSV();
+		newOutcomeCSV.addAppointmentOutcome(appointmentOutcome, appointment, medicalRecord, consultationNotes, status);
+	}
 }

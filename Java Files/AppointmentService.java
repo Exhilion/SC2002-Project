@@ -8,4 +8,7 @@ public interface AppointmentService {
     List<Appointment> getPendingAppointments(String doctorID);
     void updateAppointmentStatus(String appointmentID, String newStatus);
     List<Appointment> getConfirmedAppointments(String doctorID);
+    void addAppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord,
+			String consultationNotes, PrescriptionStatus status);
+    void updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean isBooked);
 }

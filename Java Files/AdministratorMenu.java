@@ -51,7 +51,8 @@ public class AdministratorMenu {
                     adminService.approveReplenishmentRequests();
                     break;
                 case 8:
-                    System.out.println("Logging out...");
+                	 System.out.println("Logout");
+                     main.displayLoginMenu();
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");

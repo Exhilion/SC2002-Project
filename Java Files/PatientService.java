@@ -55,7 +55,7 @@ public class PatientService {
 		System.out.println("Enter the end time (HH:mm): ");
 		String endTime = scanner.nextLine();
 
-		PatientCSV.scheduleAppointment(load.getAppointmentSlots(), username, doctorID, dateOfChoice, startTime,
+		AppointmentCSV.scheduleAppointment(load.getAppointmentSlots(), username, doctorID, dateOfChoice, startTime,
 				endTime);
 	}
 
@@ -70,7 +70,7 @@ public class PatientService {
 	public static void cancelAppointment(String username) {
 		System.out.println("Enter the Appointment ID to cancel: ");
 		String appointmentID = scanner.nextLine();
-		PatientCSV.cancelAppointment(username, appointmentID);
+		AppointmentCSV.cancelAppointment(username, appointmentID);
 	}
 
 	public static void viewScheduledAppointments(String username) {
@@ -89,7 +89,5 @@ public class PatientService {
 		AppointmentOutcome.viewAppointmentOutcomeRecords(load.getAppointmentOutcomes(), username);
 	}
 	
-	public void logout() {
-		// Implementation here
-	}
+
 }

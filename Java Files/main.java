@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class main {
-	private static void displayLoginMenu() {
+	static void displayLoginMenu() {
 		System.out.println("Login");
 		System.out.println("Enter your username ");
 		Scanner scanner = new Scanner(System.in);
@@ -22,12 +22,9 @@ public class main {
 		String result = tempuser.login(username, password);
 		loadCSVClass load = new loadCSVClass();
 		AppointmentService appointmentService = new AppointmentServiceImpl();
-		AppointmentOutcomeService appointmentOutcomeService = new AppointmentOutcomeServiceImpl();
 		MedicalRecordService medicalRecordService = new MedicalRecordServiceImpl();
-		AppointmentSlotService appointmentSlotService = new AppointmentSlotServiceImpl();
 		if (result == "DR") {
-			DoctorService doctorService = new DoctorService(medicalRecordService, appointmentService,
-					appointmentOutcomeService, appointmentSlotService, load);
+			DoctorService doctorService = new DoctorService(medicalRecordService, appointmentService,load);
 			DoctorMenu doctorMenu = new DoctorMenu(doctorService);
 			doctorMenu.displayMenu(username);
 		} else if (result == "PT") {
