@@ -4,14 +4,22 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PatientService {
-	private static loadCSVClass load = new loadCSVClass();
-	private static final Scanner scanner = new Scanner(System.in);
+	private Scanner scanner = new Scanner(System.in);
 
-	public static void viewMedicalRecord(String username) {
-		MedicalRecord.displayMedicalRecords(load.getMedicalRecords(), username);
+	private AppointmentService appointmentService;
+	private loadCSVClass load;
+
+	public PatientService(AppointmentService appointmentService, loadCSVClass load) {
+		this.appointmentService = appointmentService;
+		this.load = load;
 	}
 
-	public static void updatePersonalInfo() {
+	public void viewMedicalRecord(String username) {
+		List<MedicalRecord> filteredRecords = MedicalRecord.filterByHospitalId(load.getMedicalRecords(),
+				username);
+	}
+
+	public void updatePersonalInfo() {
 		System.out.println("Enter Patient ID:");
 		String patientID = scanner.nextLine();
 
@@ -31,7 +39,7 @@ public class PatientService {
 		}
 	}
 
-	public static void viewAvailableAppointments() {
+	public void viewAvailableAppointments() {
 		List<AppointmentSlot> availableSlots = AppointmentSlot.filterAvailableSlots(load.getAppointmentSlots());
 		if (availableSlots.isEmpty()) {
 			System.out.println("No schedule found");
@@ -42,7 +50,7 @@ public class PatientService {
 		}
 	}
 
-	public static void scheduleAppointment(String username) {
+	public void scheduleAppointment(String username) {
 		System.out.println("Enter Doctor ID: ");
 		String doctorID = scanner.nextLine();
 
@@ -55,25 +63,37 @@ public class PatientService {
 		System.out.println("Enter the end time (HH:mm): ");
 		String endTime = scanner.nextLine();
 
-		AppointmentCSV.scheduleAppointment(load.getAppointmentSlots(), username, doctorID, dateOfChoice, startTime,
-				endTime);
+		appointmentService.scheduleAppointment(username, doctorID, dateOfChoice, startTime, endTime);
 	}
 
-	public static void rescheduleAppointment(String username) {
+	public void rescheduleAppointment(String username) {
 		System.out.println("Enter the Appointment ID to reschedule: ");
 		String appointmentID = scanner.nextLine();
+		
+		appointmentService.cancelAppointment(username, appointmentID);
 
-		System.out.println("Please enter new appointment information: ");
-		scheduleAppointment(username);
+		System.out.println("Enter Doctor ID: ");
+		String doctorID = scanner.nextLine();
+
+		System.out.println("Enter the date for your appointment: (DD/MM/YYYY)");
+		String dateOfChoice = scanner.nextLine();
+
+		System.out.println("Enter the start time (HH:mm): ");
+		String startTime = scanner.nextLine();
+
+		System.out.println("Enter the end time (HH:mm): ");
+		String endTime = scanner.nextLine();
+
+		appointmentService.scheduleAppointment(username, doctorID, dateOfChoice, startTime, endTime);
 	}
 
-	public static void cancelAppointment(String username) {
+	public void cancelAppointment(String username) {
 		System.out.println("Enter the Appointment ID to cancel: ");
 		String appointmentID = scanner.nextLine();
-		AppointmentCSV.cancelAppointment(username, appointmentID);
+		appointmentService.cancelAppointment(username, appointmentID);
 	}
 
-	public static void viewScheduledAppointments(String username) {
+	public void viewScheduledAppointments(String username) {
 		List<Appointment> scheduledAppointments = Appointment.filterScheduledAppointment(load.getAppointments(),
 				username);
 		if (scheduledAppointments.isEmpty()) {
@@ -85,9 +105,8 @@ public class PatientService {
 		}
 	}
 
-	public static void viewAppointmentOutcomeRecords(String username) {
+	public void viewAppointmentOutcomeRecords(String username) {
 		AppointmentOutcome.viewAppointmentOutcomeRecords(load.getAppointmentOutcomes(), username);
 	}
-	
 
 }

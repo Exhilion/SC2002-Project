@@ -24,11 +24,11 @@ public class main {
 		AppointmentService appointmentService = new AppointmentServiceImpl();
 		MedicalRecordService medicalRecordService = new MedicalRecordServiceImpl();
 		if (result == "DR") {
-			DoctorService doctorService = new DoctorService(medicalRecordService, appointmentService,load);
+			DoctorService doctorService = new DoctorService(medicalRecordService, appointmentService, load);
 			DoctorMenu doctorMenu = new DoctorMenu(doctorService);
 			doctorMenu.displayMenu(username);
 		} else if (result == "PT") {
-			PatientService patientService = new PatientService();
+			PatientService patientService = new PatientService(appointmentService, load);
 			PatientMenu patientMenu = new PatientMenu(patientService);
 			patientMenu.displayPatientMenu(username);
 		} else if (result == "PH") {

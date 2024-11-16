@@ -1,0 +1,6 @@
+medicineID,medicineName,quantity,lowQuantity,lowStockAlert
+101,Paracetamol,48,10,true
+102,Ibuprofen,20,10,true
+103,Amoxicillin,100,10,false
+104,Cetirizine,29,10,true
+105,Aspirin,199,10,false

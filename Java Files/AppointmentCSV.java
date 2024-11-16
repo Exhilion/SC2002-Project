@@ -127,34 +127,6 @@ public class AppointmentCSV {
         return null;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public static void scheduleAppointment( List<AppointmentSlot> slots, String patientID, String doctorID, String dateOfChoice, String startTime, String endTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         boolean appointmentScheduled = false;
