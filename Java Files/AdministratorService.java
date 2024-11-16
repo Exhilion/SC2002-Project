@@ -6,8 +6,10 @@ import java.util.Scanner;
 /**
  * The class provides administrators with the methods to manage hospital staff, view appointments 
  * and handle medication inventory.
+ * <p>
  * This service acts as a layer to interact with CSV loading, staff management and other
  * administrative operations.
+ * </p>
  */
 public class AdministratorService {
 
@@ -33,9 +35,11 @@ public class AdministratorService {
 	}
 
 	/**
-	 * Adds a new hospital staff member by collecting the necessary details from the administrator
+	 * Adds a new hospital staff member by collecting the necessary details from the administrator.
+  	 * <p>
 	 * Details such as the role, gender, name and other relevant details to the role are requested.
 	 * A unique hospital ID and default password are generated for the new staff member.
+  	 * </p>
 	 */
 	public void addHospitalStaff() {
 		Scanner scanner = new Scanner(System.in);
