@@ -6,8 +6,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The PharmacistCSV class is responsible for loading pharmacist records from a CSV file.
+ * It reads the pharmacist details from the CSV and creates Pharmacist objects to be used
+ * within the system.
+ */
 public class PharmacistCSV {
 
+	/**
+     * Loads a list of pharmacists from a CSV file.
+     * The CSV file should contain the following columns: hospitalId, password, role, gender, pharmacistName, firstTimeLogin.
+     * 
+     * @return A list of Pharmacist objects loaded from the CSV file.
+     */
     public List<Pharmacist> loadPharmacistsFromCSV() {
         List<Pharmacist> pharmacists = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.PHARMACIST_FILE_PATH))) {
