@@ -3,10 +3,23 @@ package OOPProject;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The class provides administrators with the methods to manage hospital staff, view appointments 
+ * and handle medication inventory.
+ * This service acts as a layer to interact with CSV loading, staff management and other
+ * administrative operations.
+ */
 public class AdministratorService {
 
+	/**
+	 * Helper class to load data from CSV files
+	 */
 	private static loadCSVClass load = new loadCSVClass();
 
+	/**
+	 * Displays the list of hospital staff
+	 * If no staff members are found, it prints the corresponding message.
+	 */
 	public void viewHospitalStaff() {
 //        List<Staff> staffList = load.getStaff();  // Assuming load is a method to fetch staff data
 //        if (staffList.isEmpty()) {
@@ -19,6 +32,11 @@ public class AdministratorService {
 //        }
 	}
 
+	/**
+	 * Adds a new hospital staff member by collecting the necessary details from the administrator
+	 * Details such as the role, gender, name and other relevant details to the role are requested.
+	 * A unique hospital ID and default password are generated for the new staff member.
+	 */
 	public void addHospitalStaff() {
 		Scanner scanner = new Scanner(System.in);
 		StaffCSV newStaff = new StaffCSV();
@@ -75,16 +93,26 @@ public class AdministratorService {
 		System.out.println("Staff added successfully!");
 	}
 
+	/**
+	 * Provides the functionality to update existing hospital details
+	 */
 	public void updateHospitalStaff() {
 		// Placeholder for future update functionality
 		System.out.println("Feature to update hospital staff is not implemented yet.");
 	}
 
+	/**
+	 * Provides the functionality to remove a hospital staff member.
+	 */
 	public void removeHospitalStaff() {
 		// Placeholder for future remove functionality
 		System.out.println("Feature to remove hospital staff is not implemented yet.");
 	}
 
+	/**
+	 * It iterates through and displays the details of all appointment outcomes.
+	 * If no appointment outcomes are available, it prints the corresponding message.
+	 */
 	public void viewAppointments() {
 		List<AppointmentOutcome> appointmentOutcomes = load.getAppointmentOutcomes();
 		if (appointmentOutcomes.isEmpty()) {
@@ -96,14 +124,24 @@ public class AdministratorService {
 		}
 	}
 
+	/**
+	 * Displays and manages the medication inventory.
+	 * Uses a helper class to load and display the list of medications.
+	 */
 	public void manageMedicationInventory() {
 		Medication.displayInventory(load.getMedications());
 	}
 
+	/**
+	 * Displays the details of all appointments
+	 */
 	public void viewAppointmentsDetails() {
 
 	}
 
+	/**
+	 * Approves replenishment requests for medications in the inventory.
+	 */
 	public void approveReplenishmentRequests() {
 //        System.out.println("Processing replenishment requests...");
 //        Inventory inv = new Inventory(load.getMedications());
