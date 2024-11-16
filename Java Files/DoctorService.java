@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class DoctorService {
 
+	Scanner scanner = new Scanner(System.in);
 	private AppointmentService appointmentService;
 	private MedicalRecordService medicalRecordService;
 	private loadCSVClass load;
@@ -43,24 +44,53 @@ public class DoctorService {
 		}
 	}
 
-	// Set availability for appointments
 	public void setAvailabilityForAppointments(String doctorID) {
-		Scanner scanner = new Scanner(System.in);
 		System.out.println("\nSet Availability for Appointments:");
 
-		System.out.print("Enter Start Time (HH:mm): ");
-		String startTime = scanner.nextLine();
-		System.out.print("Enter End Time (HH:mm): ");
-		String endTime = scanner.nextLine();
-		System.out.print("Enter Date (dd/MM/yyyy): ");
-		String dateStr = scanner.nextLine();
+		String startTime = null;
+		String endTime = null;
+		String dateStr = null;
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Date date;
-		try {
-			date = dateFormat.parse(dateStr);
-		} catch (ParseException e) {
-			System.out.println("Invalid date format. Please use 'dd/MM/yyyy'.");
+		while (startTime == null) {
+			System.out.print("Enter Start Time (HH:mm): ");
+			startTime = scanner.nextLine();
+			if (!startTime.matches("\\d{2}:\\d{2}")) {
+				System.out.println("Invalid time format. Please use 'HH:mm'.");
+				startTime = null;
+			}
+		}
+
+		while (endTime == null) {
+			System.out.print("Enter End Time (HH:mm): ");
+			endTime = scanner.nextLine();
+			if (!endTime.matches("\\d{2}:\\d{2}")) {
+				System.out.println("Invalid time format. Please use 'HH:mm'.");
+				endTime = null;
+			}
+		}
+
+		Date date = null;
+		while (date == null) {
+			System.out.print("Enter Date (dd/MM/yyyy): ");
+			dateStr = scanner.nextLine();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			dateFormat.setLenient(false);
+			try {
+				date = dateFormat.parse(dateStr);
+			} catch (ParseException e) {
+				System.out.println("Invalid date format. Please use 'dd/MM/yyyy'.");
+			}
+		}
+
+		String[] startTimeParts = startTime.split(":");
+		String[] endTimeParts = endTime.split(":");
+		int startHour = Integer.parseInt(startTimeParts[0]);
+		int startMinute = Integer.parseInt(startTimeParts[1]);
+		int endHour = Integer.parseInt(endTimeParts[0]);
+		int endMinute = Integer.parseInt(endTimeParts[1]);
+
+		if ((startHour > endHour) || (startHour == endHour && startMinute >= endMinute)) {
+			System.out.println("Start time must be earlier than end time.");
 			return;
 		}
 
@@ -81,10 +111,26 @@ public class DoctorService {
 		} else {
 			for (Appointment appointment : pendingAppointments) {
 				appointment.printAppointmentDetails();
-				System.out.println("Do you want to accept or decline this appointment? (1: Accept, 2: Decline)");
-				Scanner scanner = new Scanner(System.in);
-				int response = scanner.nextInt();
-				scanner.nextLine();
+				int response = 0;
+				boolean validInput = false;
+
+				while (!validInput) {
+					System.out.println("Do you want to accept or decline this appointment? (1: Accept, 2: Decline)");
+
+					if (scanner.hasNextInt()) {
+						response = scanner.nextInt();
+						scanner.nextLine();
+						if (response == 1 || response == 2) {
+							validInput = true;
+						} else {
+							System.out.println("Invalid choice! Please enter 1 to accept or 2 to decline.");
+						}
+					} else {
+						System.out.println("Invalid input! Please enter a valid number (1 or 2).");
+						scanner.nextLine(); // Consume the invalid input
+					}
+				}
+
 				String newStatus = (response == 1) ? "Confirmed" : "Cancelled";
 				appointmentService.updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 				if (response == 1) {
@@ -120,52 +166,93 @@ public class DoctorService {
 			}
 
 			// Select the appointment to update
-			Scanner scanner = new Scanner(System.in);
-			System.out.print("Select the patient to update their medical record: ");
-			int selectedAppointmentIndex = scanner.nextInt() - 1; // Input is 1-indexed, so subtract 1
-			scanner.nextLine(); // Consume newline
+			int selectedAppointmentIndex = -1;
 
-			if (selectedAppointmentIndex >= 0 && selectedAppointmentIndex < filteredAppointments.size()) {
-				Appointment selectedAppointment = filteredAppointments.get(selectedAppointmentIndex);
-				Patient selectedPatient = selectedAppointment.getPatient();
+			// Ensure valid input for appointment selection
+			while (selectedAppointmentIndex < 0 || selectedAppointmentIndex >= filteredAppointments.size()) {
+				System.out.print(
+						"Select the patient to update their medical record (1-" + filteredAppointments.size() + "): ");
+				while (!scanner.hasNextInt()) {
+					System.out.println("Invalid input. Please enter a valid number.");
+					scanner.next(); // Consume the invalid input
+				}
+				selectedAppointmentIndex = scanner.nextInt() - 1; // Input is 1-indexed, so subtract 1
+				scanner.nextLine(); // Consume newline
 
-				if (selectedPatient != null) {
-					System.out.println("Patient ID: " + selectedPatient.getHospitalId());
-					List<Diagnosis> diagnoses = load.getDiagnoses();
-					List<Treatment> treatments = load.getTreatments();
-					List<Prescription> prescriptions = load.getPrescriptions();
+				if (selectedAppointmentIndex < 0 || selectedAppointmentIndex >= filteredAppointments.size()) {
+					System.out.println("Invalid selection. Please select a valid appointment.");
+				}
+			}
 
-					// Select diagnosis
+			Appointment selectedAppointment = filteredAppointments.get(selectedAppointmentIndex);
+			Patient selectedPatient = selectedAppointment.getPatient();
+
+			if (selectedPatient != null) {
+				System.out.println("Patient ID: " + selectedPatient.getHospitalId());
+				List<Diagnosis> diagnoses = load.getDiagnoses();
+				List<Treatment> treatments = load.getTreatments();
+				List<Prescription> prescriptions = load.getPrescriptions();
+
+				// Select diagnosis
+				int diagnosisChoice = -1;
+				while (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
 					System.out.println("Available Diagnoses:");
 					for (int i = 0; i < diagnoses.size(); i++) {
 						System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
 					}
-					int diagnosisChoice = scanner.nextInt() - 1;
+					System.out.print("Select a diagnosis (1-" + diagnoses.size() + "): ");
+					while (!scanner.hasNextInt()) {
+						System.out.println("Invalid input. Please enter a valid number.");
+						scanner.next();
+					}
+					diagnosisChoice = scanner.nextInt() - 1;
 					scanner.nextLine();
 
-					// Select treatment
+					if (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
+						System.out.println("Invalid selection. Please select a valid diagnosis.");
+					}
+				}
+
+				// Select treatment
+				int treatmentChoice = -1;
+				while (treatmentChoice < 0 || treatmentChoice >= treatments.size()) {
 					System.out.println("Available Treatments:");
 					for (int i = 0; i < treatments.size(); i++) {
 						System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
 					}
-					int treatmentChoice = scanner.nextInt() - 1;
+					System.out.print("Select a treatment (1-" + treatments.size() + "): ");
+					while (!scanner.hasNextInt()) {
+						System.out.println("Invalid input. Please enter a valid number.");
+						scanner.next();
+					}
+					treatmentChoice = scanner.nextInt() - 1;
 					scanner.nextLine();
 
-					// Select prescriptions
-					System.out.println("Available Prescriptions:");
-					for (int i = 0; i < prescriptions.size(); i++) {
-						Prescription p = prescriptions.get(i);
-						System.out.println(
-								(i + 1) + ". " + p.getMedication().getMedicineName() + " - " + p.getDosage() + " mg");
+					if (treatmentChoice < 0 || treatmentChoice >= treatments.size()) {
+						System.out.println("Invalid selection. Please select a valid treatment.");
 					}
+				}
 
-					// Collect multiple prescriptions
-					List<Prescription> selectedPrescriptions = new ArrayList<>();
-					String addMore = "y";
-					while ("y".equalsIgnoreCase(addMore)) {
-						System.out.print("Select a prescription by number: ");
-						int prescriptionChoice = scanner.nextInt() - 1;
-						scanner.nextLine(); // Consume the newline character
+				// Select prescriptions
+				List<Prescription> selectedPrescriptions = new ArrayList<>();
+				String addMore = "y";
+				while ("y".equalsIgnoreCase(addMore)) {
+					int prescriptionChoice = -1;
+					while (prescriptionChoice < 0 || prescriptionChoice >= prescriptions.size()) {
+						System.out.println("Available Prescriptions:");
+						for (int i = 0; i < prescriptions.size(); i++) {
+							Prescription p = prescriptions.get(i);
+							System.out.println((i + 1) + ". " + p.getMedication().getMedicineName() + " - "
+									+ p.getDosage() + " mg");
+						}
+						System.out.print("Select a prescription by number (1-" + prescriptions.size() + "): ");
+						while (!scanner.hasNextInt()) {
+							System.out.println("Invalid input. Please enter a valid number.");
+							scanner.next();
+						}
+						prescriptionChoice = scanner.nextInt() - 1;
+						scanner.nextLine();
+
 						if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
 							selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
 							System.out.println("Prescription added: "
@@ -173,38 +260,35 @@ public class DoctorService {
 						} else {
 							System.out.println("Invalid choice.");
 						}
-						System.out.print("Add another prescription? (y/n): ");
-						addMore = scanner.next();
-						scanner.nextLine();
 					}
 
-					// Enter consultation notes
-					System.out.print("Enter consultation notes: \n");
-					String consultationNotes = scanner.nextLine();
-
-					// Create a new medical record for the patient
-
-					String recordID = "MR" + UUID.randomUUID().toString().substring(0, 8);
-					MedicalRecord newMedicalRecord = new MedicalRecord(recordID, selectedPatient,
-							diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice), selectedPrescriptions);
-
-					// Add the medical record to the CSV
-					medicalRecordService.addMedicalRecord(recordID, selectedPatient, diagnoses.get(diagnosisChoice),
-							treatments.get(treatmentChoice), selectedPrescriptions);
-					System.out.println("Medical record updated for Patient ID " + selectedPatient.getHospitalId());
-
-					// Create the appointment outcome
-					String appointmentID = selectedAppointment.getAppointmentID();
-					String appointmentOutcomeID = "A" + UUID.randomUUID().toString();
-					appointmentService.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment,
-							newMedicalRecord, consultationNotes, PrescriptionStatus.Pending);
-
-					// Update the appointment status
-					appointmentService.updateAppointmentStatus(appointmentID, "Completed");
-
-				} else {
-					System.out.println("Invalid selection.");
+					System.out.print("Add another prescription? (y/n): ");
+					addMore = scanner.nextLine();
 				}
+
+				// Enter consultation notes
+				System.out.print("Enter consultation notes: \n");
+				String consultationNotes = scanner.nextLine();
+
+				// Create a new medical record for the patient
+				String recordID = "MR" + UUID.randomUUID().toString().substring(0, 8);
+				MedicalRecord newMedicalRecord = new MedicalRecord(recordID, selectedPatient,
+						diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice), selectedPrescriptions);
+
+				// Add the medical record to the CSV
+				medicalRecordService.addMedicalRecord(recordID, selectedPatient, diagnoses.get(diagnosisChoice),
+						treatments.get(treatmentChoice), selectedPrescriptions);
+				System.out.println("Medical record updated for Patient ID " + selectedPatient.getHospitalId());
+
+				// Create the appointment outcome
+				String appointmentID = selectedAppointment.getAppointmentID();
+				String appointmentOutcomeID = "A" + UUID.randomUUID().toString();
+				appointmentService.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment, newMedicalRecord,
+						consultationNotes, PrescriptionStatus.Pending);
+
+				// Update the appointment status
+				appointmentService.updateAppointmentStatus(appointmentID, "Completed");
+
 			} else {
 				System.out.println("Invalid selection.");
 			}

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PharmacistService {
-
+	Scanner scanner = new Scanner(System.in);
 	private static loadCSVClass load = new loadCSVClass();
 
 	// View Appointment Outcome Record
@@ -33,95 +33,118 @@ public class PharmacistService {
 			pendingOutcomes.get(i).printDetails();
 		}
 
-		System.out.print("Enter the AppointmentOutcome to prescribe: ");
-		Scanner scanner = new Scanner(System.in);
-		int outcomeChoice = scanner.nextInt();
-		scanner.nextLine();
-
-		if (outcomeChoice > 0 && outcomeChoice <= pendingOutcomes.size()) {
-			AppointmentOutcome selectedOutcome = pendingOutcomes.get(outcomeChoice - 1);
-			System.out.println(
-					"Prescribing medication for AppointmentOutcome ID: " + selectedOutcome.getAppointmentOutcomeID());
-
-			// Display available medications
-			List<Medication> medications = load.getMedications();
-			if (medications.isEmpty()) {
-				System.out.println("No medications available.");
-				return;
-			}
-
-			List<Medication> prescribedMedications = new ArrayList<>();
-			List<Integer> prescribedQuantities = new ArrayList<>();
-
-			boolean prescribing = true;
-			while (prescribing) {
-				System.out.println("Select a medication to prescribe:");
-				for (int i = 0; i < medications.size(); i++) {
-					System.out.println("(" + (i + 1) + ") " + medications.get(i).getMedicineName() + " - Available: "
-							+ medications.get(i).getQuantity());
-				}
-
-				System.out.print("Enter the number of the medication (or 0 to finish): ");
-				int medicationChoice = scanner.nextInt();
+		int outcomeChoice = -1;
+		while (outcomeChoice < 1 || outcomeChoice > pendingOutcomes.size()) {
+			System.out.print("Enter the AppointmentOutcome to prescribe: ");
+			if (scanner.hasNextInt()) {
+				outcomeChoice = scanner.nextInt();
 				scanner.nextLine();
-
-				if (medicationChoice == 0) {
-					break;
-				}
-
-				if (medicationChoice > 0 && medicationChoice <= medications.size()) {
-					Medication selectedMedication = medications.get(medicationChoice - 1);
-
-					// Check if the medication has already been prescribed
-					if (prescribedMedications.contains(selectedMedication)) {
-						System.out.println("This medication has already been prescribed. Choose another.");
-						continue;
-					}
-
-					System.out.print("Enter the quantity to prescribe: ");
-					int quantity = scanner.nextInt();
-					scanner.nextLine();
-
-					if (quantity > 0 && quantity <= selectedMedication.getQuantity()) {
-						selectedMedication.reduceQuantity(quantity);
-						prescribedMedications.add(selectedMedication);
-						prescribedQuantities.add(quantity);
-						MedicationCSV medicationCSV = new MedicationCSV();
-						medicationCSV.updateMedicationQuantity(selectedMedication.getMedicineID(),
-								selectedMedication.getQuantity());
-
-						System.out.println("Added " + quantity + " units of " + selectedMedication.getMedicineName()
-								+ " to the prescription.");
-					} else {
-						System.out.println("Invalid quantity.");
-					}
-				} else {
-					System.out.println("Invalid medication selection.");
-				}
-
-				System.out.print("Do you want to prescribe another medication? (y/n): ");
-				String response = scanner.nextLine();
-				prescribing = response.equalsIgnoreCase("y");
-			}
-
-			// Check if any medications were prescribed
-			if (!prescribedMedications.isEmpty()) {
-				// Update the status of the AppointmentOutcome
-				AppointmentOutcomeCSV outcome = new AppointmentOutcomeCSV();
-				outcome.updateAppointmentOutcomeStatus(load.getAppointmentOutcomes(),
-						selectedOutcome.getAppointmentOutcomeID(), PrescriptionStatus.Dispensed);
-				System.out.println("Prescription successful. Medications prescribed:");
-
-				// Display all prescribed medications
-				for (int i = 0; i < prescribedMedications.size(); i++) {
-					System.out.println("- " + prescribedQuantities.get(i) + " units of "
-							+ prescribedMedications.get(i).getMedicineName());
+				if (outcomeChoice < 1 || outcomeChoice > pendingOutcomes.size()) {
+					System.out.println("Invalid choice. Please select a valid AppointmentOutcome.");
 				}
 			} else {
-				System.out.println("No medications were prescribed.");
+				System.out.println("Invalid input. Please enter a number.");
+				scanner.nextLine(); // Consume the invalid input
+			}
+		}
+
+		AppointmentOutcome selectedOutcome = pendingOutcomes.get(outcomeChoice - 1);
+		System.out.println(
+				"Prescribing medication for AppointmentOutcome ID: " + selectedOutcome.getAppointmentOutcomeID());
+
+		// Display available medications
+		List<Medication> medications = load.getMedications();
+		if (medications.isEmpty()) {
+			System.out.println("No medications available.");
+			return;
+		}
+
+		List<Medication> prescribedMedications = new ArrayList<>();
+		List<Integer> prescribedQuantities = new ArrayList<>();
+
+		boolean prescribing = true;
+		while (prescribing) {
+			System.out.println("Select a medication to prescribe:");
+			for (int i = 0; i < medications.size(); i++) {
+				System.out.println("(" + (i + 1) + ") " + medications.get(i).getMedicineName() + " - Available: "
+						+ medications.get(i).getQuantity());
+			}
+
+			int medicationChoice = -1;
+			while (medicationChoice < 0 || medicationChoice > medications.size()) {
+				System.out.print("Enter the number of the medication (or 0 to finish): ");
+				if (scanner.hasNextInt()) {
+					medicationChoice = scanner.nextInt();
+					scanner.nextLine();
+					if (medicationChoice < 0 || medicationChoice > medications.size()) {
+						System.out.println("Invalid choice. Please select a valid medication.");
+					}
+				} else {
+					System.out.println("Invalid input. Please enter a number.");
+					scanner.nextLine(); // Consume the invalid input
+				}
+			}
+
+			if (medicationChoice == 0) {
+				break;
+			}
+
+			Medication selectedMedication = medications.get(medicationChoice - 1);
+
+			// Check if the medication has already been prescribed
+			if (prescribedMedications.contains(selectedMedication)) {
+				System.out.println("This medication has already been prescribed. Choose another.");
+				continue;
+			}
+
+			int quantity = -1;
+			while (quantity <= 0 || quantity > selectedMedication.getQuantity()) {
+				System.out.print("Enter the quantity to prescribe: ");
+				if (scanner.hasNextInt()) {
+					quantity = scanner.nextInt();
+					scanner.nextLine();
+					if (quantity <= 0) {
+						System.out.println("Quantity must be greater than 0.");
+					} else if (quantity > selectedMedication.getQuantity()) {
+						System.out.println(
+								"Not enough stock available. Available quantity: " + selectedMedication.getQuantity());
+					}
+				} else {
+					System.out.println("Invalid input. Please enter a valid quantity.");
+					scanner.nextLine(); // Consume the invalid input
+				}
+			}
+
+			selectedMedication.reduceQuantity(quantity);
+			prescribedMedications.add(selectedMedication);
+			prescribedQuantities.add(quantity);
+			MedicationCSV medicationCSV = new MedicationCSV();
+			medicationCSV.updateMedicationQuantity(selectedMedication.getMedicineID(),
+					selectedMedication.getQuantity());
+
+			System.out.println("Added " + quantity + " units of " + selectedMedication.getMedicineName()
+					+ " to the prescription.");
+
+			System.out.print("Do you want to prescribe another medication? (y/n): ");
+			String response = scanner.nextLine();
+			prescribing = response.equalsIgnoreCase("y");
+		}
+
+		// Check if any medications were prescribed
+		if (!prescribedMedications.isEmpty()) {
+			// Update the status of the AppointmentOutcome
+			AppointmentOutcomeCSV outcome = new AppointmentOutcomeCSV();
+			outcome.updateAppointmentOutcomeStatus(load.getAppointmentOutcomes(),
+					selectedOutcome.getAppointmentOutcomeID(), PrescriptionStatus.Dispensed);
+			System.out.println("Prescription successful. Medications prescribed:");
+
+			// Display all prescribed medications
+			for (int i = 0; i < prescribedMedications.size(); i++) {
+				System.out.println("- " + prescribedQuantities.get(i) + " units of "
+						+ prescribedMedications.get(i).getMedicineName());
 			}
 		} else {
-			System.out.println("Invalid AppointmentOutcome selection.");
+			System.out.println("No medications were prescribed.");
 		}
 	}
 
