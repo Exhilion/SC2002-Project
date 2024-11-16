@@ -6,7 +6,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The PrescriptionCSV class handles the loading of prescription data from a CSV file. 
+ * It parses the file to create a list of Prescription objects, associating each prescription 
+ * with the correct Medication based on the medication name.
+ */
 public class PrescriptionCSV {
+	
+	/**
+     * Finds a Medication object by its name from the list of medications.
+     * 
+     * @param medicationName The name of the medication to search for.
+     * @param medications A list of Medication objects.
+     * @return The Medication object if found, otherwise null.
+     */
 	private Medication findMedicationByName(String medicationName, List<Medication> medications) {
         for (Medication med : medications) {
             if (med.getMedicineName().equals(medicationName)) {
@@ -17,6 +30,13 @@ public class PrescriptionCSV {
     }
     
 	//Read file
+	/**
+     * Loads a list of prescriptions from a CSV file, associating each prescription 
+     * with a medication from the provided list of medications.
+     * 
+     * @param medications The list of medications available for matching with the prescription.
+     * @return A list of Prescription objects loaded from the CSV file.
+     */
     public List<Prescription> loadPrescriptionsFromCSV(List<Medication> medications) {
         List<Prescription> prescriptions = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.PRESCRIPTION_FILE_PATH))) {
