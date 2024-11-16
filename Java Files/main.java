@@ -20,10 +20,14 @@ public class main {
 
 		// Verify username and password
 		String result = tempuser.login(username, password);
+		loadCSVClass load = new loadCSVClass();
 		AppointmentService appointmentService = new AppointmentServiceImpl();
 		AppointmentOutcomeService appointmentOutcomeService = new AppointmentOutcomeServiceImpl();
+		MedicalRecordService medicalRecordService = new MedicalRecordServiceImpl();
+		AppointmentSlotService appointmentSlotService = new AppointmentSlotServiceImpl();
 		if (result == "DR") {
-			DoctorService doctorService = new DoctorService(appointmentService, appointmentOutcomeService);
+			DoctorService doctorService = new DoctorService(medicalRecordService, appointmentService,
+					appointmentOutcomeService, appointmentSlotService, load);
 			DoctorMenu doctorMenu = new DoctorMenu(doctorService);
 			doctorMenu.displayMenu(username);
 		} else if (result == "PT") {

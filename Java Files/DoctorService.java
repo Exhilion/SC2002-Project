@@ -9,15 +9,20 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class DoctorService {
-	private static loadCSVClass load = new loadCSVClass();
 
 	private AppointmentService appointmentService;
 	private AppointmentOutcomeService appointmentOutcomeService;
+	private MedicalRecordService medicalRecordService;
+	private AppointmentSlotService appointmentSlotService;
+	private loadCSVClass load;
 
 	// Constructor to inject the services
-	public DoctorService(AppointmentService appointmentService, AppointmentOutcomeService appointmentOutcomeService) {
+	public DoctorService(MedicalRecordService medicalRecordService, AppointmentService appointmentService,
+			AppointmentOutcomeService appointmentOutcomeService, AppointmentSlotService appointmentSlotService, loadCSVClass load) {
 		this.appointmentService = appointmentService;
 		this.appointmentOutcomeService = appointmentOutcomeService;
+		this.medicalRecordService = medicalRecordService;
+		this.load = load;
 	}
 
 	public static void viewPatientMedicalRecords(String doctorID) {
@@ -29,7 +34,7 @@ public class DoctorService {
 	}
 
 	// View personal schedule for the doctor
-	public static void viewPersonalSchedule(String doctorID) {
+	public void viewPersonalSchedule(String doctorID) {
 		List<AppointmentSlot> doctorSchedule = AppointmentSlot.filterByDoctorID(load.getAppointmentSlots(), doctorID);
 		System.out.println("\nSchedule:");
 		if (doctorSchedule.isEmpty()) {
@@ -86,7 +91,7 @@ public class DoctorService {
 				String newStatus = (response == 1) ? "Confirmed" : "Cancelled";
 				appointmentService.updateAppointmentStatus(appointment.getAppointmentID(), newStatus);
 				if (response == 1) {
-					AppointmentSlotCSV.updateAppointmentSlotBookingStatus(
+					appointmentSlotService.updateAppointmentSlotBookingStatus(
 							appointment.getAppointmentSlot().getAppointmentSlotID(), true);
 					System.out.println("Appointment Confirmed successfully!");
 				} else {
@@ -106,6 +111,7 @@ public class DoctorService {
 
 	// Record the outcome of an appointment
 	public void recordAppointmentOutcome(String doctorID) {
+		// Filter confirmed appointments for the given doctor
 		List<Appointment> filteredAppointments = appointmentService.getConfirmedAppointments(doctorID);
 
 		if (filteredAppointments.isEmpty()) {
@@ -116,14 +122,95 @@ public class DoctorService {
 				appointment.printAppointmentDetails();
 			}
 
-			// Example logic to record an outcome
+			// Select the appointment to update
 			Scanner scanner = new Scanner(System.in);
-			System.out.print("Enter number to record outcome details (Diagnosis/ Treatment): ");
-			String outcomeDetails = scanner.nextLine();
+			System.out.print("Select the patient to update their medical record: ");
+			int selectedAppointmentIndex = scanner.nextInt() - 1; // Input is 1-indexed, so subtract 1
+			scanner.nextLine(); // Consume newline
 
-			// Record the outcome for the first confirmed appointment (you could add logic
-			// for multiple appointments)
-			appointmentOutcomeService.recordOutcome(filteredAppointments.get(0).getAppointmentID(), outcomeDetails);
+			if (selectedAppointmentIndex >= 0 && selectedAppointmentIndex < filteredAppointments.size()) {
+				Appointment selectedAppointment = filteredAppointments.get(selectedAppointmentIndex);
+				Patient selectedPatient = selectedAppointment.getPatient();
+
+				if (selectedPatient != null) {
+					System.out.println("Patient ID: " + selectedPatient.getHospitalId());
+					List<Diagnosis> diagnoses = load.getDiagnoses();
+					List<Treatment> treatments = load.getTreatments();
+					List<Prescription> prescriptions = load.getPrescriptions();
+
+					// Select diagnosis
+					System.out.println("Available Diagnoses:");
+					for (int i = 0; i < diagnoses.size(); i++) {
+						System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
+					}
+					int diagnosisChoice = scanner.nextInt() - 1;
+					scanner.nextLine();
+
+					// Select treatment
+					System.out.println("Available Treatments:");
+					for (int i = 0; i < treatments.size(); i++) {
+						System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
+					}
+					int treatmentChoice = scanner.nextInt() - 1;
+					scanner.nextLine();
+
+					// Select prescriptions
+					System.out.println("Available Prescriptions:");
+					for (int i = 0; i < prescriptions.size(); i++) {
+						Prescription p = prescriptions.get(i);
+						System.out.println(
+								(i + 1) + ". " + p.getMedication().getMedicineName() + " - " + p.getDosage() + " mg");
+					}
+
+					// Collect multiple prescriptions
+					List<Prescription> selectedPrescriptions = new ArrayList<>();
+					String addMore = "y";
+					while ("y".equalsIgnoreCase(addMore)) {
+						System.out.print("Select a prescription by number: ");
+						int prescriptionChoice = scanner.nextInt() - 1;
+						scanner.nextLine(); // Consume the newline character
+						if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
+							selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
+							System.out.println("Prescription added: "
+									+ prescriptions.get(prescriptionChoice).getMedication().getMedicineName());
+						} else {
+							System.out.println("Invalid choice.");
+						}
+						System.out.print("Add another prescription? (y/n): ");
+						addMore = scanner.next();
+						scanner.nextLine();
+					}
+
+					// Enter consultation notes
+					System.out.print("Enter consultation notes: \n");
+					String consultationNotes = scanner.nextLine();
+
+					// Create a new medical record for the patient
+
+					String recordID = "MR" + UUID.randomUUID().toString().substring(0, 8);
+					MedicalRecord newMedicalRecord = new MedicalRecord(recordID, selectedPatient,
+							diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice), selectedPrescriptions);
+
+					// Add the medical record to the CSV
+					medicalRecordService.addMedicalRecord(recordID, selectedPatient, diagnoses.get(diagnosisChoice),
+							treatments.get(treatmentChoice), selectedPrescriptions);
+					System.out.println("Medical record updated for Patient ID " + selectedPatient.getHospitalId());
+
+					// Create the appointment outcome
+					String appointmentID = selectedAppointment.getAppointmentID();
+					String appointmentOutcomeID = "A" + UUID.randomUUID().toString();
+					appointmentOutcomeService.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment,
+							newMedicalRecord, consultationNotes, PrescriptionStatus.Pending);
+
+					// Update the appointment status
+					appointmentService.updateAppointmentStatus(appointmentID, "Completed");
+
+				} else {
+					System.out.println("Invalid selection.");
+				}
+			} else {
+				System.out.println("Invalid selection.");
+			}
 		}
 	}
 

@@ -2,3 +2,4 @@ AppointmentOutcomeID,AppointmentID,MedicalRecordID,ConsultationNotes,Prescriptio
 AC001,A001,MR3c45380b,Diagnosis done,Dispensed
 Ac3b61b61-10c5-45fe-96a6-459de775d898,A001,MRb73a7e20,diagnose with hypertension,Dispensed
 A79ed1ade-5cb4-4f2c-b665-0300a63907f2,Acb6770fd-489c-4417-a6e1-76e26d7c0354,MRe9d6d1c8,DONE,Dispensed
+AC78dfdf83-d221-433f-9697-5bd42fddd06d,A63852641-1cf9-4c59-8ae6-2c94c533932f,MRf990d3ae,done,Pending

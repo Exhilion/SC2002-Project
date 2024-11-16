@@ -118,10 +118,6 @@ public class MedicalRecordCSV {
 		return medicalRecords;
 	}
 
-	// Randomly generated Medical Record ID
-	public String generateMedicalRecordID() {
-		return "MR" + UUID.randomUUID().toString().substring(0, 8);
-	}
 
 	// Add Medical Record
 	public void addMedicalRecord(String recordID, Patient patient, Diagnosis diagnosis, Treatment treatment,
