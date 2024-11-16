@@ -2,14 +2,33 @@ package OOPProject;
 
 import java.util.Scanner;
 
+/**
+ * The class provides an interactive menu for administrators to manage hospital staaff,
+ * view appointments, and handle medication inventory operations.
+ * It interacts with the AdministratorService class to perform these operations.
+ */
 public class AdministratorMenu {
 
+	/**
+	 * The service layer that provides the logic for administrator operations.
+	 */
     private AdministratorService adminService;
 
+    /**
+     * Constructs an AdministratorMenu with the specified administrator service.
+     * 
+     * @param adminService The service to handle administrator-related operations
+     */
     public AdministratorMenu(AdministratorService adminService) {
         this.adminService = adminService;
     }
 
+    /**
+     * Displays the administrator menu and allows the administrator to choose to perform various operations.
+     * The menu will continue to be displayed until the administrator selects the "Logout" option.
+     *  
+     * @param adminID The ID of the administrator accessing the menu
+     */
     public void displayAdminMenu(String adminID) {
         Scanner scanner = new Scanner(System.in);
         int choice;
@@ -51,8 +70,7 @@ public class AdministratorMenu {
                     adminService.approveReplenishmentRequests();
                     break;
                 case 8:
-                	 System.out.println("Logout");
-                     main.displayLoginMenu();
+                    System.out.println("Logging out...");
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
