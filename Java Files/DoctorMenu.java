@@ -2,15 +2,36 @@ package OOPProject;
 
 import java.util.Scanner;
 
+/**
+ * This class represents the menu interface for the doctor in the application.
+ * It allows the doctor to interact with various services related to patient care, appointments,
+ * and personal schedule management.
+ * 
+ * The menu provides options such as viewing and updating patient medical records, 
+ * managing personal schedules, and handling appointment requests.
+ */
 public class DoctorMenu {
 
     private DoctorService doctorService;
 
+    /**
+     * Constructor to initialize the {@link DoctorMenu} with a {@link DoctorService} instance.
+     *
+     * @param doctorService The {@link DoctorService} used to handle the actions in the menu.
+     */
     public DoctorMenu(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
 
-    
+    /**
+     * Displays the doctor menu and processes the user's choice.
+     * Provides a variety of options such as viewing/updating patient records, setting appointment availability, 
+     * accepting or declining appointments, and more.
+     * 
+     * The menu continues to prompt the doctor for input until they choose to log out (option 8).
+     * 
+     * @param doctorID The ID of the doctor who is logged in, used to personalize the actions.
+     */
     public void displayMenu(String doctorID) {
         Scanner scanner = new Scanner(System.in);
         int choice;
