@@ -7,8 +7,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The MedicationCSV class handles the loading, updating, and saving of medication data from/to a CSV file.
+ * It provides methods to load medication information, update quantities, and manage low stock alerts.
+ */
 public class MedicationCSV {
 	//load medication from csv file
+	/**
+     * Loads a list of medications from the CSV file.
+     * It reads the file line by line, parses the values, and creates Medication objects.
+     * 
+     * @return A list of Medication objects loaded from the CSV file.
+     */
 		public List<Medication> loadMedicationsFromCSV() {
 	        List<Medication> medications = new ArrayList<>();
 	        try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.MEDICATION_FILE_PATH))) {
@@ -37,6 +47,14 @@ public class MedicationCSV {
 	    }
 		
 		  // Update medication quantity by medicineID
+		/**
+	     * Updates the quantity of a medication by its medicineID.
+	     * It first loads all medications, finds the medication with the given ID, updates its quantity, 
+	     * and then saves the updated list back to the CSV file.
+	     * 
+	     * @param medicineID The ID of the medication to update.
+	     * @param newQuantity The new quantity to set for the medication.
+	     */
 	    public void updateMedicationQuantity(int medicineID, int newQuantity) {
 	        List<Medication> medications = loadMedicationsFromCSV(); // Load medications from CSV
 
@@ -52,7 +70,12 @@ public class MedicationCSV {
 	        saveMedicationsToCSV(medications);
 	    }
 
-
+	    /**
+	     * Saves the list of medications back to the CSV file.
+	     * This method overwrites the existing file, including the header and all medication data.
+	     * 
+	     * @param medications The list of medications to save to the CSV file.
+	     */
 	    private void saveMedicationsToCSV(List<Medication> medications) {
 	        try (BufferedWriter bw = new BufferedWriter(new FileWriter(AppConfig.MEDICATION_FILE_PATH))) {
 	            bw.write("medicineID,medicineName,quantity,lowQuantity,lowStockAlert\n"); // Write header
@@ -68,7 +91,12 @@ public class MedicationCSV {
 	        }
 	    }
 		
-	    
+	    /**
+	     * Updates the low stock alert status for a medication.
+	     * If the current quantity is less than or equal to the low stock threshold, the alert is triggered.
+	     * 
+	     * @param med The medication object to update the low stock alert for.
+	     */
 	    public void updateLowStockAlert(Medication med)
 		{
 			if(med.getLowQuantity() >= med.getQuantity())	
