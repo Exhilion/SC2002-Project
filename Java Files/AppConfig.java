@@ -19,7 +19,6 @@ public class AppConfig {
      * The file path to the Prescription CSV file.
      * This file contains information about prescribed medications and treatments for patients.
      */
-     */
     public static final String PRESCRIPTION_FILE_PATH = "src\\\\OOPProject\\\\Prescription.csv";
     /**
      * The file path to the Treatment CSV file.
