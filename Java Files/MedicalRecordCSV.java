@@ -17,8 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The MedicalRecordCSV class handles reading and writing medical records to a CSV file.
+ * It also contains helper methods to find associated patients, diagnoses, treatments, and prescriptions by their IDs.
+ */
 public class MedicalRecordCSV {
 
+	/**
+     * Finds a patient by their hospital ID from a list of patients.
+     * 
+     * @param hospitalID The hospital ID to search for.
+     * @param patients   The list of patients to search in.
+     * @return The patient associated with the given hospital ID, or null if not found.
+     */
 	private Patient findPatientByID(String hospitalID, List<Patient> patients) {
 		for (Patient patient : patients) {
 			if (patient.getHospitalId().equals(hospitalID)) {
@@ -28,6 +39,13 @@ public class MedicalRecordCSV {
 		return null;
 	}
 
+	/**
+     * Finds a diagnosis by its ID from a list of diagnoses.
+     * 
+     * @param diagnosisID The diagnosis ID to search for.
+     * @param diagnoses   The list of diagnoses to search in.
+     * @return The diagnosis associated with the given ID, or null if not found.
+     */
 	private Diagnosis findDiagnosisByID(String diagnosisID, List<Diagnosis> diagnoses) {
 		for (Diagnosis diagnosis : diagnoses) {
 			if (diagnosis.getDiagnosisID().equals(diagnosisID)) {
@@ -37,6 +55,13 @@ public class MedicalRecordCSV {
 		return null;
 	}
 
+	/**
+     * Finds a treatment by its ID from a list of treatments.
+     * 
+     * @param treatmentID The treatment ID to search for.
+     * @param treatments The list of treatments to search in.
+     * @return The treatment associated with the given ID, or null if not found.
+     */
 	private Treatment findTreatmentByID(String treatmentID, List<Treatment> treatments) {
 		for (Treatment treatment : treatments) {
 			if (treatment.getTreatmentID().equals(treatmentID)) {
@@ -46,6 +71,13 @@ public class MedicalRecordCSV {
 		return null;
 	}
 
+	/**
+     * Finds a prescription by its ID from a list of prescriptions.
+     * 
+     * @param prescriptionID The prescription ID to search for.
+     * @param prescriptions  The list of prescriptions to search in.
+     * @return The prescription associated with the given ID, or null if not found.
+     */
 	private Prescription findPrescriptionByID(String prescriptionID, List<Prescription> prescriptions) {
 		for (Prescription prescription : prescriptions) {
 			if (prescription.getPrescriptionID().equals(prescriptionID)) {
@@ -56,6 +88,15 @@ public class MedicalRecordCSV {
 	}
 
 	// Read Medical Record
+	/**
+     * Reads medical records from a CSV file and returns a list of MedicalRecord objects.
+     * 
+     * @param patients    The list of patients to associate with the medical records.
+     * @param diagnoses   The list of diagnoses to associate with the medical records.
+     * @param treatments  The list of treatments to associate with the medical records.
+     * @param prescriptions The list of prescriptions to associate with the medical records.
+     * @return A list of MedicalRecord objects read from the CSV file.
+     */
 	public List<MedicalRecord> loadMedicalRecordsFromCSV(List<Patient> patients, List<Diagnosis> diagnoses,
 			List<Treatment> treatments, List<Prescription> prescriptions) {
 		List<MedicalRecord> medicalRecords = new ArrayList<>();
@@ -120,6 +161,15 @@ public class MedicalRecordCSV {
 
 
 	// Add Medical Record
+	/**
+     * Adds a new medical record and stores it in the CSV file.
+     * 
+     * @param recordID   The ID of the new medical record.
+     * @param patient    The patient associated with the medical record.
+     * @param diagnosis  The diagnosis associated with the medical record.
+     * @param treatment  The treatment associated with the medical record.
+     * @param prescriptions The list of prescriptions associated with the medical record.
+     */
 	public void addMedicalRecord(String recordID, Patient patient, Diagnosis diagnosis, Treatment treatment,
 			List<Prescription> prescriptions) {
 		MedicalRecord newMedicalRecord = new MedicalRecord(recordID, patient, diagnosis, treatment, prescriptions);
@@ -127,6 +177,12 @@ public class MedicalRecordCSV {
 	}
 
 	// Store MedicalRecord in CSV
+	/**
+     * Writes a medical record to the CSV file.
+     * 
+     * @param record The medical record to write to the CSV file.
+     * @return The written MedicalRecord object.
+     */
 	private MedicalRecord writeMedicalRecordToCSV(MedicalRecord record) {
 		try (FileWriter writer = new FileWriter(AppConfig.MEDICALRECORD_FILE_PATH, true)) {
 
