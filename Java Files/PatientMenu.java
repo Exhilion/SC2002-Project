@@ -2,14 +2,32 @@ package OOPProject;
 
 import java.util.Scanner;
 
+/**
+ * The PatientMenu class provides the menu interface for patients to interact with
+ * the system. It presents various options such as viewing medical records, scheduling
+ * appointments, updating personal information, and more.
+ */
 public class PatientMenu {
 
     private PatientService patientService;
 
+    /**
+     * Constructs a PatientMenu object with the given patient service.
+     * 
+     * @param patientService The patient service that will be used to handle the various
+     *                       operations related to the patient menu.
+     */
     public PatientMenu(PatientService patientService) {
         this.patientService = patientService;
     }
 
+    /**
+     * Displays the patient menu and handles user input for different patient operations.
+     * The menu allows the patient to view medical records, update personal information,
+     * schedule appointments, and perform other actions.
+     * 
+     * @param username The username of the patient logged into the system.
+     */
     public void displayPatientMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         int choice;
