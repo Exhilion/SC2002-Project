@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The AppointmentOutcome class represents the outcome of a patient's appointment.
+ * It holds the appointment details, medical record, consultation notes, and prescription status.
+ * This class provides methods to print the details of the appointment outcome, group outcomes by prescription status,
+ * and filter outcomes by their status.
+ */
 public class AppointmentOutcome {
     private String appointmentOutcomeID;
     private Appointment appointment;
@@ -13,6 +19,15 @@ public class AppointmentOutcome {
     private String consultationNotes;
     private PrescriptionStatus status;
 
+    /**
+     * Constructs an AppointmentOutcome object with the specified details.
+     *
+     * @param appointmentOutcomeID the unique ID of the appointment outcome
+     * @param appointment the appointment associated with this outcome
+     * @param medicalRecord the medical record associated with this outcome
+     * @param consultationNotes the notes from the consultation
+     * @param status the status of the prescription
+     */
     public AppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord, String consultationNotes, PrescriptionStatus status) {
         this.appointmentOutcomeID = appointmentOutcomeID;
     	this.appointment = appointment;
@@ -22,52 +37,105 @@ public class AppointmentOutcome {
     }
 
     // Getter and Setter for appointmentOutcomeID
+    /**
+     * Returns the unique ID of the appointment outcome.
+     *
+     * @return the appointment outcome ID
+     */
     public String getAppointmentOutcomeID() {
         return appointmentOutcomeID;
     }
 
+    /**
+     * Sets the unique ID for the appointment outcome.
+     *
+     * @param appointmentOutcomeID the new appointment outcome ID
+     */
     public void setAppointmentOutcomeID(String appointmentOutcomeID) {
         this.appointmentOutcomeID = appointmentOutcomeID;
     }
 
     // Getter and Setter for appointment
+    /**
+     * Returns the appointment associated with this outcome.
+     *
+     * @return the appointment object
+     */
     public Appointment getAppointment() {
         return appointment;
     }
 
+    /**
+     * Sets the appointment for this outcome.
+     *
+     * @param appointment the new appointment object
+     */
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
     }
 
 
     // Getter and Setter for medicalRecord
+    /**
+     * Returns the medical record associated with this outcome.
+     *
+     * @return the medical record object
+     */
     public MedicalRecord getMedicalRecord() {
         return medicalRecord;
     }
 
+    /**
+     * Sets the medical record for this outcome.
+     *
+     * @param medicalRecord the new medical record object
+     */
     public void setMedicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
     }
 
     // Getter and Setter for consultationNotes
+    /**
+     * Returns the consultation notes for this appointment outcome.
+     *
+     * @return the consultation notes
+     */
     public String getConsultationNotes() {
         return consultationNotes;
     }
 
+    /**
+     * Sets the consultation notes for this outcome.
+     *
+     * @param consultationNotes the new consultation notes
+     */
     public void setConsultationNotes(String consultationNotes) {
         this.consultationNotes = consultationNotes;
     }
 
     // Getter and Setter for status
+    /**
+     * Returns the prescription status for this appointment outcome.
+     *
+     * @return the prescription status
+     */
     public PrescriptionStatus getStatus() {
         return status;
     }
 
+    /**
+     * Sets the prescription status for this appointment outcome.
+    *
+    * @param status the new prescription status
+    */
     public void setStatus(PrescriptionStatus status) {
         this.status = status;
     }
     
-
+    /**
+     * Prints the details of the appointment outcome, including patient name, medical record details,
+     * consultation notes, and prescription status.
+     */
     public void printDetails() {
         System.out.println("Appointment Outcome Details:");
         System.out.println("Patient Name: " + (appointment != null && appointment.getPatient() != null ? appointment.getPatient().getName() : "N/A"));
@@ -79,6 +147,9 @@ public class AppointmentOutcome {
    
 
     // Method to print appointment details, with status check for "completed"
+    /**
+     * Prints detailed appointment outcome information if the appointment status is "completed".
+     */
     public void printAppointmentDetails() {
         if (appointment != null && appointment.getStatus().equalsIgnoreCase("completed")) {
             System.out.println("Appointment Outcome Details:");
@@ -107,6 +178,12 @@ public class AppointmentOutcome {
         }
     }
     
+    /**
+     * Views and prints grouped appointment outcome records based on prescription status for a specific patient.
+     *
+     * @param slots the list of AppointmentOutcome records
+     * @param patientID the ID of the patient whose records should be retrieved
+     */
     public static void viewAppointmentOutcomeRecords(List<AppointmentOutcome> slots, String patientID) {
     	String normalizedPatientID = patientID.trim().toLowerCase();
         Map<PrescriptionStatus, List<AppointmentOutcome>> groupedOutcomes = new HashMap<>();
@@ -135,6 +212,12 @@ public class AppointmentOutcome {
         }
     }
     
+    /**
+     * Filters and returns a list of appointment outcomes that are pending.
+     *
+     * @param allOutcomes the list of all AppointmentOutcome records
+     * @return a list of AppointmentOutcome records that have a pending status
+     */
     public static List<AppointmentOutcome> filterByPendingStatus(List<AppointmentOutcome> allOutcomes) {
         List<AppointmentOutcome>  pendingOutcomes = new ArrayList<>();
         for (AppointmentOutcome outcome : allOutcomes) {
@@ -145,7 +228,11 @@ public class AppointmentOutcome {
         return pendingOutcomes;
     }
     
-    
+    /**
+     * Provides a string representation of the AppointmentOutcome object.
+     *
+     * @return a string containing the AppointmentOutcome's ID, appointment details, consultation notes, and prescription status
+     */
     @Override
     public String toString() {
         // Retrieve the AppointmentID and PatientID if they exist
