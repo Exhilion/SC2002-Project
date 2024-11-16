@@ -4,11 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The PharmacistService class contains the core business logic related to the actions
+ * that a pharmacist can perform, such as viewing appointment outcomes, updating prescription
+ * statuses, viewing the medication inventory, and submitting replenishment requests.
+ */
 public class PharmacistService {
 	Scanner scanner = new Scanner(System.in);
 	private static loadCSVClass load = new loadCSVClass();
 
 	// View Appointment Outcome Record
+	/**
+     * Views the appointment outcome records with a status of "Pending" and prints them.
+     * This is typically used by a pharmacist to review the outcomes of appointments
+     * that have not yet been prescribed medication.
+     */
 	public void viewAppointmentOutcomeRecord() {
 		List<AppointmentOutcome> pendingOutcomes = AppointmentOutcome
 				.filterByPendingStatus(load.getAppointmentOutcomes());
@@ -18,6 +28,13 @@ public class PharmacistService {
 	}
 
 	// Update Prescription Status
+	/**
+     * Updates the prescription status by allowing the pharmacist to select an appointment
+     * outcome and prescribe medications.
+     * 
+     * It includes the process of selecting medications, checking stock, and updating the
+     * quantity in the inventory.
+     */
 	public void updatePrescriptionStatus() {
 		List<AppointmentOutcome> pendingOutcomes = AppointmentOutcome
 				.filterByPendingStatus(load.getAppointmentOutcomes());
@@ -149,6 +166,9 @@ public class PharmacistService {
 	}
 
 	// View Medication Inventory
+	/**
+     * Displays the current medication inventory and prints details of all available medications.
+     */
 	public void viewMedicationInventory() {
 		List<Medication> medications = load.getMedications();
 		for (Medication medication : medications) {
@@ -157,6 +177,13 @@ public class PharmacistService {
 	}
 
 	// Submit Replenishment Request
+	/**
+     * Submits a replenishment request for medications that are low in stock.
+     * The pharmacist can select medications to request replenishment for.
+     * 
+     * This method processes the request for low-stock medications and updates their
+     * status accordingly.
+     */
 	public void submitReplenishmentRequest() {
 		List<Medication> allMedications = load.getMedications();
 		List<Medication> lowStockMedications = new ArrayList<>();
