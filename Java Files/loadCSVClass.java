@@ -3,7 +3,7 @@ package OOPProject;
 import java.util.List;
 
 public class loadCSVClass {
-	private List<Patient> patients;
+    private List<Patient> patients;
     private List<Treatment> treatments;
     private List<Medication> medications;
     private List<Diagnosis> diagnoses;
@@ -14,11 +14,9 @@ public class loadCSVClass {
     private List<Appointment> appointments;
     private List<AppointmentOutcome> appointmentOutcomes;
 
-
     // Constructor to load all CSV data
     public loadCSVClass() {
-
-    	// Load Patients
+        // Load Patients
         PatientCSV patientCSV = new PatientCSV();
         this.patients = patientCSV.viewPatientRecords();
 
@@ -54,11 +52,6 @@ public class loadCSVClass {
         
         AppointmentOutcomeCSV appointmentOutcomeCSV = new AppointmentOutcomeCSV();
         this.appointmentOutcomes = appointmentOutcomeCSV.loadAppointmentOutcomesFromCSV(appointments, medicalRecords);
-        
-        
-        
-        
-        
     }
 
     // Getter methods to access the loaded data

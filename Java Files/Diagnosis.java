@@ -1,4 +1,3 @@
-
 package OOPProject;
 
 public class Diagnosis {

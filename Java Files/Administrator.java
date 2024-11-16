@@ -20,6 +20,8 @@ public class Administrator extends User {
     public void setAdminName(String adminName) {
         this.adminName = adminName;
     }
+    
+    
 
     // Method to approve replenishment requests submitted by pharmacists
     public void approveReplenishmentRequests(Inventory inventory) {
@@ -50,7 +52,7 @@ public class Administrator extends User {
                         // Update the inventory with the requested quantity
                         int currentQuantity = medication.getQuantity();
                         medication.setQuantity(currentQuantity + requestedQuantity);
-                        medication.updateLowStockAlert();
+                        medication.updateLowStockAlert(medication);
 
                         System.out.println("Approved replenishment for " + medicationName + 
                                            ": " + currentQuantity + " --> " + medication.getQuantity());

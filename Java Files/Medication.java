@@ -62,6 +62,7 @@ public class Medication {
 	public void setlowstockAlert(boolean lowStockAlert) {
 		this.lowStockAlert = lowStockAlert;
 	}
+	
 	public void reduceQuantity(int amount) {
 	    if (this.quantity >= amount) {
 	        this.quantity -= amount;
@@ -77,6 +78,34 @@ public class Medication {
         System.out.println("Low Quantity Threshold: " + lowQuantity);
         System.out.println("Low Stock Alert: " + lowStockAlert);
     }
+    
+    public static void displayInventory(List<Medication> medications) {
+        if (medications.isEmpty()) {
+            System.out.println("The inventory is empty.");
+        } else {
+            System.out.println("Inventory List:");
+            System.out.println("---------------------------------------------");
+            System.out.printf("%-10s %-20s %-10s %-15s%n", "ID", "Name", "Quantity", "Low Stock Alert");
+            System.out.println("---------------------------------------------");
+            for (Medication med : medications) {
+                System.out.printf("%-10d %-20s %-10d %-15s%n", 
+                                  med.getMedicineID(), 
+                                  med.getMedicineName(), 
+                                  med.getQuantity(), 
+                                  med.getLowStockAlert() ? "Yes" : "No");
+            }
+            System.out.println("---------------------------------------------");
+        }
+    }
+    
+	public void updateLowStockAlert(Medication med)
+	{
+		if(med.getLowQuantity() >= med.getQuantity())	
+		med.setlowstockAlert(true);
+		else 
+		med.setlowstockAlert(false);
+	}
+	
 	
 
 }

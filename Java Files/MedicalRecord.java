@@ -68,7 +68,8 @@ public class MedicalRecord {
 	}
 	
 
-	public void printPrescriptionDetails() {
+    // Method to print prescription details
+    public void printPrescriptionDetails() {
         System.out.println("Prescription Details:");
         
         if (prescriptions != null && !prescriptions.isEmpty()) {
@@ -83,6 +84,24 @@ public class MedicalRecord {
             System.out.println("No prescriptions available.");
         }
         System.out.println("--------------------------------");
+    }
+    
+    public static void displayMedicalRecords(List<MedicalRecord> filteredRecords, String hospitalID) {
+        System.out.println("\nAvailable Medical Records for Hospital ID: " + hospitalID);
+        if (filteredRecords == null || filteredRecords.isEmpty()) {
+            System.out.println("No medical records found for the given hospital ID.");
+        } else {
+            for (MedicalRecord record : filteredRecords) {
+                System.out.println("Medical Record ID: " + record.getRecordID());
+                System.out.println("Patient Name: " + record.getPatient().getName());
+                System.out.println("Diagnosis: " + record.getDiagnosis().getdiagnosis());
+                System.out.println("Treatment: " + record.getTreatment().gettreatment());
+                System.out.println("Prescriptions: ");
+                record.getPrescriptions().forEach(prescription ->
+                        System.out.println("  - " + prescription.getMedication().getMedicineName()));
+                System.out.println("----------------------------------------------------");
+            }
+        }
     }
 
 

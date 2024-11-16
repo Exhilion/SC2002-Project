@@ -1,6 +1,5 @@
 package OOPProject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,22 +8,24 @@ import java.util.UUID;
 
 public class AppointmentSlot {
 	private String appointmentSlotID;
-    private Doctor doctor;
-    private String startTime;
-    private String endTime;
-    private Date date;
-    private boolean isBooked;
+	private Doctor doctor;
+	private String startTime;
+	private String endTime;
+	private Date date;
+	private boolean isBooked;
 
-    public AppointmentSlot(String appointmentSlotID, Doctor doctor, String startTime,String endTime, Date date, boolean isBooked) {
-    	this.appointmentSlotID = appointmentSlotID;
+	// Constructor
+	public AppointmentSlot(String appointmentSlotID, Doctor doctor, String startTime, String endTime, Date date,
+			boolean isBooked) {
+		this.appointmentSlotID = appointmentSlotID;
 		this.doctor = doctor;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.date = date;
 		this.isBooked = isBooked;
-    }
-    
-    public AppointmentSlot(String appointmentSlotID, String startTime, String endTime, Date date,
+	}
+	
+	public AppointmentSlot(String appointmentSlotID, String startTime, String endTime, Date date,
 			boolean isBooked) {
 		this.appointmentSlotID = appointmentSlotID;
 		this.startTime = startTime;
@@ -32,6 +33,10 @@ public class AppointmentSlot {
 		this.date = date;
 		this.isBooked = isBooked;
 	}
+
+	// Getters
+	
+	 // Generate a unique AppointmentID using UUID
     public String generateUniqueID() {
         return "AS" + UUID.randomUUID().toString();
     }
@@ -90,6 +95,7 @@ public class AppointmentSlot {
 		return filteredSlots;
 	}
 	
+	
 	public static List<AppointmentSlot> filterAvailableSlots(List<AppointmentSlot> slots) {
 	    List<AppointmentSlot> availableSlots = new ArrayList<>();
 
@@ -103,7 +109,6 @@ public class AppointmentSlot {
 	    return availableSlots;
 	}
 	
-	
 	@Override
 	public String toString() {
 	    return "Appointment Slot ID: " + appointmentSlotID +
@@ -113,5 +118,7 @@ public class AppointmentSlot {
 	           ", Date: " + date +
 	           ", Is Booked: " + (isBooked ? "Yes" : "No");
 	}
+
+
 
 }

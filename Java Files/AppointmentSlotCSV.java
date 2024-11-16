@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 public class AppointmentSlotCSV {
-	// Define the allowed time format
+	
+    // Define the allowed time format
     private static final String TIME_FORMAT = "H:mm"; // Format for 9:00, 10:00, etc.
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
     
@@ -99,7 +99,7 @@ public class AppointmentSlotCSV {
     }
     
     //Update Booking Status
-    public boolean updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean newStatus) {
+    public static boolean updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean newStatus) {
         File inputFile = new File(AppConfig.APPOINTMENT_SLOT_FILE_PATH);
         List<String> lines = new ArrayList<>();
         boolean isUpdated = false;  // Flag to track if an update happened

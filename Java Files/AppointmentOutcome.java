@@ -2,12 +2,12 @@ package OOPProject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class AppointmentOutcome {
-	private String appointmentOutcomeID;
+    private String appointmentOutcomeID;
     private Appointment appointment;
     private MedicalRecord medicalRecord;
     private String consultationNotes;
@@ -135,6 +135,17 @@ public class AppointmentOutcome {
         }
     }
     
+    public static List<AppointmentOutcome> filterByPendingStatus(List<AppointmentOutcome> allOutcomes) {
+        List<AppointmentOutcome>  pendingOutcomes = new ArrayList<>();
+        for (AppointmentOutcome outcome : allOutcomes) {
+            if (outcome.getStatus() == PrescriptionStatus.Pending) {
+                pendingOutcomes.add(outcome);
+            }
+        }
+        return pendingOutcomes;
+    }
+    
+    
     @Override
     public String toString() {
         // Retrieve the AppointmentID and PatientID if they exist
@@ -152,5 +163,5 @@ public class AppointmentOutcome {
                "\nPrescriptionStatus: " + status;
     }
     
-
+  
 }
