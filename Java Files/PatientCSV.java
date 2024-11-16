@@ -13,9 +13,18 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * The PatientCSV class handles loading, viewing, and updating patient records from a CSV file.
+ * It includes methods for viewing patient records, and updating specific fields such as email and contact number.
+ */
 public class PatientCSV {
 	
 	// Method to load patients from CSV
+	/**
+     * Loads the patient records from a CSV file and returns a list of Patient objects.
+     * 
+     * @return A list of Patient objects populated with data from the CSV file.
+     */
 	public List<Patient> viewPatientRecords() {
 	    List<Patient> patients = new ArrayList<>();
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/DD/yyyy");
@@ -58,9 +67,11 @@ public class PatientCSV {
 	    return patients;
 	}
 
-
-
-	
+	/**
+     * Updates a patient's email or contact number based on the provided choice.
+     * 
+     * @param patientID The ID of the patient whose records need to be updated.
+     */
 	public static void updatePatientRecords(String patientID) {
 		System.out.println("Would you like to update (1)Email or (2)Contact Number?");
 		Scanner scanner = new Scanner(System.in);
@@ -130,6 +141,13 @@ public class PatientCSV {
         
 	}
 	
+	/**
+     * Updates a specific patient's record (either email or contact number).
+     * 
+     * @param patientID The ID of the patient to update.
+     * @param choice The choice indicating which field to update (1 for email, 2 for contact number).
+     * @param newValue The new value to set for the selected field.
+     */
 	public static void updatePatientRecords(String patientID, int choice, String newValue) {
         List<String[]> records = new ArrayList<>();
         boolean recordUpdated = false;
@@ -161,6 +179,11 @@ public class PatientCSV {
         }
     }
 
+	/**
+     * Writes the updated patient records back to the CSV file.
+     * 
+     * @param records The list of updated records to be written to the file.
+     */
     private static void writeRecordsToFile(List<String[]> records) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(AppConfig.PATIENT_FILE_PATH))) {
             for (String[] record : records) {
