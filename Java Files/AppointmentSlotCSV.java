@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Handles CSV operations related to appointment slots, such as loading, adding, and updating booking statuses.
+ */
 public class AppointmentSlotCSV {
 	
     // Define the allowed time format
@@ -25,6 +28,12 @@ public class AppointmentSlotCSV {
 
 
     // Read file and load appointment slots
+    /**
+     * Loads appointment slots from the CSV file.
+     *
+     * @param doctors a list of {@link Doctor} objects to match the slots with their respective doctors
+     * @return a list of {@link AppointmentSlot} objects loaded from the CSV
+     */
     public List<AppointmentSlot> loadAppointmentSlotsFromCSV(List<Doctor> doctors) {
         List<AppointmentSlot> appointmentSlots = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.APPOINTMENT_SLOT_FILE_PATH))) {
@@ -71,6 +80,13 @@ public class AppointmentSlotCSV {
     }
     
     // Allow doctor to add a new appointment slot with time format validation
+    /**
+     * Adds a new appointment slot to the CSV file after validating the time format.
+     *
+     * @param slot     the {@link AppointmentSlot} object to add
+     * @param doctorID the ID of the doctor associated with the slot
+     * @return {@code true} if the slot was added successfully, {@code false} otherwise
+     */
     public boolean addAppointmentSlotToCSV(AppointmentSlot slot, String doctorID) {
         if (!isValidTimeFormat(slot.getStartTime()) || !isValidTimeFormat(slot.getEndTime())) {
             System.out.println("Invalid time format. Please use 'H:mm' format (e.g., 9:00, 13:30).");
@@ -99,6 +115,13 @@ public class AppointmentSlotCSV {
     }
     
     //Update Booking Status
+    /**
+     * Updates the booking status of an appointment slot in the CSV file.
+     *
+     * @param appointmentSlotID the ID of the appointment slot to update
+     * @param newStatus         the new booking status ({@code true} for booked, {@code false} for unbooked)
+     * @return {@code true} if the update was successful, {@code false} otherwise
+     */
     public static boolean updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean newStatus) {
         File inputFile = new File(AppConfig.APPOINTMENT_SLOT_FILE_PATH);
         List<String> lines = new ArrayList<>();
@@ -143,6 +166,12 @@ public class AppointmentSlotCSV {
 
 
     // Validate the format of the time string
+    /**
+     * Validates the format of a time string.
+     *
+     * @param time the time string to validate
+     * @return {@code true} if the time is valid, {@code false} otherwise
+     */
     public boolean isValidTimeFormat(String time) {
         try {
             timeFormat.parse(time);
@@ -155,6 +184,14 @@ public class AppointmentSlotCSV {
  
 
     // Helper method to find a Doctor by name
+    /**
+     * Finds a doctor by their ID from a list of doctors.
+     *
+     * @param doctorID the ID of the doctor to find
+     * @param doctors  a list of {@link Doctor} objects
+     * @return the {@link Doctor} object if found, {@code null} otherwise
+     */
+
     private Doctor findDoctorByID(String doctorID, List<Doctor> doctors) {
         for (Doctor doctor : doctors) {
             if (doctor.getHospitalId().equalsIgnoreCase(doctorID)) {
