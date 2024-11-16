@@ -6,8 +6,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The UserCSV class handles user authentication by reading user data from CSV files.
+ * It verifies the provided username and password against records in different databases
+ * based on the user's role (Doctor, Pharmacist, Administrator, or Patient).
+ */
 public class UserCSV {
 	
+	/**
+     * Authenticates a user by checking their username and password against the appropriate CSV file
+     * based on the user's role (Doctor, Pharmacist, Administrator, or Patient).
+     * 
+     * @param Username The username (hospital ID) of the user attempting to log in.
+     * @param Password The password of the user attempting to log in.
+     * @return A string representing the role of the user ("DR" for Doctor, "PH" for Pharmacist, 
+     *         "AD" for Administrator, "PT" for Patient) if authentication is successful, or an empty string if unsuccessful.
+     */
 	public String login(String Username, String Password) {
 		String role = Username.substring(0,2);
         if(role.equalsIgnoreCase("DR")) {
