@@ -3,9 +3,8 @@ package OOPProject;
 import java.util.Scanner;
 
 /**
- * The PharmacistMenu class handles the user interface for the pharmacist role.
- * It presents a menu of actions available to the pharmacist and allows the pharmacist
- * to interact with the system by choosing options from the menu.
+ * Represents the menu interface for pharmacists to interact with the system.
+ * Provides options for managing appointment outcomes, prescriptions, and medication inventory.
  */
 public class PharmacistMenu {
 
@@ -13,9 +12,9 @@ public class PharmacistMenu {
     private Scanner scanner;
 
     /**
-     * Constructor to initialize the PharmacistMenu with the provided PharmacistService.
-     * 
-     * @param pharmacistService The service layer responsible for handling pharmacist actions.
+     * Constructs a new {@code PharmacistMenu} with the specified service.
+     *
+     * @param pharmacistService The service layer handling pharmacist-related operations.
      */
     public PharmacistMenu(PharmacistService pharmacistService) {
         this.pharmacistService = pharmacistService;
@@ -23,11 +22,17 @@ public class PharmacistMenu {
     }
 
     /**
-     * Displays the pharmacist menu and prompts the pharmacist to select an action.
-     * The menu includes options for viewing appointment outcomes, updating prescriptions,
-     * viewing the medication inventory, submitting replenishment requests, and logging out.
-     * 
-     * @param userid The ID of the logged-in pharmacist, passed to the menu for possible use.
+     * Displays the pharmacist menu and handles user input to perform actions.
+     * Available options include:
+     * <ul>
+     *   <li>Viewing appointment outcome records</li>
+     *   <li>Updating prescription statuses</li>
+     *   <li>Viewing medication inventory</li>
+     *   <li>Submitting replenishment requests</li>
+     *   <li>Logging out</li>
+     * </ul>
+     *
+     * @param userid The user ID of the pharmacist currently logged in.
      */
     public void displayMenu(String userid) {
         int choice;
@@ -68,6 +73,4 @@ public class PharmacistMenu {
 
         scanner.close();
     }
-
-   
 }

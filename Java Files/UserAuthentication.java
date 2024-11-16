@@ -1,42 +1,42 @@
 package OOPProject;
 
 /**
- * The UserAuthentication interface provides methods for handling user authentication
- * tasks such as logging in, changing passwords, and logging out.
- * It is intended to be implemented by classes that handle user authentication logic.
+ * Interface defining user authentication operations for the hospital management system.
+ * Provides methods for login, password management, and logout functionalities.
  */
 public interface UserAuthentication {
-	
-	/**
-     * Authenticates a user with their hospital ID and password.
-     * 
-     * @param hospitalID The hospital ID of the user attempting to log in.
-     * @param password The password of the user attempting to log in.
-     * @return True if the login is successful, otherwise false.
+
+    /**
+     * Logs in a user with the specified hospital ID and password.
+     *
+     * @param hospitalID the hospital ID of the user.
+     * @param password   the password of the user.
+     * @return {@code true} if login is successful, {@code false} otherwise.
      */
-	boolean login(String hospitalID, String password);
-	
-	/**
-     * Changes the password for a user.
-     * 
-     * @param hospitalID The hospital ID of the user requesting the password change.
-     * @param oldPassword The user's current password.
-     * @param newPassword The new password that the user wants to set.
+    boolean login(String hospitalID, String password);
+
+    /**
+     * Changes the password for the user with the specified hospital ID.
+     *
+     * @param hospitalID  the hospital ID of the user.
+     * @param oldPassword the current password of the user.
+     * @param newPassword the new password to be set.
      */
     void changePassword(String hospitalID, String oldPassword, String newPassword);
-    
+
     /**
-     * Initiates the process for a user who has forgotten their password.
-     * 
-     * @param hospitalID The hospital ID of the user who has forgotten their password.
+     * Handles the "forgot password" process for the user with the specified hospital ID.
+     * Typically involves sending a password reset link or providing a mechanism for recovery.
+     *
+     * @param hospitalID the hospital ID of the user.
      */
     void forgotPassword(String hospitalID);
-    
+
     /**
-     * Logs out a user by their hospital ID.
-     * 
-     * @param hospitalID The hospital ID of the user who wants to log out.
-     * @return True if the logout is successful, otherwise false.
+     * Logs out the user with the specified hospital ID.
+     *
+     * @param hospitalID the hospital ID of the user.
+     * @return {@code true} if logout is successful, {@code false} otherwise.
      */
     boolean logOut(String hospitalID);
 }

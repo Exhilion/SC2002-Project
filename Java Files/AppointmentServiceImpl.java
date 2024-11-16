@@ -6,22 +6,22 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Implementation of the {@link AppointmentService} interface.
- * This class provides methods for managing appointments, appointment slots, and appointment outcomes.
+ * Implementation of the AppointmentService interface, providing methods for
+ * scheduling, canceling, and managing appointments, appointment slots, and
+ * appointment outcomes.
  */
 public class AppointmentServiceImpl implements AppointmentService {
 	private loadCSVClass load = new loadCSVClass();
 
-	// Appointment functions
 	/**
-     * Schedules a new appointment for a patient with a doctor at a specified time slot.
-     *
-     * @param patientID   the ID of the patient
-     * @param doctorID    the ID of the doctor
-     * @param dateOfChoice the date of the appointment in the format "yyyy-MM-dd"
-     * @param startTime   the start time of the appointment in HH:mm format
-     * @param endTime     the end time of the appointment in HH:mm format
-     */
+	 * Schedules an appointment for a patient with a specific doctor.
+	 *
+	 * @param patientID    the ID of the patient
+	 * @param doctorID     the ID of the doctor
+	 * @param dateOfChoice the desired date for the appointment
+	 * @param startTime    the starting time of the appointment
+	 * @param endTime      the ending time of the appointment
+	 */
 	@Override
 	public void scheduleAppointment(String patientID, String doctorID, String dateOfChoice, String startTime,
 			String endTime) {
@@ -30,22 +30,22 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	/**
-     * Cancels an appointment for a patient based on the appointment ID.
-     *
-     * @param patientID      the ID of the patient
-     * @param appointmentID  the ID of the appointment to cancel
-     */
+	 * Cancels an existing appointment for a specific patient.
+	 *
+	 * @param patientID     the ID of the patient
+	 * @param appointmentID the ID of the appointment to be canceled
+	 */
 	@Override
 	public void cancelAppointment(String patientID, String appointmentID) {
 		AppointmentCSV.cancelAppointment(patientID, appointmentID);
 	}
 
 	/**
-     * Retrieves all pending appointments for a specific doctor.
-     *
-     * @param doctorID  the ID of the doctor
-     * @return a list of {@link Appointment} objects with "pending" status
-     */
+	 * Retrieves a list of pending appointments for a specific doctor.
+	 *
+	 * @param doctorID the ID of the doctor
+	 * @return a list of pending appointments for the specified doctor
+	 */
 	@Override
 	public List<Appointment> getPendingAppointments(String doctorID) {
 		List<Appointment> pendingAppointments = new ArrayList<>();
@@ -59,35 +59,34 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	/**
-     * Updates the status of an appointment.
-     *
-     * @param appointmentID  the ID of the appointment to update
-     * @param newStatus      the new status of the appointment (e.g., "confirmed", "cancelled")
-     */
+	 * Updates the status of an existing appointment.
+	 *
+	 * @param appointmentID the ID of the appointment to update
+	 * @param newStatus     the new status for the appointment
+	 */
 	@Override
 	public void updateAppointmentStatus(String appointmentID, String newStatus) {
 		new AppointmentCSV().updateAppointmentStatus(appointmentID, newStatus);
 	}
 
 	/**
-     * Retrieves all confirmed appointments for a specific doctor.
-     *
-     * @param doctorID  the ID of the doctor
-     * @return a list of {@link Appointment} objects with "confirmed" status
-     */
+	 * Retrieves a list of confirmed appointments for a specific doctor.
+	 *
+	 * @param doctorID the ID of the doctor
+	 * @return a list of confirmed appointments for the specified doctor
+	 */
 	@Override
 	public List<Appointment> getConfirmedAppointments(String doctorID) {
 		String status = "confirmed";
 		return Appointment.filterAppointmentsByDoctorAndStatus(load.getAppointments(), doctorID, status);
 	}
 
-	// Appointment Slot functions
 	/**
-     * Updates the booking status of an appointment slot.
-     *
-     * @param appointmentSlotID  the ID of the appointment slot to update
-     * @param isBooked           {@code true} to mark the slot as booked, {@code false} to mark it as available
-     */
+	 * Updates the booking status of a specific appointment slot.
+	 *
+	 * @param appointmentSlotID the ID of the appointment slot
+	 * @param isBooked          the new booking status of the appointment slot
+	 */
 	@Override
 	public void updateAppointmentSlotBookingStatus(String appointmentSlotID, boolean isBooked) {
 		AppointmentSlotCSV.updateAppointmentSlotBookingStatus(appointmentSlotID, isBooked);
@@ -95,14 +94,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	/**
-     * Adds a new appointment slot for a specific doctor.
-     *
-     * @param doctorID    the ID of the doctor
-     * @param startTime   the start time of the slot in HH:mm format
-     * @param endTime     the end time of the slot in HH:mm format
-     * @param date        the date of the slot
-     * @return {@code true} if the slot was added successfully, {@code false} otherwise
-     */
+	 * Adds a new appointment slot for a specific doctor.
+	 *
+	 * @param doctorID  the ID of the doctor
+	 * @param startTime the starting time of the appointment slot
+	 * @param endTime   the ending time of the appointment slot
+	 * @param date      the date of the appointment slot
+	 * @return true if the appointment slot was successfully added, false otherwise
+	 */
 	@Override
 	public boolean addAppointmentSlot(String doctorID, String startTime, String endTime, Date date) {
 		AppointmentSlotCSV newSlotCSV = new AppointmentSlotCSV();
@@ -111,16 +110,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return newSlotCSV.addAppointmentSlotToCSV(newSlot, doctorID);
 	}
 
-	// Appointment outcome functions
 	/**
-     * Adds a new appointment outcome after a consultation.
-     *
-     * @param appointmentOutcomeID  the ID of the appointment outcome
-     * @param appointment           the associated {@link Appointment}
-     * @param medicalRecord         the {@link MedicalRecord} associated with the appointment
-     * @param consultationNotes     the consultation notes
-     * @param status                the {@link PrescriptionStatus} of the outcome
-     */
+	 * Adds an outcome for a completed appointment.
+	 *
+	 * @param appointmentOutcomeID the ID of the appointment outcome
+	 * @param appointment          the completed appointment
+	 * @param medicalRecord        the associated medical record
+	 * @param consultationNotes    any consultation notes from the appointment
+	 * @param status               the prescription status of the appointment
+	 *                             outcome
+	 */
 	@Override
 	public void addAppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord,
 			String consultationNotes, PrescriptionStatus status) {

@@ -8,48 +8,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The class provides functionality to manage {@link AppointmentOutcome} objects by reading from and writing to a CSV file.
- * It supports operations like adding, updating, and loading appointment outcomes.
+ * Class to handle the operations related to AppointmentOutcome, including
+ * adding, writing to CSV, loading from CSV, updating the status, and saving
+ * changes back to CSV.
  */
 public class AppointmentOutcomeCSV {
-
-	// Add AppointmentOutcome
 	/**
-     * Adds a new {@link AppointmentOutcome} and writes it to the CSV file.
-     *
-     * @param appointmentOutcomeID the unique ID for the appointment outcome
-     * @param appointment the associated {@link Appointment} object
-     * @param medicalRecord the associated {@link MedicalRecord} object
-     * @param consultationNotes the notes recorded during the consultation
-     * @param status the {@link PrescriptionStatus} of the appointment outcome
-     */
+	 * Adds a new AppointmentOutcome and writes it to the CSV file.
+	 * 
+	 * @param appointmentOutcomeID the unique ID for the AppointmentOutcome.
+	 * @param appointment          the Appointment associated with the outcome.
+	 * @param medicalRecord        the MedicalRecord associated with the outcome.
+	 * @param consultationNotes    the consultation notes for the appointment.
+	 * @param status               the prescription status of the outcome.
+	 */
 	public void addAppointmentOutcome(String appointmentOutcomeID, Appointment appointment, MedicalRecord medicalRecord,
 			String consultationNotes, PrescriptionStatus status) {
-		// Create a new AppointmentOutcome object
+
 		AppointmentOutcome appointmentOutcome = new AppointmentOutcome(appointmentOutcomeID, appointment, medicalRecord,
 				consultationNotes, status);
 
-		// Write the AppointmentOutcome to CSV
 		writeAppointmentOutcomeToCSV(appointmentOutcome);
 	}
 
-	// Write AppointmentOutcome to CSV
 	/**
-     * Writes a given {@link AppointmentOutcome} to the CSV file.
-     *
-     * @param appointmentOutcome the {@link AppointmentOutcome} object to write
-     */
+	 * Writes an AppointmentOutcome to the CSV file.
+	 * 
+	 * @param appointmentOutcome the AppointmentOutcome object to be written to the
+	 *                           CSV file.
+	 */
 	private void writeAppointmentOutcomeToCSV(AppointmentOutcome appointmentOutcome) {
 		try (FileWriter writer = new FileWriter(AppConfig.APPOINTMENT_OUTCOME_FILE_PATH, true)) {
 
-			// Prepare CSV line by extracting details from the AppointmentOutcome object
 			String csvLine = appointmentOutcome.getAppointmentOutcomeID() + ","
 					+ appointmentOutcome.getAppointment().getAppointmentID() + ","
 					+ appointmentOutcome.getMedicalRecord().getRecordID() + ","
 					+ appointmentOutcome.getConsultationNotes() + "," + appointmentOutcome.getStatus().toString()
 					+ "\n";
 
-			// Write the data to CSV
 			writer.write(csvLine);
 			System.out.println("Appointment Outcome added successfully.");
 		} catch (IOException e) {
@@ -57,26 +53,26 @@ public class AppointmentOutcomeCSV {
 		}
 	}
 
-	// Load AppointmentOutcomes from CSV
 	/**
-     * Loads {@link AppointmentOutcome} objects from the CSV file.
-     *
-     * @param appointments a list of {@link Appointment} objects for lookup
-     * @param medicalRecords a list of {@link MedicalRecord} objects for lookup
-     * @return a list of loaded {@link AppointmentOutcome} objects
-     */
+	 * Loads all AppointmentOutcomes from the CSV file.
+	 * 
+	 * @param appointments   the list of appointments to match against Appointment
+	 *                       IDs.
+	 * @param medicalRecords the list of medical records to match against Record
+	 *                       IDs.
+	 * @return a list of AppointmentOutcome objects loaded from the CSV file.
+	 */
 	public List<AppointmentOutcome> loadAppointmentOutcomesFromCSV(List<Appointment> appointments,
 			List<MedicalRecord> medicalRecords) {
 		List<AppointmentOutcome> appointmentOutcomes = new ArrayList<>();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.APPOINTMENT_OUTCOME_FILE_PATH))) {
 			String line;
-			reader.readLine(); // Skip the header line if there is one
+			reader.readLine();
 
 			while ((line = reader.readLine()) != null) {
 				String[] parts = line.split(",");
 
-				// Ensure correct number of columns
 				if (parts.length != 5) {
 					System.err.println("Invalid line format: " + line);
 					continue;
@@ -89,21 +85,18 @@ public class AppointmentOutcomeCSV {
 					String consultationNotes = parts[3].trim();
 					PrescriptionStatus status = PrescriptionStatus.valueOf(parts[4].trim());
 
-					// Find Appointment by ID
 					Appointment appointment = findAppointmentByID(appointmentID, appointments);
 					if (appointment == null) {
 						System.err.println("Appointment with ID " + appointmentID + " not found.");
 						continue;
 					}
 
-					// Find Medical Record by ID
 					MedicalRecord medicalRecord = findMedicalRecordByID(medicalRecordID, medicalRecords);
 					if (medicalRecord == null) {
 						System.err.println("Medical Record with ID " + medicalRecordID + " not found.");
 						continue;
 					}
 
-					// Create a new AppointmentOutcome instance
 					AppointmentOutcome appointmentOutcome = new AppointmentOutcome(appointmentOutcomeID, appointment,
 							medicalRecord, consultationNotes, status);
 
@@ -119,24 +112,22 @@ public class AppointmentOutcomeCSV {
 		return appointmentOutcomes;
 	}
 
-	// Update the status of a specific AppointmentOutcome by its
-	// appointmentOutcomeID
 	/**
-     * Updates the status of an {@link AppointmentOutcome} and saves the changes to the CSV file.
-     *
-     * @param appointmentOutcomes the list of all {@link AppointmentOutcome} objects
-     * @param appointmentOutcomeID the ID of the {@link AppointmentOutcome} to update
-     * @param newStatus the new {@link PrescriptionStatus} to set
-     */
+	 * Updates the status of a specific AppointmentOutcome based on its ID.
+	 * 
+	 * @param appointmentOutcomes  the list of AppointmentOutcome objects to update.
+	 * @param appointmentOutcomeID the ID of the AppointmentOutcome to update.
+	 * @param newStatus            the new status to set for the AppointmentOutcome.
+	 */
 	public void updateAppointmentOutcomeStatus(List<AppointmentOutcome> appointmentOutcomes,
 			String appointmentOutcomeID, PrescriptionStatus newStatus) {
-		// Find the AppointmentOutcome to update
+
 		AppointmentOutcome outcomeToUpdate = appointmentOutcomes.stream()
 				.filter(appointmentOutcome -> appointmentOutcome.getAppointmentOutcomeID().equals(appointmentOutcomeID))
 				.findFirst().orElse(null);
 
 		if (outcomeToUpdate != null) {
-			// Update the status
+
 			outcomeToUpdate.setStatus(newStatus);
 			System.out.println("Appointment Outcome status updated successfully.");
 
@@ -146,12 +137,11 @@ public class AppointmentOutcomeCSV {
 		}
 	}
 
-	// save the updated AppointmentOutcome back to the CSV
 	/**
-     * Saves the updated {@link AppointmentOutcome} back to the CSV file.
-     *
-     * @param updatedOutcome the updated {@link AppointmentOutcome} object
-     */
+	 * Saves the updated AppointmentOutcome back to the CSV file.
+	 * 
+	 * @param updatedOutcome the AppointmentOutcome object with the updated status.
+	 */
 	private void saveAppointmentOutcomeToCSV(AppointmentOutcome updatedOutcome) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(AppConfig.APPOINTMENT_OUTCOME_FILE_PATH))) {
 
@@ -185,12 +175,12 @@ public class AppointmentOutcomeCSV {
 	}
 
 	/**
-     * Finds an {@link Appointment} by its ID from a list of appointments.
-     *
-     * @param appointmentID the ID of the {@link Appointment} to find
-     * @param appointments the list of {@link Appointment} objects to search
-     * @return the found {@link Appointment} object, or {@code null} if not found
-     */
+	 * Finds an Appointment by its ID from a list of appointments.
+	 * 
+	 * @param appointmentID the ID of the Appointment to search for.
+	 * @param appointments  the list of Appointment objects to search.
+	 * @return the Appointment object if found, or null if not found.
+	 */
 	private Appointment findAppointmentByID(String appointmentID, List<Appointment> appointments) {
 		for (Appointment appointment : appointments) {
 			if (appointment.getAppointmentID().equalsIgnoreCase(appointmentID)) {
@@ -201,12 +191,12 @@ public class AppointmentOutcomeCSV {
 	}
 
 	/**
-     * Finds a {@link MedicalRecord} by its ID from a list of medical records.
-     *
-     * @param recordID the ID of the {@link MedicalRecord} to find
-     * @param medicalRecords the list of {@link MedicalRecord} objects to search
-     * @return the found {@link MedicalRecord} object, or {@code null} if not found
-     */
+	 * Finds a MedicalRecord by its ID from a list of medical records.
+	 * 
+	 * @param recordID       the ID of the MedicalRecord to search for.
+	 * @param medicalRecords the list of MedicalRecord objects to search.
+	 * @return the MedicalRecord object if found, or null if not found.
+	 */
 	private MedicalRecord findMedicalRecordByID(String recordID, List<MedicalRecord> medicalRecords) {
 		for (MedicalRecord medicalRecord : medicalRecords) {
 			if (medicalRecord.getRecordID().equalsIgnoreCase(recordID)) {

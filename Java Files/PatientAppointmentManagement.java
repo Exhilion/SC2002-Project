@@ -3,49 +3,50 @@ package OOPProject;
 import java.util.List;
 
 /**
- * The PatientAppointmentManagement interface provides methods to manage appointments for patients.
- * It allows for viewing appointment outcomes, canceling and rescheduling appointments, and viewing available appointment slots.
+ * The {@code PatientAppointmentManagement} interface defines methods to manage
+ * patient appointments, including viewing appointment outcomes, scheduling,
+ * canceling, rescheduling, and viewing available appointments.
  */
 public interface PatientAppointmentManagement {
-	
-	/**
-     * Views the appointment outcomes for a given patient.
-     * 
-     * @param patient The patient whose appointment outcomes are to be viewed.
-     * @return A list of AppointmentOutcome objects representing the patient's appointment results.
+
+    /**
+     * Retrieves the list of appointment outcomes for a specific patient.
+     *
+     * @param patient The {@link Patient} whose appointment outcomes are to be retrieved.
+     * @return A {@link List} of {@link AppointmentOutcome} objects associated with the patient.
      */
-	List<AppointmentOutcome> viewAppointmentOutcome(Patient patient);
-	
-	/**
-     * Cancels an appointment for the given patient.
-     * 
-     * @param patient The patient who wants to cancel the appointment.
-     * @param appointment The appointment to be canceled.
+    List<AppointmentOutcome> viewAppointmentOutcome(Patient patient);
+
+    /**
+     * Cancels an existing appointment for a specific patient.
+     *
+     * @param patient     The {@link Patient} whose appointment is to be canceled.
+     * @param appointment The {@link Appointment} to be canceled.
      */
-	void cancelAppointment(Patient patient, Appointment appointment);
-	
-	/**
-     * Schedules a new appointment for the patient at the given appointment slot.
-     * 
-     * @param patient The patient who is scheduling the appointment.
-     * @param slot The appointment slot where the patient will be scheduled.
+    void cancelAppointment(Patient patient, Appointment appointment);
+
+    /**
+     * Schedules a new appointment for a specific patient in the specified appointment slot.
+     *
+     * @param patient The {@link Patient} for whom the appointment is to be scheduled.
+     * @param slot    The {@link AppointmentSlot} where the appointment is to be scheduled.
      */
-	void scheduleAppointment(Patient patient, AppointmentSlot slot);
-	
-	/**
-     * Reschedules an existing appointment to a new slot.
-     * 
-     * @param patient The patient whose appointment is being rescheduled.
-     * @param appointment The current appointment that needs to be rescheduled.
-     * @param newSlot The new appointment slot for the rescheduled appointment.
-     * @return The rescheduled appointment.
+    void scheduleAppointment(Patient patient, AppointmentSlot slot);
+
+    /**
+     * Reschedules an existing appointment for a patient to a new appointment slot.
+     *
+     * @param patient      The {@link Patient} whose appointment is to be rescheduled.
+     * @param appointment  The {@link AppointmentSlot} to be rescheduled.
+     * @param newSlot      The new {@link AppointmentSlot} to which the appointment is to be rescheduled.
+     * @return The updated {@link Appointment} object with the new schedule.
      */
-	Appointment rescheduleAppointment(Patient patient, AppointmentSlot appointment, AppointmentSlot newSlot);
-	
-	/**
-     * Views the available appointment slots.
-     * 
-     * @return A list of available AppointmentSlot objects.
+    Appointment rescheduleAppointment(Patient patient, AppointmentSlot appointment, AppointmentSlot newSlot);
+
+    /**
+     * Retrieves a list of available appointment slots.
+     *
+     * @return A {@link List} of {@link AppointmentSlot} objects that are available for booking.
      */
-	List<AppointmentSlot> viewAvailableAppointment();
+    List<AppointmentSlot> viewAvailableAppointment();
 }

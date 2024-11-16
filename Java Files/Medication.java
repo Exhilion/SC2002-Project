@@ -7,141 +7,163 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Medication class represents a medication in the inventory.
- * It includes details like the medicine ID, name, quantity, and whether a low stock alert is triggered.
+ * The {@code Medication} class represents a medication item in the inventory system.
+ * It includes details such as the medicine's ID, name, quantity, low stock threshold,
+ * and restock request status.
  */
 public class Medication {
-	private int medicineID;
-	private String medicineName;
-	private int quantity;
-	private boolean lowStockAlert;
-	private int lowQuantity;
 
-	/**
-     * Constructs a new Medication object with the specified details.
+    private int medicineID;
+    private String medicineName;
+    private int quantity;
+    private boolean lowStockAlert;
+    private int lowQuantity;
+    private String requestRestock;
+
+    /**
+     * Constructs a new {@code Medication} object with the specified details.
      *
-     * @param medicineID The unique ID of the medication.
-     * @param medicineName The name of the medication.
-     * @param quantity The current stock quantity of the medication.
-     * @param lowQuantity The threshold quantity for low stock alert.
-     * @param lowStockAlert The status indicating if the medication has triggered a low stock alert.
+     * @param medicineID     The unique ID of the medication.
+     * @param medicineName   The name of the medication.
+     * @param quantity       The current stock quantity of the medication.
+     * @param lowQuantity    The threshold below which the stock is considered low.
+     * @param lowStockAlert  Whether a low stock alert is triggered.
+     * @param requestRestock The restock request status for the medication.
      */
-	public Medication(int medicineID, String medicineName, int quantity, int lowQuantity, boolean lowStockAlert) {
-		this.medicineID = medicineID;
-		this.medicineName = medicineName;
-		this.quantity = quantity;
-		this.lowQuantity = lowQuantity; 
-		this.lowStockAlert = lowStockAlert;
+    public Medication(int medicineID, String medicineName, int quantity, int lowQuantity, boolean lowStockAlert,
+                      String requestRestock) {
+        this.medicineID = medicineID;
+        this.medicineName = medicineName;
+        this.quantity = quantity;
+        this.lowQuantity = lowQuantity;
+        this.lowStockAlert = lowStockAlert;
+        this.requestRestock = requestRestock;
+    }
 
-	}
-
-	/**
-     * Returns the unique ID of the medication.
+    /**
+     * Gets the restock request status.
      *
-     * @return The medicine ID.
+     * @return The restock request status as a {@code String}.
      */
-	public int getMedicineID() {
-		return medicineID;
-	}
+    public String getRequestRestock() {
+        return requestRestock;
+    }
 
-	/**
-     * Returns the name of the medication.
+    /**
+     * Sets the restock request status.
      *
-     * @return The medicine name.
+     * @param requestRestock The new restock request status.
      */
-	public String getMedicineName() {
-		return medicineName;
-	}
+    public void setRequestRestock(String requestRestock) {
+        this.requestRestock = requestRestock;
+    }
 
-	/**
-     * Returns the current stock quantity of the medication.
+    /**
+     * Gets the unique ID of the medication.
      *
-     * @return The medication quantity.
+     * @return The medication ID as an integer.
      */
-	public int getQuantity() {
-		return quantity;
-	}
-	
-	/**
-     * Returns the threshold for low stock alert.
-     *
-     * @return The low quantity threshold.
-     */
-	public int getLowQuantity() {
-		return lowQuantity;
-	}
+    public int getMedicineID() {
+        return medicineID;
+    }
 
-	// true = high stock, false = low stock
-	// admin can have a function to check for stock, if returns false then replenish
-	/**
-     * Returns whether the medication has triggered a low stock alert.
+    /**
+     * Gets the name of the medication.
      *
-     * @return true if the stock is low, false otherwise.
+     * @return The medication name as a {@code String}.
      */
-	public boolean getLowStockAlert() {
-		return lowStockAlert;
-	}
+    public String getMedicineName() {
+        return medicineName;
+    }
 
-	/**
+    /**
+     * Gets the current quantity of the medication in stock.
+     *
+     * @return The stock quantity as an integer.
+     */
+    public int getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * Gets the low stock quantity threshold.
+     *
+     * @return The low stock threshold as an integer.
+     */
+    public int getLowQuantity() {
+        return lowQuantity;
+    }
+
+    /**
+     * Checks whether the low stock alert is triggered.
+     *
+     * @return {@code true} if the stock is below or equal to the threshold, {@code false} otherwise.
+     */
+    public boolean getLowStockAlert() {
+        return lowStockAlert;
+    }
+
+    /**
      * Sets the unique ID of the medication.
      *
-     * @param medicineID The new medicine ID.
+     * @param medicineID The new medication ID.
      */
-	public void setMedicineID(int medicineID) {
-		this.medicineID = medicineID;
-	}
+    public void setMedicineID(int medicineID) {
+        this.medicineID = medicineID;
+    }
 
-	/**
+    /**
      * Sets the name of the medication.
      *
-     * @param medicineName The new medicine name.
+     * @param medicineName The new medication name.
      */
-	public void quantity(String medicineName) {
-		this.medicineName = medicineName;
-	}
+    public void quantity(String medicineName) {
+        this.medicineName = medicineName;
+    }
 
-	/**
-     * Sets the current stock quantity of the medication.
+    /**
+     * Sets the stock quantity of the medication.
      *
      * @param quantity The new stock quantity.
      */
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	
-	/**
-     * Sets the threshold for low stock alert.
-     *
-     * @param lowQuantity The new low quantity threshold.
-     */
-	public void setLowQuantity(int lowQuantity) {
-		this.lowQuantity = lowQuantity; 
-	}
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
-	/**
+    /**
+     * Sets the low stock quantity threshold.
+     *
+     * @param lowQuantity The new low stock threshold.
+     */
+    public void setLowQuantity(int lowQuantity) {
+        this.lowQuantity = lowQuantity;
+    }
+
+    /**
      * Sets the low stock alert status.
      *
-     * @param lowStockAlert true if the stock is low, false otherwise.
+     * @param lowStockAlert The new low stock alert status.
      */
-	public void setlowstockAlert(boolean lowStockAlert) {
-		this.lowStockAlert = lowStockAlert;
-	}
-	
-	/**
-     * Reduces the stock quantity by the specified amount.
+    public void setlowstockAlert(boolean lowStockAlert) {
+        this.lowStockAlert = lowStockAlert;
+    }
+
+    /**
+     * Reduces the stock quantity by the specified amount if sufficient stock is available.
      *
-     * @param amount The amount to reduce the stock by.
+     * @param amount The amount to reduce.
      */
-	public void reduceQuantity(int amount) {
-	    if (this.quantity >= amount) {
-	        this.quantity -= amount;
-	    } else {
-	        System.out.println("Insufficient stock available.");
-	    }
-	}
-	
-	/**
-     * Prints the details of the medication.
+    public void reduceQuantity(int amount) {
+        if (this.quantity >= amount) {
+            this.quantity -= amount;
+        } else {
+            System.out.println("Insufficient stock available.");
+        }
+    }
+
+    /**
+     * Prints the details of the medication, including name, quantity, low stock threshold,
+     * and restock request status.
      */
     public void printDetails() {
         System.out.println("Medication Details:");
@@ -149,10 +171,11 @@ public class Medication {
         System.out.println("Quantity: " + quantity);
         System.out.println("Low Quantity Threshold: " + lowQuantity);
         System.out.println("Low Stock Alert: " + lowStockAlert);
+        System.out.println("Restock Request: " + requestRestock);
     }
-    
+
     /**
-     * Displays the list of medications in the inventory.
+     * Displays the inventory of medications in a tabular format.
      *
      * @param medications The list of medications to display.
      */
@@ -165,29 +188,23 @@ public class Medication {
             System.out.printf("%-10s %-20s %-10s %-15s%n", "ID", "Name", "Quantity", "Low Stock Alert");
             System.out.println("---------------------------------------------");
             for (Medication med : medications) {
-                System.out.printf("%-10d %-20s %-10d %-15s%n", 
-                                  med.getMedicineID(), 
-                                  med.getMedicineName(), 
-                                  med.getQuantity(), 
-                                  med.getLowStockAlert() ? "Yes" : "No");
+                System.out.printf("%-10d %-20s %-10d %-15s%n", med.getMedicineID(), med.getMedicineName(),
+                        med.getQuantity(), med.getLowStockAlert() ? "Yes" : "No");
             }
             System.out.println("---------------------------------------------");
         }
     }
-    
-    /**
-     * Updates the low stock alert status based on the current stock quantity and low quantity threshold.
-     *
-     * @param med The medication object to update the low stock alert status for.
-     */
-	public void updateLowStockAlert(Medication med)
-	{
-		if(med.getLowQuantity() >= med.getQuantity())	
-		med.setlowstockAlert(true);
-		else 
-		med.setlowstockAlert(false);
-	}
-	
-	
 
+    /**
+     * Updates the low stock alert status of a medication based on its current quantity
+     * and low stock threshold.
+     *
+     * @param med The {@code Medication} object to update.
+     */
+    public void updateLowStockAlert(Medication med) {
+        if (med.getLowQuantity() >= med.getQuantity())
+            med.setlowstockAlert(true);
+        else
+            med.setlowstockAlert(false);
+    }
 }

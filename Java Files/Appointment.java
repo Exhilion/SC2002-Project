@@ -6,13 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The class is an appointment for a patient with details about the appointment slot,
- * status, and associated patient.
- * <p>
- * This class provides functionality for creating, filtering, and printing appointment details,
- * along with generating unique appointment IDs. It also includes methods for managing 
- * appointments by doctor and status.
- * </p>
+ * The Appointment class represents a scheduled appointment for a patient with a
+ * specific doctor at a certain time slot.
  */
 public class Appointment {
 	private String appointmentID;
@@ -20,15 +15,14 @@ public class Appointment {
 	private String status;
 	private Patient patient;
 
-	// Constructor
 	/**
-	 * Constructs an Appointment object with the specified appointment ID, appointment slot,
-     * status, and patient.
-     * 
-	 * @param appointmentID The unique ID for the appointment
-	 * @param appointmentSlot The appointment slot associated with the appointment
-	 * @param status The current status of the appointment (e.g. Pending, Confirmed)
-	 * @param patient The patient associated with the appointment
+	 * Constructor for the Appointment class.
+	 * 
+	 * @param appointmentID   the unique identifier for the appointment
+	 * @param appointmentSlot the appointment slot for the appointment
+	 * @param status          the status of the appointment (e.g., Pending,
+	 *                        Confirmed)
+	 * @param patient         the patient associated with the appointment
 	 */
 	public Appointment(String appointmentID, AppointmentSlot appointmentSlot, String status, Patient patient) {
 		this.appointmentID = appointmentID;
@@ -37,17 +31,15 @@ public class Appointment {
 		this.patient = patient;
 	}
 
-	// Generate a unique AppointmentID using UUID
 	/**
-	 * Generates a unique appointment ID using UUID
+	 * Generates a unique appointment ID using UUID.
 	 * 
-	 * @return the generated unique appointment ID
+	 * @return a unique appointment ID
 	 */
 	private String generateUniqueID() {
 		return UUID.randomUUID().toString();
 	}
 
-	// Getters and Setters
 	/**
 	 * Gets the appointment ID.
 	 * 
@@ -67,16 +59,16 @@ public class Appointment {
 	}
 
 	/**
-	 * Sets the appointment slot for the appointment
+	 * Sets the appointment slot for the appointment.
 	 * 
-	 * @param appointmentSlot The new appointment slot to be set
+	 * @param appointmentSlot the appointment slot to set
 	 */
 	public void setAppointmentSlot(AppointmentSlot appointmentSlot) {
 		this.appointmentSlot = appointmentSlot;
 	}
 
 	/**
-	 * Gets the status of the appointment
+	 * Gets the status of the appointment.
 	 * 
 	 * @return the status of the appointment
 	 */
@@ -85,9 +77,9 @@ public class Appointment {
 	}
 
 	/**
-	 * Sets the status of the appointment
+	 * Sets the status of the appointment.
 	 * 
-	 * @param status The new status to be set
+	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
@@ -96,7 +88,7 @@ public class Appointment {
 	/**
 	 * Gets the patient associated with the appointment.
 	 * 
-	 * @return the patient associated with the appointment
+	 * @return the patient
 	 */
 	public Patient getPatient() {
 		return patient;
@@ -105,15 +97,14 @@ public class Appointment {
 	/**
 	 * Sets the patient for the appointment.
 	 * 
-	 * @param patient The new patient to be set
+	 * @param patient the patient to set
 	 */
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
 
 	/**
-	 * Prints the details of the appointment, including the patient information,
-	 * doctor, appointment slot times, and booking status.
+	 * Prints the details of the appointment.
 	 */
 	public void printAppointmentDetails() {
 		System.out.println("Patient: " + patient.getName());
@@ -130,13 +121,14 @@ public class Appointment {
 	}
 
 	/**
-	 * Filters and returns a list of scheduled appointments for a given patient ID that are either "Pending"
-	 * or "Confirmed".
+	 * Filters and returns a list of appointments that are scheduled (pending or
+	 * confirmed) for the given patient ID.
 	 * 
-	 * @param slots The list of appointments to filter
-	 * @param patientID The patient ID to filter by
-	 * @return a list of appointments for the specified patient ID with "Pending" or "Confirmed" status
+	 * @param slots     the list of appointments to filter
+	 * @param patientID the patient ID to filter by
+	 * @return a list of scheduled appointments for the given patient
 	 */
+
 	public static List<Appointment> filterScheduledAppointment(List<Appointment> slots, String patientID) {
 		List<Appointment> scheduledAppointments = new ArrayList<>();
 		String normalizedPatientID = patientID.trim().toLowerCase(); // Normalize the patientID passed in
@@ -158,9 +150,29 @@ public class Appointment {
 	}
 
 	/**
-	 * Returns a string representation of the appointment, including appointment ID, slot ID, status, and patient ID.
+	 * Filters appointments by the given doctor ID.
 	 * 
-	 * @return the string representation of the appointment
+	 * @param appointments the list of appointments to filter
+	 * @param doctorID     the doctor ID to filter by
+	 * @return a list of appointments for the given doctor
+	 */
+	public static List<Appointment> filterAppointmentsByDoctor(List<Appointment> appointments, String doctorID) {
+		List<Appointment> filteredAppointments = new ArrayList<>();
+
+		for (Appointment appointment : appointments) {
+			if (appointment.getAppointmentSlot() != null
+					&& appointment.getAppointmentSlot().getDoctor().getHospitalId().equals(doctorID)) {
+				filteredAppointments.add(appointment);
+			}
+		}
+
+		return filteredAppointments;
+	}
+
+	/**
+	 * Provides a string representation of the appointment object.
+	 * 
+	 * @return a string representing the appointment details
 	 */
 	@Override
 	public String toString() {
@@ -168,28 +180,28 @@ public class Appointment {
 				+ (appointmentSlot != null ? appointmentSlot.getAppointmentSlotID() : "null") + ", Status: " + status
 				+ ", PatientID: " + (patient != null ? patient.getHospitalId() : "null");
 	}
-	
+
 	/**
-	 * Filters and returns a list of appointments by doctor ID and appointment status.
+	 * Filters appointments by the given doctor ID and status.
 	 * 
-	 * @param appointments The list of appointments to filter
-	 * @param doctorID The doctor ID to filter by
-	 * @param status The status to filter by
-	 * @return a list of appointments matching the doctor ID and status
+	 * @param appointments the list of appointments to filter
+	 * @param doctorID     the doctor ID to filter by
+	 * @param status       the status to filter by
+	 * @return a list of appointments for the given doctor and status
 	 */
-	   public static List<Appointment> filterAppointmentsByDoctorAndStatus(List<Appointment> appointments, String doctorID, String status) {
-	        List<Appointment> filteredAppointments = new ArrayList<>();
+	public static List<Appointment> filterAppointmentsByDoctorAndStatus(List<Appointment> appointments, String doctorID,
+			String status) {
+		List<Appointment> filteredAppointments = new ArrayList<>();
 
-	        for (Appointment appointment : appointments) {
-	            // Check if the appointment matches the doctor and the status
-	            if (appointment.getAppointmentSlot() != null && 
-	                appointment.getAppointmentSlot().getDoctor().getHospitalId().equals(doctorID) && 
-	                appointment.getStatus().equalsIgnoreCase(status)) {
-	                filteredAppointments.add(appointment);
-	            }
-	        }
+		for (Appointment appointment : appointments) {
+			if (appointment.getAppointmentSlot() != null
+					&& appointment.getAppointmentSlot().getDoctor().getHospitalId().equals(doctorID)
+					&& appointment.getStatus().equalsIgnoreCase(status)) {
+				filteredAppointments.add(appointment);
+			}
+		}
 
-	        return filteredAppointments;
-	    }
+		return filteredAppointments;
+	}
 
 }

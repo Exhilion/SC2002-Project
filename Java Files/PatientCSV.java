@@ -5,150 +5,71 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import java.util.UUID;
 
 /**
- * The PatientCSV class handles loading, viewing, and updating patient records from a CSV file.
- * It includes methods for viewing patient records, and updating specific fields such as email and contact number.
+ * The {@code PatientCSV} class provides functionality to manage patient data stored in a CSV file.
+ * It includes methods to load patient records, update patient information, and write updated data
+ * back to the CSV file.
  */
 public class PatientCSV {
-	
-	// Method to load patients from CSV
-	/**
-     * Loads the patient records from a CSV file and returns a list of Patient objects.
-     * 
-     * @return A list of Patient objects populated with data from the CSV file.
+
+    /**
+     * Loads patient records from the CSV file specified in {@code AppConfig.PATIENT_FILE_PATH}.
+     *
+     * @return A list of {@link Patient} objects parsed from the CSV file.
      */
-	public List<Patient> viewPatientRecords() {
-	    List<Patient> patients = new ArrayList<>();
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/DD/yyyy");
+    public List<Patient> viewPatientRecords() {
+        List<Patient> patients = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/DD/yyyy");
 
-	    try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))) {
-	        String line;
-	        br.readLine(); // Skip the header line
-	        while ((line = br.readLine()) != null) {
-	            String[] values = line.split(",");
-	            if (values.length == 10) { // Adjusted to 9 instead of 8
-	                try {
-	                    // Parse the values and convert to appropriate types
-	                    String hospitalID = values[0];
-	                    String password = values[1];
-	                    Role role = Role.valueOf(values[2].toUpperCase()); // Enum conversion
-	                    Gender gender = Gender.valueOf(values[3].toUpperCase()); // Enum conversion
-	                    String name = values[4];
-	                    Date dateOfBirth = dateFormat.parse(values[5]);
-	                    BloodType bloodType = BloodType.valueOf(values[6].toUpperCase()); // Enum conversion
-	                    String phoneNumber = values[7];
-	                    String email = values[8];
-	                    Boolean firstTimeLogin = Boolean.parseBoolean(values[9].trim());
+        try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))) {
+            String line;
+            br.readLine(); // Skip the header line
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values.length == 10) {
+                    try {
+                        String hospitalID = values[0];
+                        String password = values[1];
+                        Role role = Role.valueOf(values[2].toUpperCase());
+                        Gender gender = Gender.valueOf(values[3].toUpperCase());
+                        String name = values[4];
+                        Date dateOfBirth = dateFormat.parse(values[5]);
+                        BloodType bloodType = BloodType.valueOf(values[6].toUpperCase());
+                        String phoneNumber = values[7];
+                        String email = values[8];
+                        Boolean firstTimeLogin = Boolean.parseBoolean(values[9].trim());
 
+                        Patient patient = new Patient(hospitalID, password, role, gender, name, dateOfBirth,
+                                bloodType, phoneNumber, email, firstTimeLogin);
+                        patients.add(patient);
+                    } catch (Exception e) {
+                        System.out.println("Error processing record: " + line + " | " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("Invalid record format: " + line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return patients;
+    }
 
-	                    // Create Patient object and add to list
-	                    Patient patient = new Patient(hospitalID, password, role, gender,
-	                                                  name, dateOfBirth, bloodType,
-	                                                  phoneNumber, email,firstTimeLogin);
-	                    patients.add(patient);
-	                } catch (Exception e) {
-	                    System.out.println("Error processing record: " + line + " | " + e.getMessage());
-	                }
-	            } else {
-	                System.out.println("Invalid record format: " + line);
-	            }
-	        }
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	    return patients;
-	}
-
-	/**
-     * Updates a patient's email or contact number based on the provided choice.
-     * 
-     * @param patientID The ID of the patient whose records need to be updated.
+    /**
+     * Updates the patient records in the CSV file based on the given patient ID, choice of column to update,
+     * and the new value.
+     *
+     * @param patientID The ID of the patient whose record is to be updated.
+     * @param choice    The column to update (1 for email, 2 for contact number).
+     * @param newValue  The new value for the chosen column.
      */
-	public static void updatePatientRecords(String patientID) {
-		System.out.println("Would you like to update (1)Email or (2)Contact Number?");
-		Scanner scanner = new Scanner(System.in);
-		int choice;
-		choice = scanner.nextInt();
-		scanner.nextLine();
-    	boolean valid = false;
-    	//String path = "src\\\\OOPProject\\\\Patient.csv";
-		String dateFormat = "MM/DD/yyyy";
-    	SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-    	List<String[]> records = new ArrayList<>();
-    	
-		do{
-			if(choice == 1) {
-				
-				System.out.println("Enter new Email");
-				String newEmail = scanner.nextLine();
-				try (BufferedReader br = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))) {
-					String line = br.readLine();  // Read header line
-		            records.add(line.split(","));
-		    		while((line = br.readLine())!= null) {
-		    			String [] values = line.split(",");
-		    			if(values[0].trim().equalsIgnoreCase(patientID)) {
-		    				values[8] = newEmail;
-		    				valid = true; 
-		    			}
-		    			records.add(values);
-		    		}
-		    	}catch (IOException e ) {
-	    			System.out.println("Error Reading the file: " + e.getMessage());
-		    	}
-			}
-			else if(choice == 2) {
-				System.out.println("Enter new Contact Number");
-				String newContactNumber = scanner.nextLine();
-				try(BufferedReader br  = new BufferedReader(new FileReader(AppConfig.PATIENT_FILE_PATH))){
-		    		String line = br.readLine();
-		    		records.add(line.split(","));
-		    		while((line = br.readLine())!= null) {
-		    			String [] values = line.split(",");
-		    			if(values[0].trim().equalsIgnoreCase(patientID)) {
-		    				values[7] = newContactNumber;
-		    				valid = true; 
-		    			}
-		    			records.add(values);
-		    		}
-		    	}catch (IOException e ) {
-	    			System.out.println("Error Reading the file: " + e.getMessage());
-		    	}
-			}
-			else {
-				System.out.println("Invalid input try again");
-			}
-			
-		}while(!valid);
-		
-		try (PrintWriter pw = new PrintWriter(new FileWriter(AppConfig.PATIENT_FILE_PATH))) {
-	        for (String[] record : records) {
-	            pw.println(String.join(",", record));
-	        }
-	        System.out.println("Patient record updated successfully.");
-	    } catch (IOException e) {
-	        System.out.println("Error writing to the file: " + e.getMessage());
-	    }
-
-        
-        
-	}
-	
-	/**
-     * Updates a specific patient's record (either email or contact number).
-     * 
-     * @param patientID The ID of the patient to update.
-     * @param choice The choice indicating which field to update (1 for email, 2 for contact number).
-     * @param newValue The new value to set for the selected field.
-     */
-	public static void updatePatientRecords(String patientID, int choice, String newValue) {
+    public static void updatePatientRecords(String patientID, int choice, String newValue) {
         List<String[]> records = new ArrayList<>();
         boolean recordUpdated = false;
 
@@ -179,10 +100,10 @@ public class PatientCSV {
         }
     }
 
-	/**
-     * Writes the updated patient records back to the CSV file.
-     * 
-     * @param records The list of updated records to be written to the file.
+    /**
+     * Helper method to write updated patient records back to the CSV file.
+     *
+     * @param records A list of string arrays representing updated patient records.
      */
     private static void writeRecordsToFile(List<String[]> records) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(AppConfig.PATIENT_FILE_PATH))) {
@@ -194,6 +115,4 @@ public class PatientCSV {
             System.out.println("Error writing to the file: " + e.getMessage());
         }
     }
-    
-
 }

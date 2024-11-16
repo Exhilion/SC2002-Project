@@ -1,0 +1,3 @@
+HospitalID,Password,Role,Gender,Name,Department,Specialisation,firstTimeLogin
+DR71febb42,password,DOCTOR,MALE,Jason,Neurology,Brain Surgery,true
+DR1730dc02,password,DOCTOR,MALE,Terry,Consultant,Consultation,true

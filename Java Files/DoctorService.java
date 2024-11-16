@@ -9,37 +9,24 @@ import java.util.Scanner;
 import java.util.UUID;
 
 /**
- * This class represents the service layer that provides business logic for doctor-related operations.
- * It includes functionalities such as viewing and updating patient medical records, managing personal schedules,
- * handling appointment requests, and recording the outcomes of appointments.
+ * DoctorService handles the medical record management, appointment scheduling,
+ * and various doctor-related functionalities like viewing and updating patient
+ * records.
  */
 public class DoctorService {
 
 	Scanner scanner = new Scanner(System.in);
-	
-	/**
-	 * Service for managing appointments
-	 */
 	private AppointmentService appointmentService;
-	
-	/**
-	 * Service for manaing medical records
-	 */
 	private MedicalRecordService medicalRecordService;
-	
-	/**
-	 * Service for loading data from CSV files
-	 */
 	private loadCSVClass load;
 
-	// Constructor to inject the services
 	/**
-     * Constructor to initialize the {@link DoctorService} with necessary services.
-     *
-     * @param medicalRecordService The {@link MedicalRecordService} used for managing medical records.
-     * @param appointmentService The {@link AppointmentService} used for managing appointments.
-     * @param load The {@link loadCSVClass} used to load CSV data.
-     */
+	 * Constructor to inject the required services.
+	 *
+	 * @param medicalRecordService the service for handling medical records
+	 * @param appointmentService   the service for handling appointments
+	 * @param load                 the service for loading data from CSV files
+	 */
 	public DoctorService(MedicalRecordService medicalRecordService, AppointmentService appointmentService,
 			loadCSVClass load) {
 		this.appointmentService = appointmentService;
@@ -48,32 +35,182 @@ public class DoctorService {
 	}
 
 	/**
-     * View the medical records of a patient. 
-     * This method is to be implemented for viewing the patient's medical history.
-     * 
-     * @param doctorID The ID of the doctor accessing the medical records.
-     */
-	public static void viewPatientMedicalRecords(String doctorID) {
-		// Implement the logic for viewing patient medical records here
+	 * Views the medical records for a particular doctor. Prompts the doctor to
+	 * select a patient from a list and displays their medical records.
+	 *
+	 * @param doctorID the ID of the doctor whose patients' medical records are
+	 *                 being viewed
+	 */
+	public void viewPatientMedicalRecords(String doctorID) {
+
+		List<Appointment> filteredAppointments = Appointment.filterAppointmentsByDoctor(load.getAppointments(),
+				doctorID);
+
+		if (filteredAppointments.isEmpty()) {
+			System.out.println("No appointments found for this doctor.");
+			return;
+		}
+
+		int index = 1;
+		List<String> displayedPatientNames = new ArrayList<>();
+
+		// Display the list of patients
+		for (Appointment appointment : filteredAppointments) {
+			Patient patient = appointment.getPatient();
+			if (patient != null && !displayedPatientNames.contains(patient.getName())) {
+				displayedPatientNames.add(patient.getName()); // Add the patient's name to the list
+				System.out.println(index + ". PatientID: " + patient.getHospitalId() + " , " + patient.getName());
+				index++;
+			}
+		}
+
+		// Prompt the user to enter patient ID
+		System.out.println("Please enter patientID: ");
+		String selectedID = scanner.nextLine();
+
+		// Filter medical records by hospital ID
+		List<MedicalRecord> filteredRecords = MedicalRecord.filterByHospitalId(load.getMedicalRecords(), selectedID);
+
+		if (filteredRecords.isEmpty()) {
+			System.out.println("No medical records found for this patient.");
+			return;
+		}
+
+		// Display each filtered medical record
+
+		MedicalRecord.displayMedicalRecords(filteredRecords);
+
 	}
 
 	/**
-     * Update the medical records of a patient. 
-     * This method is to be implemented for updating patient information after consultations.
-     * 
-     * @param doctorID The ID of the doctor making the updates to the medical records.
-     */
-	public static void updatePatientMedicalRecords(String doctorID) {
-		// Implement the logic for updating patient medical records here
+	 * Updates the medical records for a patient. Allows the doctor to select a
+	 * medical record and update the diagnosis, treatment, and prescriptions.
+	 *
+	 * @param doctorID the ID of the doctor who is updating the medical record
+	 */
+	public void updatePatientMedicalRecords(String doctorID) {
+
+		MedicalRecordCSV medicalRecordCSV = new MedicalRecordCSV();
+		String patientID = null;
+
+		System.out.print("Enter patient ID: ");
+		patientID = scanner.nextLine();
+
+		List<Patient> patients = load.getPatients();
+		List<Diagnosis> diagnoses = load.getDiagnoses();
+		List<Treatment> treatments = load.getTreatments();
+		List<Prescription> prescriptions = load.getPrescriptions();
+
+		List<MedicalRecord> records = medicalRecordCSV.loadMedicalRecordsFromCSV(patients, diagnoses, treatments,
+				prescriptions);
+
+		List<MedicalRecord> patientRecords = MedicalRecord.filterByHospitalId(records, patientID);
+
+		System.out.println("Select a medical record to update (enter record number):");
+		for (int i = 0; i < patientRecords.size(); i++) {
+			MedicalRecord record = patientRecords.get(i);
+
+			System.out.println((i + 1) + ". ");
+			System.out.println("Medical Record ID: " + record.getRecordID());
+			System.out.println("Patient Name: " + record.getPatient().getName());
+			System.out.println("Diagnosis: " + record.getDiagnosis().getdiagnosis());
+			System.out.println("Treatment: " + record.getTreatment().gettreatment());
+			record.getPrescriptions().forEach(
+					prescription -> System.out.println("  - " + prescription.getMedication().getMedicineName()));
+			System.out.println("----------------------------------------------------");
+		}
+
+		int recordNumber = -1;
+		while (recordNumber < 1 || recordNumber > patientRecords.size()) {
+			System.out.print("Enter the number of the record to update: ");
+			recordNumber = scanner.nextInt();
+			scanner.nextLine();
+		}
+
+		MedicalRecord selectedRecord = patientRecords.get(recordNumber - 1);
+
+		;
+		int diagnosisChoice = -1;
+		while (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
+			System.out.println("Available Diagnoses:");
+			for (int i = 0; i < diagnoses.size(); i++) {
+				System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
+			}
+			System.out.print("Select a diagnosis (1-" + diagnoses.size() + "): ");
+			while (!scanner.hasNextInt()) {
+				System.out.println("Invalid input. Please enter a valid number.");
+				scanner.next();
+			}
+			diagnosisChoice = scanner.nextInt() - 1;
+			scanner.nextLine();
+
+			if (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
+				System.out.println("Invalid selection. Please select a valid diagnosis.");
+			}
+		}
+
+		int treatmentChoice = -1;
+		while (treatmentChoice < 0 || treatmentChoice >= treatments.size()) {
+			System.out.println("Available Treatments:");
+			for (int i = 0; i < treatments.size(); i++) {
+				System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
+			}
+			System.out.print("Select a treatment (1-" + treatments.size() + "): ");
+			while (!scanner.hasNextInt()) {
+				System.out.println("Invalid input. Please enter a valid number.");
+				scanner.next();
+			}
+			treatmentChoice = scanner.nextInt() - 1;
+			scanner.nextLine();
+
+			if (treatmentChoice < 0 || treatmentChoice >= treatments.size()) {
+				System.out.println("Invalid selection. Please select a valid treatment.");
+			}
+		}
+
+		List<Prescription> selectedPrescriptions = new ArrayList<>();
+		String addMore = "y";
+		while ("y".equalsIgnoreCase(addMore)) {
+			int prescriptionChoice = -1;
+			while (prescriptionChoice < 0 || prescriptionChoice >= prescriptions.size()) {
+				System.out.println("Available Prescriptions:");
+				for (int i = 0; i < prescriptions.size(); i++) {
+					Prescription p = prescriptions.get(i);
+					System.out.println(
+							(i + 1) + ". " + p.getMedication().getMedicineName() + " - " + p.getDosage() + " mg");
+				}
+				System.out.print("Select a prescription by number (1-" + prescriptions.size() + "): ");
+				while (!scanner.hasNextInt()) {
+					System.out.println("Invalid input. Please enter a valid number.");
+					scanner.next();
+				}
+				prescriptionChoice = scanner.nextInt() - 1;
+				scanner.nextLine();
+
+				if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
+					selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
+					System.out.println("Prescription added: "
+							+ prescriptions.get(prescriptionChoice).getMedication().getMedicineName());
+				} else {
+					System.out.println("Invalid choice.");
+				}
+			}
+
+			System.out.print("Add another prescription? (y/n): ");
+			addMore = scanner.nextLine();
+		}
+
+		medicalRecordService.updatePatientRecords(selectedRecord.getRecordID(), patientID,
+				diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice), selectedPrescriptions);
+		;
 	}
 
-	// View personal schedule for the doctor
 	/**
-     * View the personal schedule of the doctor.
-     * Displays the doctor's available time slots for appointments.
-     * 
-     * @param doctorID The ID of the doctor whose schedule is being viewed.
-     */
+	 * Displays the doctor's personal schedule. This shows the doctor's availability
+	 * and upcoming appointments.
+	 *
+	 * @param doctorID the ID of the doctor whose schedule is being viewed
+	 */
 	public void viewPersonalSchedule(String doctorID) {
 		List<AppointmentSlot> doctorSchedule = AppointmentSlot.filterByDoctorID(load.getAppointmentSlots(), doctorID);
 		System.out.println("\nSchedule:");
@@ -87,11 +224,11 @@ public class DoctorService {
 	}
 
 	/**
-     * Set the doctor's availability for appointments.
-     * Allows the doctor to specify available time slots for appointments.
-     * 
-     * @param doctorID The ID of the doctor setting availability.
-     */
+	 * Sets the availability for a doctor to take appointments. Allows the doctor to
+	 * define the start and end time for appointment slots.
+	 *
+	 * @param doctorID the ID of the doctor who is setting the availability
+	 */
 	public void setAvailabilityForAppointments(String doctorID) {
 		System.out.println("\nSet Availability for Appointments:");
 
@@ -149,13 +286,15 @@ public class DoctorService {
 		}
 	}
 
-	// Accept or decline appointments
 	/**
-     * Accept or decline appointment requests.
-     * Allows the doctor to review pending appointment requests and accept or decline them.
-     * 
-     * @param doctorID The ID of the doctor reviewing the appointment requests.
-     */
+	 * Allows a doctor to accept or decline pending appointment requests. Displays
+	 * each pending appointment and prompts the doctor to respond. If the doctor
+	 * accepts, the appointment status is updated to "Confirmed" and the
+	 * corresponding time slot is marked as booked. If the doctor declines, the
+	 * appointment status is updated to "Cancelled".
+	 * 
+	 * @param doctorID The ID of the doctor whose appointments are being managed.
+	 */
 	public void acceptDeclineAppointments(String doctorID) {
 		System.out.println("\nAccept/Decline Appointment Requests:");
 		List<Appointment> pendingAppointments = appointmentService.getPendingAppointments(doctorID);
@@ -181,7 +320,7 @@ public class DoctorService {
 						}
 					} else {
 						System.out.println("Invalid input! Please enter a valid number (1 or 2).");
-						scanner.nextLine(); // Consume the invalid input
+						scanner.nextLine();
 					}
 				}
 
@@ -198,13 +337,14 @@ public class DoctorService {
 		}
 	}
 
-	// View upcoming appointments
 	/**
-     * View all upcoming confirmed appointments for the doctor.
-     * Displays a list of confirmed appointments.
-     * 
-     * @param doctorID The ID of the doctor whose upcoming appointments are being viewed.
-     */
+	 * Displays the list of upcoming confirmed appointments for a doctor. This
+	 * method retrieves the confirmed appointments for the specified doctor and
+	 * prints the details of each one.
+	 * 
+	 * @param doctorID The ID of the doctor whose upcoming appointments are to be
+	 *                 viewed.
+	 */
 	public void viewUpcomingAppointments(String doctorID) {
 		List<Appointment> confirmedAppointments = appointmentService.getConfirmedAppointments(doctorID);
 		for (Appointment appointment : confirmedAppointments) {
@@ -212,16 +352,17 @@ public class DoctorService {
 		}
 	}
 
-	// Record the outcome of an appointment
 	/**
-     * Record the outcome of an appointment after it is completed.
-     * This includes updating the patient's medical record, selecting diagnosis, treatment, and prescriptions,
-     * and adding the appointment outcome.
-     * 
-     * @param doctorID The ID of the doctor recording the appointment outcome.
-     */
+	 * Records the outcome of an appointment for a doctor. This method allows the
+	 * doctor to record the outcome of a completed appointment, such as marking it
+	 * as successful or needing follow-up. The implementation for this method is not
+	 * provided here.
+	 * 
+	 * @param doctorID The ID of the doctor for whom the appointment outcome is
+	 *                 being recorded.
+	 */
 	public void recordAppointmentOutcome(String doctorID) {
-		// Filter confirmed appointments for the given doctor
+
 		List<Appointment> filteredAppointments = appointmentService.getConfirmedAppointments(doctorID);
 
 		if (filteredAppointments.isEmpty()) {
@@ -232,19 +373,17 @@ public class DoctorService {
 				appointment.printAppointmentDetails();
 			}
 
-			// Select the appointment to update
 			int selectedAppointmentIndex = -1;
 
-			// Ensure valid input for appointment selection
 			while (selectedAppointmentIndex < 0 || selectedAppointmentIndex >= filteredAppointments.size()) {
 				System.out.print(
 						"Select the patient to update their medical record (1-" + filteredAppointments.size() + "): ");
 				while (!scanner.hasNextInt()) {
 					System.out.println("Invalid input. Please enter a valid number.");
-					scanner.next(); // Consume the invalid input
+					scanner.next();
 				}
-				selectedAppointmentIndex = scanner.nextInt() - 1; // Input is 1-indexed, so subtract 1
-				scanner.nextLine(); // Consume newline
+				selectedAppointmentIndex = scanner.nextInt() - 1;
+				scanner.nextLine();
 
 				if (selectedAppointmentIndex < 0 || selectedAppointmentIndex >= filteredAppointments.size()) {
 					System.out.println("Invalid selection. Please select a valid appointment.");
@@ -260,7 +399,6 @@ public class DoctorService {
 				List<Treatment> treatments = load.getTreatments();
 				List<Prescription> prescriptions = load.getPrescriptions();
 
-				// Select diagnosis
 				int diagnosisChoice = -1;
 				while (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
 					System.out.println("Available Diagnoses:");
@@ -280,7 +418,6 @@ public class DoctorService {
 					}
 				}
 
-				// Select treatment
 				int treatmentChoice = -1;
 				while (treatmentChoice < 0 || treatmentChoice >= treatments.size()) {
 					System.out.println("Available Treatments:");
@@ -300,7 +437,6 @@ public class DoctorService {
 					}
 				}
 
-				// Select prescriptions
 				List<Prescription> selectedPrescriptions = new ArrayList<>();
 				String addMore = "y";
 				while ("y".equalsIgnoreCase(addMore)) {
@@ -333,27 +469,22 @@ public class DoctorService {
 					addMore = scanner.nextLine();
 				}
 
-				// Enter consultation notes
 				System.out.print("Enter consultation notes: \n");
 				String consultationNotes = scanner.nextLine();
 
-				// Create a new medical record for the patient
 				String recordID = "MR" + UUID.randomUUID().toString().substring(0, 8);
 				MedicalRecord newMedicalRecord = new MedicalRecord(recordID, selectedPatient,
 						diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice), selectedPrescriptions);
 
-				// Add the medical record to the CSV
 				medicalRecordService.addMedicalRecord(recordID, selectedPatient, diagnoses.get(diagnosisChoice),
 						treatments.get(treatmentChoice), selectedPrescriptions);
 				System.out.println("Medical record updated for Patient ID " + selectedPatient.getHospitalId());
 
-				// Create the appointment outcome
 				String appointmentID = selectedAppointment.getAppointmentID();
 				String appointmentOutcomeID = "A" + UUID.randomUUID().toString();
 				appointmentService.addAppointmentOutcome(appointmentOutcomeID, selectedAppointment, newMedicalRecord,
 						consultationNotes, PrescriptionStatus.Pending);
 
-				// Update the appointment status
 				appointmentService.updateAppointmentStatus(appointmentID, "Completed");
 
 			} else {

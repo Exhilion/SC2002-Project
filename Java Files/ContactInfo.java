@@ -1,23 +1,19 @@
 package OOPProject;
 
 /**
- * Represents a contact information record that stores a phone number and an email address.
- * Provides methods to get and set these details, as well as a constructor for initialization.
- * 
- * <p>
- * This class also allows creating a ContactInfo instance with only a phone number, 
- * defaulting the email field to null.
- * </p>
+ * The ContactInfo class represents the contact details of an individual,
+ * including their phone number and email address.
  */
 public class ContactInfo {
-    private String phoneNumber; 
-    private String email; 
+    
+    private String phoneNumber;  
+    private String email;       
     
     /**
-     * Constructs a ContactInfo object with both a phone number and an email address.
+     * Constructs a ContactInfo object with the specified phone number and email.
      * 
-     * @param phoneNumber the phone number of the contact
-     * @param email the email address of the contact
+     * @param phoneNumber the phone number of the individual
+     * @param email the email address of the individual
      */
     public ContactInfo(String phoneNumber, String email) {
         this.phoneNumber = phoneNumber; 
@@ -25,16 +21,16 @@ public class ContactInfo {
     }
     
     /**
-     * Gets the phone number of the contact.
+     * Returns the phone number of the individual.
      * 
-     * @return the phone number
+     * @return the phone number as a String
      */
     public String getPhoneNumber() {
         return phoneNumber; 
     }
     
     /**
-     * Sets the phone number of the contact.
+     * Sets the phone number of the individual.
      * 
      * @param phoneNumber the new phone number to set
      */
@@ -43,16 +39,16 @@ public class ContactInfo {
     }
     
     /**
-     * Gets the email address of the contact.
+     * Returns the email address of the individual.
      * 
-     * @return the email address
+     * @return the email address as a String
      */
     public String getEmail() {
         return email;
     }
     
     /**
-     * Sets the email address of the contact.
+     * Sets the email address of the individual.
      * 
      * @param email the new email address to set
      */
@@ -61,19 +57,20 @@ public class ContactInfo {
     }
     
     /**
-     * Constructs a ContactInfo object with only a phone number.
-     * The email address is initialized to {@code null}.
+     * Constructs a ContactInfo object with a single contact detail (phone number).
+     * This constructor is intended for cases where only the phone number is provided.
      * 
-     * @param contactDetail the phone number of the contact
+     * @param contactDetail the phone number to set
      */
     public ContactInfo(String contactDetail) {
         this.phoneNumber = contactDetail; 
     }
     
     /**
-     * Returns a string representation of the contact information.
+     * Returns a string representation of the ContactInfo object.
+     * This includes the phone number, but can be extended to include email.
      * 
-     * @return a string in the format "Phone: [phoneNumber]"
+     * @return a string representing the contact information
      */
     @Override
     public String toString() {

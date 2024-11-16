@@ -1,0 +1,3 @@
+﻿AppointmentID,AppointmentSlotID,Status,PatientID
+Aa358b3db-5e54-46d1-b48b-46ae5bc2c9d9,AS8ae62970-1b6a-42bc-9d9c-376231b2fa5c,Cancelled,pt125
+A0aba1b79-b18f-4a4d-8f11-a72b9416e34c,AS4de17217-a4cf-4560-902c-bbcc7f98817a,Completed,pt125

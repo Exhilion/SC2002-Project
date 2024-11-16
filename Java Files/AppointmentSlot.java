@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The class represents a time slot available for appointments with a doctor.
- * Each slot includes information about the doctor, time range, date, and booking status.
+ * Represents an appointment slot for a doctor in the system. The slot includes
+ * information about the doctor, the time, date, and booking status.
  */
 public class AppointmentSlot {
 	private String appointmentSlotID;
@@ -18,17 +18,16 @@ public class AppointmentSlot {
 	private Date date;
 	private boolean isBooked;
 
-	// Constructor
 	/**
-    * Constructs an {@code AppointmentSlot} with the specified details.
-    *
-    * @param appointmentSlotID the unique ID of the appointment slot
-    * @param doctor the {@link Doctor} associated with the appointment slot
-    * @param startTime the start time of the slot (format: HH:mm)
-    * @param endTime the end time of the slot (format: HH:mm)
-    * @param date the date of the appointment slot
-    * @param isBooked {@code true} if the slot is booked, {@code false} otherwise
-    */
+	 * Constructor to initialize an AppointmentSlot with all properties.
+	 * 
+	 * @param appointmentSlotID the unique ID for the appointment slot
+	 * @param doctor            the doctor associated with the appointment slot
+	 * @param startTime         the start time of the appointment slot
+	 * @param endTime           the end time of the appointment slot
+	 * @param date              the date of the appointment slot
+	 * @param isBooked          the booking status of the appointment slot
+	 */
 	public AppointmentSlot(String appointmentSlotID, Doctor doctor, String startTime, String endTime, Date date,
 			boolean isBooked) {
 		this.appointmentSlotID = appointmentSlotID;
@@ -38,18 +37,18 @@ public class AppointmentSlot {
 		this.date = date;
 		this.isBooked = isBooked;
 	}
-	
+
 	/**
-     * Constructs an {@code AppointmentSlot} without specifying a doctor.
-     *
-     * @param appointmentSlotID the unique ID of the appointment slot
-     * @param startTime the start time of the slot (format: HH:mm)
-     * @param endTime the end time of the slot (format: HH:mm)
-     * @param date the date of the appointment slot
-     * @param isBooked {@code true} if the slot is booked, {@code false} otherwise
-     */
-	public AppointmentSlot(String appointmentSlotID, String startTime, String endTime, Date date,
-			boolean isBooked) {
+	 * Constructor to initialize an AppointmentSlot with all properties excluding
+	 * the doctor.
+	 * 
+	 * @param appointmentSlotID the unique ID for the appointment slot
+	 * @param startTime         the start time of the appointment slot
+	 * @param endTime           the end time of the appointment slot
+	 * @param date              the date of the appointment slot
+	 * @param isBooked          the booking status of the appointment slot
+	 */
+	public AppointmentSlot(String appointmentSlotID, String startTime, String endTime, Date date, boolean isBooked) {
 		this.appointmentSlotID = appointmentSlotID;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -57,125 +56,121 @@ public class AppointmentSlot {
 		this.isBooked = isBooked;
 	}
 
-	// Getters
-	
-	 // Generate a unique AppointmentID using UUID
 	/**
-     * Generates a unique ID for the appointment slot.
-     *
-     * @return a unique appointment slot ID in the format "AS" followed by a UUID
-     */
-    public String generateUniqueID() {
-        return "AS" + UUID.randomUUID().toString();
-    }
-    
-    /**
-     * Retrieves the appointment slot ID.
-     *
-     * @return the appointment slot ID
-     */
+	 * Generates a unique appointment slot ID using UUID.
+	 * 
+	 * @return a unique appointment slot ID
+	 */
+	public String generateUniqueID() {
+		return "AS" + UUID.randomUUID().toString();
+	}
+
+	/**
+	 * Gets the appointment slot ID.
+	 * 
+	 * @return the appointment slot ID
+	 */
 	public String getAppointmentSlotID() {
 		return appointmentSlotID;
 	}
 
 	/**
-     * Retrieves the doctor associated with the slot.
-     *
-     * @return the {@link Doctor} object
-     */
+	 * Gets the doctor associated with the appointment slot.
+	 * 
+	 * @return the doctor associated with the appointment slot
+	 */
 	public Doctor getDoctor() {
 		return doctor;
 	}
 
 	/**
-     * Retrieves the start time of the slot.
-     *
-     * @return the start time in HH:mm format
-     */
+	 * Gets the start time of the appointment slot.
+	 * 
+	 * @return the start time of the appointment slot
+	 */
 	public String getStartTime() {
 		return startTime;
 	}
 
 	/**
-     * Retrieves the end time of the slot.
-     *
-     * @return the end time in HH:mm format
-     */
+	 * Gets the end time of the appointment slot.
+	 * 
+	 * @return the end time of the appointment slot
+	 */
 	public String getEndTime() {
 		return endTime;
 	}
 
 	/**
-     * Retrieves the date of the slot.
-     *
-     * @return the {@link Date} object
-     */
+	 * Gets the date of the appointment slot.
+	 * 
+	 * @return the date of the appointment slot
+	 */
 	public Date getDate() {
 		return date;
 	}
 
 	/**
-     * Checks if the slot is booked.
-     *
-     * @return {@code true} if the slot is booked, {@code false} otherwise
-     */
+	 * Gets the booking status of the appointment slot.
+	 * 
+	 * @return true if the appointment slot is booked, false otherwise
+	 */
 	public boolean isBooked() {
 		return isBooked;
 	}
 
-	// Setters
 	/**
-     * Updates the doctor associated with the slot.
-     *
-     * @param doctor the new {@link Doctor} object
-     */
+	 * Sets the doctor associated with the appointment slot.
+	 * 
+	 * @param doctor the doctor to associate with the appointment slot
+	 */
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
 
 	/**
-     * Updates the start time of the slot.
-     *
-     * @param startTime the new start time in HH:mm format
-     */
+	 * Sets the start time of the appointment slot.
+	 * 
+	 * @param startTime the start time to set
+	 */
 	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
 	/**
-     * Updates the end time of the slot.
-     *
-     * @param endTime the new end time in HH:mm format
-     */
+	 * Sets the end time of the appointment slot.
+	 * 
+	 * @param endTime the end time to set
+	 */
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 
 	/**
-     * Updates the date of the slot.
-     *
-     * @param date the new {@link Date} object
-     */
+	 * Sets the date of the appointment slot.
+	 * 
+	 * @param date the date to set
+	 */
 	public void setDate(Date date) {
 		this.date = date;
 	}
 
 	/**
-     * Updates the booking status of the slot.
-     *
-     * @param isBooked {@code true} if the slot is booked, {@code false} otherwise
-     */
+	 * Sets the booking status of the appointment slot.
+	 * 
+	 * @param isBooked true if the slot is booked, false otherwise
+	 */
 	public void setBooked(boolean isBooked) {
 		this.isBooked = isBooked;
 	}
 
 	/**
-     * Filters appointment slots by a specific doctor's ID.
-     *
-     * @param slots the list of {@code AppointmentSlot} objects to filter
-     * @param doctorID the ID of the doctor to filter by
-     * @return a list of {@code AppointmentSlot} objects associated with the specified doctor
-     */
+	 * Filters a list of appointment slots by a given doctor ID.
+	 * 
+	 * @param slots    the list of appointment slots to filter
+	 * @param doctorID the doctor ID to filter by
+	 * @return a list of appointment slots associated with the specified doctor ID
+	 */
 	public static List<AppointmentSlot> filterByDoctorID(List<AppointmentSlot> slots, String doctorID) {
 		List<AppointmentSlot> filteredSlots = new ArrayList<>();
 		for (AppointmentSlot slot : slots) {
@@ -185,41 +180,40 @@ public class AppointmentSlot {
 		}
 		return filteredSlots;
 	}
-	
+
 	/**
-     * Filters appointment slots to retrieve only available (unbooked) slots.
-     *
-     * @param slots the list of {@code AppointmentSlot} objects to filter
-     * @return a list of available {@code AppointmentSlot} objects
-     */
+	 * Filters a list of appointment slots to only include available (unbooked)
+	 * slots.
+	 * 
+	 * @param slots the list of appointment slots to filter
+	 * @return a list of available (unbooked) appointment slots
+	 */
 	public static List<AppointmentSlot> filterAvailableSlots(List<AppointmentSlot> slots) {
-	    List<AppointmentSlot> availableSlots = new ArrayList<>();
+		List<AppointmentSlot> availableSlots = new ArrayList<>();
 
-	    for (AppointmentSlot slot : slots) {
-	        // Check if the slot is unbooked
-	        if (!slot.isBooked()) {
-	            availableSlots.add(slot);
-	        }
-	    }
+		for (AppointmentSlot slot : slots) {
+			// Check if the slot is unbooked
+			if (!slot.isBooked()) {
+				availableSlots.add(slot);
+			}
+		}
 
-	    return availableSlots;
+		return availableSlots;
 	}
-	
+
 	/**
-     * Returns a string representation of the appointment slot, including all its details.
-     *
-     * @return a string describing the appointment slot
-     */
+	 * Returns a string representation of the appointment slot.
+	 * 
+	 * @return a string representation of the appointment slot
+	 */
 	@Override
 	public String toString() {
-	    return "Appointment Slot ID: " + appointmentSlotID +
-	           ", Doctor: " + doctor.getDoctorName() +  // Assuming Doctor class has a getName() method
-	           ", Start Time: " + startTime +
-	           ", End Time: " + endTime +
-	           ", Date: " + date +
-	           ", Is Booked: " + (isBooked ? "Yes" : "No");
+		return "Appointment Slot ID: " + appointmentSlotID + ", Doctor: " + doctor.getDoctorName() + // Assuming Doctor
+																										// class has a
+																										// getName()
+																										// method
+				", Start Time: " + startTime + ", End Time: " + endTime + ", Date: " + date + ", Is Booked: "
+				+ (isBooked ? "Yes" : "No");
 	}
-
-
 
 }

@@ -1,87 +1,70 @@
 package OOPProject;
 
 /**
- * Represents a medical diagnosis with associated details such as a description and a doctor.
+ * Represents a medical diagnosis in the system.
+ * Stores details such as the diagnosis ID, name, and description.
  */
 public class Diagnosis {
-	
-	/** 
-     * The name or type of the diagnosis. 
-     */
-	private String diagnosis; 
-	
-	/** 
-     * A detailed description of the diagnosis. 
-     */
-	private String description; 
-	
-	/** 
-     * The doctor associated with this diagnosis. 
-     */
-	private Doctor Doctor; 
-	
-	/** 
-     * The unique identifier for the diagnosis. 
-     */
-	private String diagnosisID;
-	
-	/**
-     * Constructs a new Diagnosis instance with the specified ID, name, and description.
-     *
+    private String diagnosis; 
+    private String description; 
+    private Doctor Doctor; 
+    private String diagnosisID;
+
+    /**
+     * Constructs a new Diagnosis object with the given diagnosis ID, diagnosis name, and description.
+     * 
      * @param diagnosisID the unique identifier for the diagnosis
-     * @param diagnosis the name or type of the diagnosis
+     * @param diagnosis the name of the diagnosis
      * @param description a detailed description of the diagnosis
      */
-	public Diagnosis(String diagnosisID, String diagnosis, String description) {
-		this.diagnosisID = diagnosisID;
-		this.diagnosis = diagnosis;
-		this.description = description;
+    public Diagnosis(String diagnosisID, String diagnosis, String description) {
+        this.diagnosisID = diagnosisID;
+        this.diagnosis = diagnosis;
+        this.description = description;
+    }
 
-	}
-
-	/**
-     * Gets the unique identifier for this diagnosis.
-     *
+    /**
+     * Returns the unique identifier of the diagnosis.
+     * 
      * @return the diagnosis ID
      */
-	public String getDiagnosisID() {
-	    return diagnosisID;
-	}
+    public String getDiagnosisID() {
+        return diagnosisID;
+    }
 
-	/**
-     * Gets the name or type of the diagnosis.
-     *
-     * @return the diagnosis
+    /**
+     * Returns the name of the diagnosis.
+     * 
+     * @return the diagnosis name
      */
-	public String getdiagnosis() {
-		return diagnosis;
-	}
+    public String getdiagnosis() {
+        return diagnosis;
+    }
 
-	/**
-     * Gets the description of the diagnosis.
-     *
-     * @return the description
+    /**
+     * Returns the description of the diagnosis.
+     * 
+     * @return the description of the diagnosis
      */
-	public String getdescription() {
-		return description;
-	}
+    public String getdescription() {
+        return description;
+    }
 
-	/**
-     * Sets the name or type of the diagnosis.
-     *
-     * @param diagnosis the new diagnosis name or type
+    /**
+     * Sets the name of the diagnosis.
+     * 
+     * @param diagnosis the name to set for the diagnosis
      */
-	public void setdiagnosis(String diagnosis) {
-		this.diagnosis = diagnosis;
-	}
+    public void setdiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
 
-	/**
+    /**
      * Sets the description of the diagnosis.
-     *
-     * @param description the new description
+     * 
+     * @param description the description to set for the diagnosis
      */
-	public void description(String description) {
-		this.description = description;
-	}
-
+    public void description(String description) {
+        this.description = description;
+    }
 }

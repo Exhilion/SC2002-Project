@@ -1,141 +1,138 @@
 package OOPProject;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-//Pharmacist prescription management
-//Pharmacist can view Appointment outcome record to fufill prescription orders ( Appointment outcome class)
-//Status can be updated from pending to dispensed
-//Monitors inventory of medication ( in Medication class)
-//Submit requests to admin to replenish stock ( in Medication class )
+
 /**
- * The Prescription class represents a prescription order made by a healthcare provider.
- * It contains information about the prescription's ID, the medication prescribed, the dosage, 
- * the frequency of administration, and the duration of treatment. 
- * The class provides methods to get and set these properties and display the prescription details.
+ * Represents a prescription containing details about the medication, dosage, frequency, and duration.
+ * 
+ * <p>
+ * Pharmacists can:
+ * - View appointment outcome records to fulfill prescription orders (via {@link AppointmentOutcome}).
+ * - Update the status of prescriptions from pending to dispensed.
+ * - Monitor the inventory of medications (via {@link Medication}).
+ * - Submit requests to administrators for stock replenishment (via {@link Medication}).
+ * </p>
  */
 public class Prescription {
-	private String prescriptionID;
-	private Medication medication;
-	private int dosage;
-	private int frequency;
-	private String duration;
+    private String prescriptionID;
+    private Medication medication;
+    private int dosage;
+    private int frequency;
+    private String duration;
 
-	/**
-     * Constructs a Prescription object with the given details.
+    /**
+     * Constructs a {@code Prescription} with the specified details.
      *
-     * @param prescriptionID The unique ID of the prescription.
-     * @param medication The medication being prescribed.
-     * @param dosage The dosage of the medication in mg.
-     * @param frequency The number of times per day the medication is to be taken.
-     * @param duration The duration for which the medication is prescribed.
+     * @param prescriptionID the unique ID of the prescription.
+     * @param medication the medication associated with the prescription.
+     * @param dosage the dosage of the medication (in mg).
+     * @param frequency the frequency of administration (times per day).
+     * @param duration the duration of the prescription (e.g., "7 days").
      */
-	public Prescription(String prescriptionID, Medication medication, int dosage, int frequency, String duration) {
-		this.prescriptionID = prescriptionID;
-		this.medication = medication;
-		this.dosage = dosage;
-		this.frequency = frequency;
-		this.duration = duration;
-	}
+    public Prescription(String prescriptionID, Medication medication, int dosage, int frequency, String duration) {
+        this.prescriptionID = prescriptionID;
+        this.medication = medication;
+        this.dosage = dosage;
+        this.frequency = frequency;
+        this.duration = duration;
+    }
 
-	/**
-     * Gets the unique ID of the prescription.
+    /**
+     * Returns the unique ID of the prescription.
      *
-     * @return The prescription ID.
+     * @return the prescription ID.
      */
-	public String getPrescriptionID() {
-	    return prescriptionID;
-	}
+    public String getPrescriptionID() {
+        return prescriptionID;
+    }
 
-	// Getter and Setter for medication
-	/**
-     * Gets the medication prescribed.
+    /**
+     * Returns the medication associated with this prescription.
      *
-     * @return The medication object.
+     * @return the medication.
      */
-	public Medication getMedication() {
-		return medication;
-	}
+    public Medication getMedication() {
+        return medication;
+    }
 
-	/**
-     * Sets the medication for the prescription.
+    /**
+     * Sets the medication for this prescription.
      *
-     * @param medication The medication to be prescribed.
+     * @param medication the medication to set.
      */
-	public void setMedication(Medication medication) {
-		this.medication = medication;
-	}
+    public void setMedication(Medication medication) {
+        this.medication = medication;
+    }
 
-	// Getter and Setter for dosage
-	/**
-     * Gets the dosage of the medication in mg.
+    /**
+     * Returns the dosage of the medication (in mg).
      *
-     * @return The dosage in mg.
+     * @return the dosage.
      */
-	public int getDosage() {
-		return dosage;
-	}
+    public int getDosage() {
+        return dosage;
+    }
 
-	/**
-     * Sets the dosage of the medication.
+    /**
+     * Sets the dosage of the medication (in mg).
      *
-     * @param dosage The dosage in mg.
+     * @param dosage the dosage to set.
      */
-	public void setDosage(int dosage) {
-		this.dosage = dosage;
-	}
+    public void setDosage(int dosage) {
+        this.dosage = dosage;
+    }
 
-	// Getter and Setter for frequency
-	/**
-     * Gets the frequency of medication administration (number of times per day).
+    /**
+     * Returns the frequency of administration (times per day).
      *
-     * @return The frequency of dosage per day.
+     * @return the frequency.
      */
-	public int getFrequency() {
-		return frequency;
-	}
+    public int getFrequency() {
+        return frequency;
+    }
 
-	/**
-     * Sets the frequency of medication administration.
+    /**
+     * Sets the frequency of administration (times per day).
      *
-     * @param frequency The number of times per day the medication should be taken.
+     * @param frequency the frequency to set.
      */
-	public void setFrequency(int frequency) {
-		this.frequency = frequency;
-	}
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
 
-	// Getter and Setter for duration
-	/**
-     * Gets the duration for which the medication is prescribed.
+    /**
+     * Returns the duration of the prescription.
      *
-     * @return The duration of the prescription (e.g., "7 days").
+     * @return the duration (e.g., "7 days").
      */
-	public String getDuration() {
-		return duration;
-	}
+    public String getDuration() {
+        return duration;
+    }
 
-	/**
-     * Sets the duration of the medication prescription.
+    /**
+     * Sets the duration of the prescription.
      *
-     * @param duration The duration for which the medication is prescribed.
+     * @param duration the duration to set (e.g., "7 days").
      */
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
-	  // toString() method to display the prescription
-/**
- * Returns a string representation of the prescription's details.
- * 
- * @return A formatted string displaying the prescription's ID, medication, dosage, frequency, and duration.
- */
-  @Override
-  public String toString() {
-      return "Prescription ID: " + prescriptionID + "\n" +
-             "Medication: " + medication.getMedicineName() + "\n" +
-             "Dosage: " + dosage + " mg\n" +
-             "Frequency: " + frequency + " times per day\n" +
-             "Duration: " + duration + "\n";
-  }
+    /**
+     * Returns a string representation of the prescription details.
+     *
+     * @return a string containing all prescription details.
+     */
+    @Override
+    public String toString() {
+        return "Prescription ID: " + prescriptionID + "\n" +
+               "Medication: " + medication.getMedicineName() + "\n" +
+               "Dosage: " + dosage + " mg\n" +
+               "Frequency: " + frequency + " times per day\n" +
+               "Duration: " + duration + "\n";
+    }
 }
