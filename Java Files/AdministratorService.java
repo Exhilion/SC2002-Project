@@ -570,17 +570,17 @@ public class AdministratorService {
 		String newEntry = "";
 
 		switch (choice) {
-		case 1: // Pharmacist
+		case 1: 
 			csvFilePath = AppConfig.PHARMACIST_FILE_PATH;
 			newEntry = createPharmacistEntry(scanner);
 			break;
 
-		case 2: // Doctor
+		case 2: 
 			csvFilePath = AppConfig.DOCTOR_FILE_PATH;
 			newEntry = createDoctorEntry(scanner);
 			break;
 
-		case 3: // Admin
+		case 3: 
 			csvFilePath = AppConfig.ADMIN_FILE_PATH;
 			newEntry = createAdminEntry(scanner);
 			break;
@@ -606,13 +606,23 @@ public class AdministratorService {
 	 * @param scanner the Scanner object to capture user input.
 	 * @return the formatted CSV entry for a new pharmacist.
 	 */
-
 	private String createPharmacistEntry(Scanner scanner) {
 		System.out.println("\n--- Add Pharmacist ---");
 		System.out.print("Enter Pharmacist ID: ");
 		String id = scanner.nextLine().trim();
-		System.out.print("Enter Gender: ");
-		String gender = scanner.nextLine().trim().toUpperCase();
+
+		String gender = "";
+		while (true) {
+			System.out.print("Enter Gender (MALE/FEMALE): ");
+			gender = scanner.nextLine().trim().toUpperCase();
+			try {
+				Gender.valueOf(gender);
+				break; 
+			} catch (IllegalArgumentException e) {
+				System.out.println("Invalid gender. Please enter 'MALE' or 'FEMALE'.");
+			}
+		}
+
 		System.out.print("Enter Name: ");
 		String name = scanner.nextLine().trim();
 
@@ -629,8 +639,19 @@ public class AdministratorService {
 		System.out.println("\n--- Add Doctor ---");
 		System.out.print("Enter Doctor ID: ");
 		String id = scanner.nextLine().trim();
-		System.out.print("Enter Gender: ");
-		String gender = scanner.nextLine().trim().toUpperCase();
+
+		String gender = "";
+		while (true) {
+			System.out.print("Enter Gender (MALE/FEMALE): ");
+			gender = scanner.nextLine().trim().toUpperCase();
+			try {
+				Gender.valueOf(gender);
+				break; 
+			} catch (IllegalArgumentException e) {
+				System.out.println("Invalid gender. Please enter 'MALE' or 'FEMALE'.");
+			}
+		}
+
 		System.out.print("Enter Name: ");
 		String name = scanner.nextLine().trim();
 		System.out.print("Enter Department: ");
@@ -651,8 +672,19 @@ public class AdministratorService {
 		System.out.println("\n--- Add Admin ---");
 		System.out.print("Enter Hospital ID: ");
 		String id = scanner.nextLine().trim();
-		System.out.print("Enter Gender: ");
-		String gender = scanner.nextLine().trim().toUpperCase();
+
+		String gender = "";
+		while (true) {
+			System.out.print("Enter Gender (MALE/FEMALE): ");
+			gender = scanner.nextLine().trim().toUpperCase();
+			try {
+				Gender.valueOf(gender);
+				break; 
+			} catch (IllegalArgumentException e) {
+				System.out.println("Invalid gender. Please enter 'MALE' or 'FEMALE'.");
+			}
+		}
+
 		System.out.print("Enter Name: ");
 		String name = scanner.nextLine().trim();
 

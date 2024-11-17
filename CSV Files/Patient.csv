@@ -1,7 +1,0 @@
-hospitalID,password,role,gender,name,dateOfBirth,bloodType,phoneNumber,email,firstTimeLogin
-PT125,password3,Patient,FEMALE,Emily Johnson,12/12/1998,BPos,6677889900,123@GMAIL.COM,FALSE
-PT126,password4,Patient,MALE,Michael Brown,15/6/2001,ONeg,6677889900,michael.brown@email.com,FALSE
-PT127,password5,Patient,FEMALE,Olivia Davis,31/12/1999,Apos,5566778899,olivia.davis@email.com,TRUE
-PT128,password6,Patient,MALE,Liam Miller,2/2/2013,ONeg,4433221100,liam.miller@email.com,TRUE
-PT129,password7,Patient,FEMALE,Sophia Wilson,5/9/1980,Bneg,2233445566,sophia.wilson@email.com,FALSE
-PT130,password8,Patient,MALE,James Moore,27/11/1996,ABPos,3344556677,james.moore@email.com,FALSE

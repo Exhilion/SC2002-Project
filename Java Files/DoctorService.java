@@ -94,22 +94,33 @@ public class DoctorService {
 		String patientID = null;
 
 		System.out.print("Enter patient ID: ");
-		patientID = scanner.nextLine();
+		patientID = scanner.nextLine().trim();
+
+		String test = patientID;
 
 		List<Patient> patients = load.getPatients();
 		List<Diagnosis> diagnoses = load.getDiagnoses();
 		List<Treatment> treatments = load.getTreatments();
 		List<Prescription> prescriptions = load.getPrescriptions();
 
+		boolean patientExists = patients.stream().anyMatch(p -> p.getHospitalId().equalsIgnoreCase(test));
+		if (!patientExists) {
+			System.out.println("Patient ID not found. Please try again.");
+			return;
+		}
+
 		List<MedicalRecord> records = medicalRecordCSV.loadMedicalRecordsFromCSV(patients, diagnoses, treatments,
 				prescriptions);
-
 		List<MedicalRecord> patientRecords = MedicalRecord.filterByHospitalId(records, patientID);
+
+		if (patientRecords.isEmpty()) {
+			System.out.println("No medical records found for the given patient ID.");
+			return;
+		}
 
 		System.out.println("Select a medical record to update (enter record number):");
 		for (int i = 0; i < patientRecords.size(); i++) {
 			MedicalRecord record = patientRecords.get(i);
-
 			System.out.println((i + 1) + ". ");
 			System.out.println("Medical Record ID: " + record.getRecordID());
 			System.out.println("Patient Name: " + record.getPatient().getName());
@@ -123,13 +134,17 @@ public class DoctorService {
 		int recordNumber = -1;
 		while (recordNumber < 1 || recordNumber > patientRecords.size()) {
 			System.out.print("Enter the number of the record to update: ");
-			recordNumber = scanner.nextInt();
-			scanner.nextLine();
+			if (scanner.hasNextInt()) {
+				recordNumber = scanner.nextInt();
+				scanner.nextLine();
+			} else {
+				System.out.println("Invalid input. Please enter a valid number.");
+				scanner.next();
+			}
 		}
 
 		MedicalRecord selectedRecord = patientRecords.get(recordNumber - 1);
 
-		;
 		int diagnosisChoice = -1;
 		while (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
 			System.out.println("Available Diagnoses:");
@@ -137,15 +152,12 @@ public class DoctorService {
 				System.out.println((i + 1) + ". " + diagnoses.get(i).getdiagnosis());
 			}
 			System.out.print("Select a diagnosis (1-" + diagnoses.size() + "): ");
-			while (!scanner.hasNextInt()) {
+			if (scanner.hasNextInt()) {
+				diagnosisChoice = scanner.nextInt() - 1;
+				scanner.nextLine();
+			} else {
 				System.out.println("Invalid input. Please enter a valid number.");
 				scanner.next();
-			}
-			diagnosisChoice = scanner.nextInt() - 1;
-			scanner.nextLine();
-
-			if (diagnosisChoice < 0 || diagnosisChoice >= diagnoses.size()) {
-				System.out.println("Invalid selection. Please select a valid diagnosis.");
 			}
 		}
 
@@ -156,15 +168,12 @@ public class DoctorService {
 				System.out.println((i + 1) + ". " + treatments.get(i).gettreatment());
 			}
 			System.out.print("Select a treatment (1-" + treatments.size() + "): ");
-			while (!scanner.hasNextInt()) {
+			if (scanner.hasNextInt()) {
+				treatmentChoice = scanner.nextInt() - 1;
+				scanner.nextLine();
+			} else {
 				System.out.println("Invalid input. Please enter a valid number.");
 				scanner.next();
-			}
-			treatmentChoice = scanner.nextInt() - 1;
-			scanner.nextLine();
-
-			if (treatmentChoice < 0 || treatmentChoice >= treatments.size()) {
-				System.out.println("Invalid selection. Please select a valid treatment.");
 			}
 		}
 
@@ -180,12 +189,14 @@ public class DoctorService {
 							(i + 1) + ". " + p.getMedication().getMedicineName() + " - " + p.getDosage() + " mg");
 				}
 				System.out.print("Select a prescription by number (1-" + prescriptions.size() + "): ");
-				while (!scanner.hasNextInt()) {
+				if (scanner.hasNextInt()) {
+					prescriptionChoice = scanner.nextInt() - 1;
+					scanner.nextLine();
+				} else {
 					System.out.println("Invalid input. Please enter a valid number.");
-					scanner.next();
+					scanner.next(); // Clear invalid input
+					continue;
 				}
-				prescriptionChoice = scanner.nextInt() - 1;
-				scanner.nextLine();
 
 				if (prescriptionChoice >= 0 && prescriptionChoice < prescriptions.size()) {
 					selectedPrescriptions.add(prescriptions.get(prescriptionChoice));
@@ -197,12 +208,17 @@ public class DoctorService {
 			}
 
 			System.out.print("Add another prescription? (y/n): ");
-			addMore = scanner.nextLine();
+			addMore = scanner.nextLine().trim().toLowerCase();
+			while (!addMore.equals("y") && !addMore.equals("n")) {
+				System.out.print("Invalid input. Please enter 'y' or 'n': ");
+				addMore = scanner.nextLine().trim().toLowerCase();
+			}
 		}
 
 		medicalRecordService.updatePatientRecords(selectedRecord.getRecordID(), patientID,
 				diagnoses.get(diagnosisChoice), treatments.get(treatmentChoice), selectedPrescriptions);
-		;
+
+		System.out.println("Medical record updated successfully.");
 	}
 
 	/**
@@ -346,11 +362,18 @@ public class DoctorService {
 	 *                 viewed.
 	 */
 	public void viewUpcomingAppointments(String doctorID) {
-		List<Appointment> confirmedAppointments = appointmentService.getConfirmedAppointments(doctorID);
-		for (Appointment appointment : confirmedAppointments) {
-			appointment.printAppointmentDetails();
-		}
+	    List<Appointment> confirmedAppointments = appointmentService.getConfirmedAppointments(doctorID);
+	    
+	    if (confirmedAppointments == null || confirmedAppointments.isEmpty()) {
+	        System.out.println("No upcoming appointments found");
+	        return;
+	    }
+	    
+	    for (Appointment appointment : confirmedAppointments) {
+	        appointment.printAppointmentDetails();
+	    }
 	}
+
 
 	/**
 	 * Records the outcome of an appointment for a doctor. This method allows the

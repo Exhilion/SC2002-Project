@@ -1,4 +1,0 @@
-user_id,password,role,gender,is_logged_in
-U001,hashedPassword1,DOCTOR,MALE,false
-U002,hashedPassword2,PATIENT,FEMALE,false
-U003,hashedPassword3,PHARMACIST,MALE,false

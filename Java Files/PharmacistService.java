@@ -30,10 +30,17 @@ public class PharmacistService {
     public void viewAppointmentOutcomeRecord() {
         List<AppointmentOutcome> pendingOutcomes = AppointmentOutcome
                 .filterByPendingStatus(load.getAppointmentOutcomes());
+        
+        if (pendingOutcomes == null || pendingOutcomes.isEmpty()) {
+            System.out.println("No pending appointment outcomes found.");
+            return;
+        }
+        
         for (AppointmentOutcome outcome : pendingOutcomes) {
             outcome.printDetails();
         }
     }
+
 
     /**
      * Allows the pharmacist to update the prescription status for appointment outcomes.
