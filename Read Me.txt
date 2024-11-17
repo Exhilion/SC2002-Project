@@ -1,0 +1,64 @@
+Name and Number 
+Darrell Ma Wei Ze (5)
+Joyce Chen (11)
+Kim Dobin (13)
+Sam Chern Kai, Chester (19)
+Shaun Cheong Jia Yong (21)
+Yang Jerry (24)
+# OOP Project Setup Guide
+
+This README provides instructions on setting up a Java project in Eclipse named OOP with a package called OOPProject. By following this guide, you'll be able to create the project, set up the package, and import existing Java files to get started with development.
+
+## Prerequisites
+
+Before you begin, ensure you have the following:
+- Eclipse IDE for Java Developers (download from https://www.eclipse.org/downloads/)
+- Java Development Kit (JDK) installed (version 8 or higher)
+- The source files for OOPProject ready for import
+
+## Setup Instructions
+
+### Step 1: Launch Eclipse
+1. Open Eclipse IDE on your computer.
+2. Choose your desired workspace location (you can use the default or select a custom directory).
+3. Click Launch.
+
+### Step 2: Create a New Java Project
+1. Navigate to File > New > Java Project.
+2. In the Project Name field, enter: OOP
+3. Click Finish.
+
+### Step 3: Create a New Package
+1. In the Package Explorer, expand the OOP project folder.
+2. Right-click on the src folder, select New > Package.
+3. Enter the package name: OOPProject
+4. Click Finish
+
+### Step 4: Import Existing Java Files
+1. Locate the OOPProject folder with your existing `.java` files on your system.
+2. Copy the files from your local OOPProject folder.
+3. In Eclipse:
+   - Go to the Package Explorer.
+   - Expand the OOP project, then expand the src folder, and finally the OOPProject package.
+   - Right-click on the OOPProject package and select Paste.
+
+   Alternative Import Method:
+   1. Right-click on the OOP project in the Package Explorer.
+   2. Select Import > General > File System.
+   3. Click Next.
+   4. Click Browse and navigate to the folder containing your `.java` files.
+   5. Select the files you want to import.
+   6. Ensure the destination folder is set to `OOP/src/OOPProject`.
+   7. Click Finish.
+
+### Step 5: Run Your Project
+1. In the Package Explorer, expand the OOPProject package.
+2. Locate your main class (the one containing `public static void main(String[] args)`).
+3. Right-click on the file and select Run As > Java Application.
+
+## Additional Resources
+- Eclipse Documentation: https://help.eclipse.org/
+- Java Tutorials: https://docs.oracle.com/javase/tutorial/
+- Java API Documentation: https://docs.oracle.com/en/java/javase/
+
+---
