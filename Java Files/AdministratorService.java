@@ -335,6 +335,7 @@ public class AdministratorService {
 							values[2] = String.valueOf(updatedQuantity);
 
 							values[5] = "approved";
+							values[4] = "false";
 							System.out.println(
 									"Updated quantity for Medication ID: " + values[0] + " to " + updatedQuantity);
 
@@ -376,8 +377,7 @@ public class AdministratorService {
 		System.out.println("Would you like to filter the results?");
 		System.out.println("1. By Role (Pharmacist/Doctor/Admin)");
 		System.out.println("2. By Gender (Separate Male/Female)");
-		System.out.println("3. By Age (Enter age range)");
-		System.out.println("4. No Filter (View all)");
+		System.out.println("3. No Filter (View all)");
 		System.out.print("Enter your choice (1-4): ");
 
 		int choice;
@@ -396,8 +396,6 @@ public class AdministratorService {
 			displayByGender();
 		} else if (choice == 3) {
 
-			displayByAgeRange(scanner);
-		} else if (choice != 4) {
 			System.out.println("Invalid choice. Exiting.");
 		} else {
 
@@ -437,23 +435,8 @@ public class AdministratorService {
 		readAndDisplayFile(AppConfig.ADMIN_FILE_PATH, "gender", "Female");
 	}
 
-	/**
-	 * Displays hospital staff filtered by a specified age range.
-	 *
-	 * @param scanner the Scanner object to capture user input.
-	 */
-	private void displayByAgeRange(Scanner scanner) {
-		System.out.print("Enter minimum age: ");
-		int minAge = Integer.parseInt(scanner.nextLine().trim());
-		System.out.print("Enter maximum age: ");
-		int maxAge = Integer.parseInt(scanner.nextLine().trim());
-		String ageRange = minAge + "-" + maxAge;
-
-		System.out.println("\n--- Staff within age range ---");
-		readAndDisplayFile(AppConfig.PHARMACIST_FILE_PATH, "age", ageRange);
-		readAndDisplayFile(AppConfig.DOCTOR_FILE_PATH, "age", ageRange);
-		readAndDisplayFile(AppConfig.ADMIN_FILE_PATH, "age", ageRange);
-	}
+	
+	
 
 	/**
 	 * Reads the specified file and displays the content, optionally filtered by
@@ -498,52 +481,12 @@ public class AdministratorService {
 		case "gender":
 
 			return values[3].trim().equalsIgnoreCase(filterValue);
-
-		case "age":
-
-			String[] ageRange = filterValue.split("-");
-			int minAge = Integer.parseInt(ageRange[0]);
-			int maxAge = Integer.parseInt(ageRange[1]);
-
-			try {
-				String dob = values[4].trim();
-				int age = calculateAge(dob);
-				return age >= minAge && age <= maxAge;
-			} catch (Exception e) {
-				return false;
-			}
-
 		default:
 			return true; // No filter
 		}
 	}
 
-	/**
-	 * Calculates the age from a date of birth (DOB).
-	 *
-	 * @param dob the date of birth in the format DD/MM/YYYY.
-	 * @return the calculated age, or -1 if an error occurs during parsing.
-	 */
-	private int calculateAge(String dob) {
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			sdf.setLenient(false);
-			Date birthDate = sdf.parse(dob);
-
-			Calendar birth = Calendar.getInstance();
-			birth.setTime(birthDate);
-
-			Calendar today = Calendar.getInstance();
-			int age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
-
-			if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
-				age--;
-			}
-			return age;
-		} catch (Exception e) {
-			return -1;
-		}
-	}
+	
 
 	/**
 	 * Adds a new hospital staff member based on user input.

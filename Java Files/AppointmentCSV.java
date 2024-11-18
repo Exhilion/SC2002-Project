@@ -231,7 +231,6 @@ public class AppointmentCSV {
 			appointmentLines.add(reader.readLine());
 			while ((line = reader.readLine()) != null) {
 				String[] values = line.split(",");
-				System.out.println(values[0]);
 				if (values[0].equalsIgnoreCase(appointmentID) && values[3].equalsIgnoreCase(patientID)) {
 					System.out.println("Cancelling appointment with ID: " + appointmentID);
 					values[2] = "Cancelled";

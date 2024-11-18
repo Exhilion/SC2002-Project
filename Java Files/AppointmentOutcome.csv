@@ -1,2 +1,4 @@
 AppointmentOutcomeID,AppointmentID,MedicalRecordID,ConsultationNotes,PrescriptionStatus
 ACc2e10c4b-d4de-45d8-bd8a-1dd875bff95e,A0aba1b79-b18f-4a4d-8f11-a72b9416e34c,MR30cfeb80,Showed Signs of migraine,Dispensed
+ACf00a30fe-febe-40d8-8ee3-b29137c3dae3,A748efea1-3f35-42f1-a7e2-b05a86e8b236,MRb360f1e4,test,Dispensed
+ACd909f43c-d207-4246-a1c6-0e9a648b8784,A7955be5e-94ba-4804-8692-e02fa0e36880,MR59d509a5,test,Dispensed
